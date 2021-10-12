@@ -32,14 +32,40 @@ namespace ft {
             }
             // template <class InputIterator>
             // vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type());
-            // vector (const vector& x);
+            vector (const vector& x)
+            {
+                this->_size = x.size();
+                this->_capacity = this->_size;
+                this->_alloc = x.get_allocator();
+                this->_array = this->_alloc.allocate(this->_capacity);
+                for (size_type i = 0; i < this->_size; i++)
+                    this->_array[i] = x[i];
+            }
+            
             ~vector() 
             {
                 if (this->_array)
                     this->_alloc.deallocate(this->_array, this->_capacity);
             }
-
-
+            vector& operator= (const vector& x)
+            {
+                if (this != &x)
+                {
+                    if (this->_capacity >= x.size())
+                        this->_size = x.size();
+                    else
+                    {
+                        this->_size = x.size();
+                        this->_alloc.deallocate(this->_array, this->_capacity);
+                        this->_capacity = this->_size;
+                        this->_array = this->_alloc.allocate(this->_capacity);
+                    }
+                    for (size_type i = 0; i < x.size(); i++)
+                        this->_array[i] = x[i];
+                }
+                return *this;
+            }
+            
             // Capacity :
             size_type size() const { return this->_size; }
             size_type max_size() const { return this->_alloc.max_size(); }
@@ -66,8 +92,55 @@ namespace ft {
             reference back() { return this->_array[this->_size]; }
             const_reference back() const { return this->_array[this->size]; }
 
+            // Modifiers :
+            // template <class InputIterator>
+            // void assign (InputIterator first, InputIterator last);	
+            void assign (size_type n, const value_type& val)
+            {
+                this->_size = n;
+                if (this->_capacity < n)
+                {
+                    this->_alloc.deallocate(this->_array, this->_capacity);
+                    this->_capacity = this->_size;
+                    this->_array = this->_alloc.allocate(this->_capacity);
+                }
+                for (size_type i = 0; i < this->_size; i++)
+                    this->_array[i] = val;
+            }
 
-
+            void push_back (const value_type& val)
+            {
+                pointer newArray;
+                if (this->_capacity < this->_size + 1)
+                {
+                    try
+                    {
+                        newArray = this->_alloc.allocate(this->_capacity == 0 ? 1 : this->_capacity * 2);
+                    }
+                    catch(const std::bad_alloc& e)
+                    {
+                        throw std::bad_alloc();
+                    }
+                    
+                    for (size_type i = 0; i < this->_size; i++)
+                        newArray[i] = this->_array[i];
+                    this->_alloc.deallocate(this->_array, this->_capacity);
+                    this->_array = newArray;
+                    this->_array[this->_size] = val;
+                    this->_size++;
+                    this->_capacity = this->_capacity == 0 ? 1 : this->_capacity * 2;
+                }
+                else
+                {
+                    this->_array[this->_size] = val;
+                    this->_size++;
+                }
+            }
+            void pop_back()
+            {
+                if (this->_size)
+                    this->_size--;
+            }
             // Allocator :
             allocator_type get_allocator() const { return this->_alloc; }
     };
