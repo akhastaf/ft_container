@@ -3,6 +3,8 @@
 # include <iostream>
 # include <memory>
 # include <stdexcept>
+# include <stdexcept>
+
 
 
 namespace ft {
@@ -71,6 +73,50 @@ namespace ft {
             size_type max_size() const { return this->_alloc.max_size(); }
             size_type capacity() const { return this->_capacity; }
             bool empty() const { return this->_size == 0; }
+            void resize (size_type n, value_type val = value_type())
+            {
+                try
+                {
+                    this->reserve(n);
+                    if (this->_size > n)
+                        for (size_type i = n; i < this->_size; i++)
+                            this->_alloc.destroy(&this->_array[i]);
+                    if (this->_size < n)
+                        for (size_type i = this->_size; i < n; i++)
+                            this->_array[i] = val;
+                }
+                catch (std::length_error &e)
+                {
+                    throw std::length_error("vector");
+                }
+                catch (std::bad_alloc &e)
+                {
+                    throw std::bad_alloc();
+                }
+                
+            }
+            void reserve( size_type new_cap )
+            {
+                pointer newArray;
+                if (new_cap > this->max_size())
+                    throw std::length_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size");
+                if (this->_capacity < new_cap)
+                {
+                    try
+                    {
+                        newArray = this->_alloc.allocate(new_cap);
+                        this->_capacity = new_cap;
+                        for (size_type i = 0; i < this->_size; i++)
+                            this->_alloc.destroy(&this->_array[i]);
+                        this->_alloc.deallocate(this->_array, this->_capacity);
+                        this->_array  = newArray;
+                    }
+                    catch (std::bad_alloc &e)
+                    {
+                        throw std::bad_alloc();
+                    }
+                }
+            }
 
             // Element access :
             reference operator[] (size_type n) { return this->_array[n]; }
@@ -116,19 +162,18 @@ namespace ft {
                     try
                     {
                         newArray = this->_alloc.allocate(this->_capacity == 0 ? 1 : this->_capacity * 2);
+                        for (size_type i = 0; i < this->_size; i++)
+                            newArray[i] = this->_array[i];
+                        this->_alloc.deallocate(this->_array, this->_capacity);
+                        this->_array = newArray;
+                        this->_array[this->_size] = val;
+                        this->_size++;
+                        this->_capacity = this->_capacity == 0 ? 1 : this->_capacity * 2;
                     }
                     catch(const std::bad_alloc& e)
                     {
                         throw std::bad_alloc();
                     }
-                    
-                    for (size_type i = 0; i < this->_size; i++)
-                        newArray[i] = this->_array[i];
-                    this->_alloc.deallocate(this->_array, this->_capacity);
-                    this->_array = newArray;
-                    this->_array[this->_size] = val;
-                    this->_size++;
-                    this->_capacity = this->_capacity == 0 ? 1 : this->_capacity * 2;
                 }
                 else
                 {
@@ -139,7 +184,10 @@ namespace ft {
             void pop_back()
             {
                 if (this->_size)
+                {
                     this->_size--;
+                    this->_alloc.destroy(&this->_array[this->_size]);
+                }
             }
             // Allocator :
             allocator_type get_allocator() const { return this->_alloc; }

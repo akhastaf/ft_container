@@ -89,9 +89,33 @@ int main()
 
 
     testpush.pop_back();
+    
+    std::cout << testpush[testpush.size()] << std::endl;
     std::cout << testpush.size() << std::endl;
     std::cout << testpush.capacity() << std::endl;
     for (int i = 0; i < testpush.size(); i++)
         std::cout << testpush0[i] << " : " << testpush[i] << std::endl;
+
+    try 
+    {
+        testpush.reserve(testpush.max_size() + 10);
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+    std::cout << testpush.size() << std::endl;
+    std::cout << testpush.capacity() << std::endl;
+    
+    try 
+    {
+        testpush.resize(testpush.max_size() + 10, 45);
+    }
+    catch (std::exception &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+    std::cout << testpush.size() << std::endl;
+    std::cout << testpush.capacity() << std::endl;
     return 0;
 }

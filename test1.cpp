@@ -18,6 +18,24 @@ int main (void) {
   std::cout << myvector.size() << std::endl;
   std::cout << myvector.capacity() << std::endl;
   
+
+  try
+  {
+    myvector.reserve(myvector.max_size() + 1e3);
+  }
+  catch (std::exception &e)
+  {
+    std::cout << e.what() << std::endl;
+  }
+  try
+  {
+    myvector.resize(myvector.max_size() + 1e3, 10);
+  }
+  catch (std::exception &e)
+  {
+    std::cout << e.what() << std::endl;
+  }
+
   // for(int i = 0; i < 8; i++)
   //   myvector.push_back(i);
   
