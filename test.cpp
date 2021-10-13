@@ -117,5 +117,21 @@ int main()
     }
     std::cout << testpush.size() << std::endl;
     std::cout << testpush.capacity() << std::endl;
+    ft::vector<int> testop = testpush;
+    if (testpush == testop)
+        std::cout << "the vector are equal" << std::endl;
+    else if (testop != testpush)
+        std::cout << "the vector are not equal" << std::endl;
+
+    testpush.clear();
+    std::cout << testpush.size() << std::endl;
+    std::cout << testpush.capacity() << std::endl;
+    
+    if (testpush == testop)
+        std::cout << "the vector are equal" << std::endl;
+    else if (testop != testpush)
+        std::cout << "the vector are not equal" << std::endl;
+        
+    
     return 0;
 }

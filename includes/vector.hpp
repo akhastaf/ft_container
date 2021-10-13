@@ -47,7 +47,11 @@ namespace ft {
             ~vector() 
             {
                 if (this->_array)
+                {
+                    for (size_type i = 0; i < this->_size; i++)
+                        this->_alloc.destroy(&this->_array[i]);
                     this->_alloc.deallocate(this->_array, this->_capacity);
+                }
             }
             vector& operator= (const vector& x)
             {
@@ -107,6 +111,8 @@ namespace ft {
                         newArray = this->_alloc.allocate(new_cap);
                         this->_capacity = new_cap;
                         for (size_type i = 0; i < this->_size; i++)
+                            newArray[i] = this->_array[i];
+                        for (size_type i = 0; i < this->_size; i++)
                             this->_alloc.destroy(&this->_array[i]);
                         this->_alloc.deallocate(this->_array, this->_capacity);
                         this->_array  = newArray;
@@ -156,39 +162,36 @@ namespace ft {
 
             void push_back (const value_type& val)
             {
-                pointer newArray;
-                if (this->_capacity < this->_size + 1)
+                try
                 {
-                    try
+                    if (this->_capacity < this->_size + 1)
                     {
-                        newArray = this->_alloc.allocate(this->_capacity == 0 ? 1 : this->_capacity * 2);
-                        for (size_type i = 0; i < this->_size; i++)
-                            newArray[i] = this->_array[i];
-                        this->_alloc.deallocate(this->_array, this->_capacity);
-                        this->_array = newArray;
-                        this->_array[this->_size] = val;
-                        this->_size++;
-                        this->_capacity = this->_capacity == 0 ? 1 : this->_capacity * 2;
+                        if (!this->_capacity)
+                            this->reserve(1);
+                        else
+                            this->reserve(this->_capacity * 2);
                     }
-                    catch(const std::bad_alloc& e)
-                    {
-                        throw std::bad_alloc();
-                    }
-                }
-                else
-                {
-                    this->_array[this->_size] = val;
                     this->_size++;
+                    this->_array[this->_size - 1] = val;
+                }
+                catch(const std::bad_alloc& e)
+                {
+                    throw std::bad_alloc();
                 }
             }
             void pop_back()
             {
                 if (this->_size)
-                {
                     this->_size--;
-                    this->_alloc.destroy(&this->_array[this->_size]);
-                }
             }
+
+            void clear()
+            {
+                for (size_type i = 0; i < this->_size; i++)
+                    this->_alloc.destroy(&this->_array[i]);
+                this->_size = 0;
+            }
+
             // Allocator :
             allocator_type get_allocator() const { return this->_alloc; }
     };
@@ -198,7 +201,55 @@ namespace ft {
     //     public:
     //     explicit out_of_range (const string& what_arg) : logic_error(what_arg) {};
     // };
+    template <class T, class Alloc>
+    bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        if (lhs.size() == rhs.size())
+        {
+            for (int i = 0; lhs.size() < i; i++)
+            {
+                if (lhs[i] != rhs[i])
+                    return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    template <class T, class Alloc>
+    bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        if (!ft::operator==(lhs, rhs))
+            return true;
+        return false;
+    }
+
+    // template <class T, class Alloc>
+    // bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    // {
+
+    // }
+
+    // template <class T, class Alloc>
+    // bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    // {
+
+    // }
+
+    // template <class T, class Alloc>
+    // bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    // {
+
+    // }
+
+    // template <class T, class Alloc>
+    // bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    // {
+
+    // }
 }
+
+
 
 
 #endif
