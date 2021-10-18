@@ -70,68 +70,91 @@ int main()
     //     std::cout << myar2[i] << std::endl;
 
 
-    ft::vector<int> testpush(3);
-    std::vector<int> testpush0(3);
+    // ft::vector<int> testpush(3);
+    // std::vector<int> testpush0(3);
 
-    for (int i = 0; i < 6; i++)
-    {
-        testpush.push_back(i*2);
-        testpush0.push_back(i*2);
-    }
-    std::cout << "std::vector : " << std::endl;
-    std::cout << testpush0.size() << std::endl;
-    std::cout << testpush0.capacity() << std::endl;
-    std::cout << "ft::vector : " << std::endl;
-    std::cout << testpush.size() << std::endl;
-    std::cout << testpush.capacity() << std::endl;
-    for (int i = 0; i < testpush0.size(); i++)
-        std::cout << testpush0[i] << " : " << testpush[i] << std::endl;
+    // for (int i = 0; i < 6; i++)
+    // {
+    //     testpush.push_back(i*2);
+    //     testpush0.push_back(i*2);
+    // }
+    // std::cout << "std::vector : " << std::endl;
+    // std::cout << testpush0.size() << std::endl;
+    // std::cout << testpush0.capacity() << std::endl;
+    // std::cout << "ft::vector : " << std::endl;
+    // std::cout << testpush.size() << std::endl;
+    // std::cout << testpush.capacity() << std::endl;
+    // for (int i = 0; i < testpush0.size(); i++)
+    //     std::cout << testpush0[i] << " : " << testpush[i] << std::endl;
 
 
-    testpush.pop_back();
+    // testpush.pop_back();
     
-    std::cout << testpush[testpush.size()] << std::endl;
-    std::cout << testpush.size() << std::endl;
-    std::cout << testpush.capacity() << std::endl;
-    for (int i = 0; i < testpush.size(); i++)
-        std::cout << testpush0[i] << " : " << testpush[i] << std::endl;
+    // std::cout << testpush[testpush.size()] << std::endl;
+    // std::cout << testpush.size() << std::endl;
+    // std::cout << testpush.capacity() << std::endl;
+    // for (int i = 0; i < testpush.size(); i++)
+    //     std::cout << testpush0[i] << " : " << testpush[i] << std::endl;
 
-    try 
-    {
-        testpush.reserve(testpush.max_size() + 10);
-    }
-    catch (std::exception &e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-    std::cout << testpush.size() << std::endl;
-    std::cout << testpush.capacity() << std::endl;
+    // try 
+    // {
+    //     testpush.reserve(testpush.max_size() + 10);
+    // }
+    // catch (std::exception &e)
+    // {
+    //     std::cout << e.what() << std::endl;
+    // }
+    // std::cout << testpush.size() << std::endl;
+    // std::cout << testpush.capacity() << std::endl;
     
-    try 
-    {
-        testpush.resize(testpush.max_size() + 10, 45);
-    }
-    catch (std::exception &e)
-    {
-        std::cout << e.what() << std::endl;
-    }
-    std::cout << testpush.size() << std::endl;
-    std::cout << testpush.capacity() << std::endl;
-    ft::vector<int> testop = testpush;
-    if (testpush == testop)
-        std::cout << "the vector are equal" << std::endl;
-    else if (testop != testpush)
-        std::cout << "the vector are not equal" << std::endl;
+    // try 
+    // {
+    //     testpush.resize(testpush.max_size() + 10, 45);
+    // }
+    // catch (std::exception &e)
+    // {
+    //     std::cout << e.what() << std::endl;
+    // }
+    // std::cout << testpush.size() << std::endl;
+    // std::cout << testpush.capacity() << std::endl;
+    // ft::vector<int> testop = testpush;
+    // if (testpush == testop)
+    //     std::cout << "the vector are equal" << std::endl;
+    // else if (testop != testpush)
+    //     std::cout << "the vector are not equal" << std::endl;
 
-    testpush.clear();
-    std::cout << testpush.size() << std::endl;
-    std::cout << testpush.capacity() << std::endl;
+    // testpush.clear();
+    // std::cout << testpush.size() << std::endl;
+    // std::cout << testpush.capacity() << std::endl;
     
-    if (testpush == testop)
-        std::cout << "the vector are equal" << std::endl;
-    else if (testop != testpush)
-        std::cout << "the vector are not equal" << std::endl;
+    // if (testpush == testop)
+    //     std::cout << "the vector are equal" << std::endl;
+    // else if (testop != testpush)
+    //     std::cout << "the vector are not equal" << std::endl;
         
-    
+    std::vector<int> org(20);
+    for (int i = 0; i < org.size(); i++)
+        org.push_back(i);
+    ft::vector<int> my(org.begin(), org.end());
+
+    std::cout << my.size() << std::endl;
+    std::cout << my.capacity() << std::endl;
+    for (int i = 0; i < my.size(); i++)
+        std::cout << my[i] << std::endl;
+    int i = 0;
+    ft::vector<int>::iterator it = my.begin();
+    for (it = my.begin(); it != my.end(); it++)
+    {
+        std::cout << "my[" << i << "] = " << *it << std::endl;
+        i++;
+    }
+
+    // it = my.end();
+    // it--;
+    // my.erase(my.begin(), it);
+    // std::cout << my.size() << std::endl;
+    // std::cout << my.capacity() << std::endl;
+
+    // std::cout << my[0] << std::endl;
     return 0;
 }
