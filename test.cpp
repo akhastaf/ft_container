@@ -132,22 +132,22 @@ int main()
     // else if (testop != testpush)
     //     std::cout << "the vector are not equal" << std::endl;
         
-    std::vector<int> org(20);
-    for (int i = 0; i < org.size(); i++)
-        org.push_back(i);
-    ft::vector<int> my(org.begin(), org.end());
+    // std::vector<int> org(20);
+    // for (int i = 0; i < org.size(); i++)
+    //     org.push_back(i);
+    // ft::vector<int> my(org.begin(), org.end());
 
-    std::cout << my.size() << std::endl;
-    std::cout << my.capacity() << std::endl;
-    for (int i = 0; i < my.size(); i++)
-        std::cout << my[i] << std::endl;
-    int i = 0;
-    ft::vector<int>::iterator it = my.begin();
-    for (it = my.begin(); it != my.end(); it++)
-    {
-        std::cout << "my[" << i << "] = " << *it << std::endl;
-        i++;
-    }
+    // std::cout << my.size() << std::endl;
+    // std::cout << my.capacity() << std::endl;
+    // for (int i = 0; i < my.size(); i++)
+    //     std::cout << my[i] << std::endl;
+    // int i = 0;
+    // ft::vector<int>::iterator it = my.begin();
+    // for (it = my.begin(); it != my.end(); it++)
+    // {
+    //     std::cout << "my[" << i << "] = " << *it << std::endl;
+    //     i++;
+    // }
 
     // it = my.end();
     // it--;
@@ -156,5 +156,24 @@ int main()
     // std::cout << my.capacity() << std::endl;
 
     // std::cout << my[0] << std::endl;
+    ft::vector<int> a(10, 55);
+    ft::vector<int> b(15, 33);
+    std::cout << "A :" << std::endl;
+    for (int i = 0; i < a.size(); i++)
+        std::cout << a[i] << std::endl;
+    std::cout << "B :" << std::endl;
+    for (int i = 0; i < b.size(); i++)
+        std::cout << b[i] << std::endl;
+    a.swap(b);
+    std::cout << "A :" << std::endl;
+    for (int i = 0; i < a.size(); i++)
+        std::cout << a[i] << std::endl;
+    std::cout << "B :" << std::endl;
+    for (int i = 0; i < b.size(); i++)
+        std::cout << b[i] << std::endl;
+    std::cout << a.size() << std::endl;
+    std::cout << a.capacity() << std::endl;
+    std::cout << b.size() << std::endl;
+    std::cout << b.capacity() << std::endl;
     return 0;
 }

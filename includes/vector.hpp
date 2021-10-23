@@ -4,7 +4,10 @@
 # include <memory>
 # include <stdexcept>
 # include <stdexcept>
+# include <algorithm>
+#include <iterator>
 # include "random_access_iterator.hpp"
+# include "tools.hpp"
 
 
 namespace ft {
@@ -32,16 +35,16 @@ namespace ft {
                 for (size_type i = 0; i < this->_size; i++)
                     this->_array[i] = val;
             }
-            template <class InputIterator>
-            vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size(std::distance(first, last)),
-                _capacity(_size), _array(this->_alloc.allocate(this->_capacity))
-            {
-                for (size_type i = 0; first != last; first++)
-                {
-                    this->_array[i] = *first;
-                    i++;
-                }
-            }
+            // template <class InputIterator>
+            // vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size(std::distance(first, last)),
+            //     _capacity(_size), _array(this->_alloc.allocate(this->_capacity))
+            // {
+            //     for (size_type i = 0; first != last; first++)
+            //     {
+            //         this->_array[i] = *first;
+            //         i++;
+            //     }
+            // }
             vector (const vector& x)
             {
                 this->_size = x.size();
@@ -214,19 +217,7 @@ namespace ft {
             }
             // iterator insert (iterator position, const value_type& val)
             // {
-            //     value_type tmp = *position;
-            //     try
-            //     {
-            //         this->reserve(std::distance(this->begin(), position) + 1);
-            //     }
-            //     catch(const std::bad_alloc& e)
-            //     {
-            //         throw std::bad_alloc();
-            //     }
-            //     *position = val;
-            //     position++;
-            //     for (iterator it = position; it != this->end(); it++)
-            //         *it = 
+                
             // }
             // void insert (iterator position, size_type n, const value_type& val);	
             // template <class InputIterator>
@@ -256,6 +247,18 @@ namespace ft {
             //         this->_array = nullptr;
             //     return first;
             // }
+            void swap (vector& x)
+            {
+                size_type tmp = x._size;
+                x._size = this->_size;
+                this->_size = tmp;
+                tmp = x._capacity;
+                x._capacity = this->_capacity;
+                this->_capacity = tmp;
+                pointer data = x._array;
+                x._array = this->_array;
+                this->_array = data;
+            }
             void clear()
             {
                 for (size_type i = 0; i < this->_size; i++)
@@ -276,12 +279,7 @@ namespace ft {
     {
         if (lhs.size() == rhs.size())
         {
-            for (int i = 0; lhs.size() < i; i++)
-            {
-                if (lhs[i] != rhs[i])
-                    return false;
-            }
-            return true;
+            return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
         }
         return false;
     }
@@ -294,29 +292,29 @@ namespace ft {
         return false;
     }
 
-    // template <class T, class Alloc>
-    // bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-    // {
+    template <class T, class Alloc>
+    bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+    }
 
-    // }
+    template <class T, class Alloc>
+    bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        return !ft::operator<(rhs, lhs);
+    }
 
-    // template <class T, class Alloc>
-    // bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-    // {
+    template <class T, class Alloc>
+    bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        return ft::operator<(rhs, lhs);
+    }
 
-    // }
-
-    // template <class T, class Alloc>
-    // bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-    // {
-
-    // }
-
-    // template <class T, class Alloc>
-    // bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
-    // {
-
-    // }
+    template <class T, class Alloc>
+    bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+    {
+        return !ft::operator<(lhs, rhs);
+    }
 }
 
 
