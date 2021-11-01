@@ -6,8 +6,8 @@
 # include <stdexcept>
 # include <algorithm>
 #include <iterator>
-# include "random_access_iterator.hpp"
-# include "tools.hpp"
+# include "../iterator/random_access_iterator.hpp"
+# include "../tools.hpp"
 
 
 namespace ft {
@@ -33,18 +33,18 @@ namespace ft {
             explicit vector (const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(0), _capacity(0), _array(NULL)  {}
             explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size(n), _capacity(n), _array(this->_alloc.allocate(n)) {
                 for (size_type i = 0; i < this->_size; i++)
-                    this->_array[i] = val;
+                    this->_alloc.construct(this->_array + i, val);
             }
-            // template <class InputIterator>
-            // vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size(std::distance(first, last)),
-            //     _capacity(_size), _array(this->_alloc.allocate(this->_capacity))
-            // {
-            //     for (size_type i = 0; first != last; first++)
-            //     {
-            //         this->_array[i] = *first;
-            //         i++;
-            //     }
-            // }
+            template <class InputIterator>
+            vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : _alloc(alloc), _size(std::distance(first, last)),
+                _capacity(_size), _array(this->_alloc.allocate(this->_capacity))
+            {
+                for (size_type i = 0; first != last; first++)
+                {
+                    this->_array[i] = *first;
+                    i++;
+                }
+            }
             vector (const vector& x)
             {
                 this->_size = x.size();
@@ -52,7 +52,7 @@ namespace ft {
                 this->_alloc = x.get_allocator();
                 this->_array = this->_alloc.allocate(this->_capacity);
                 for (size_type i = 0; i < this->_size; i++)
-                    this->_array[i] = x[i];
+                    this->_alloc.construct(this->_array + i, x[i]);
             }
             
             ~vector() 
@@ -78,7 +78,7 @@ namespace ft {
                         this->_array = this->_alloc.allocate(this->_capacity);
                     }
                     for (size_type i = 0; i < x.size(); i++)
-                        this->_array[i] = x[i];
+                        this->_alloc.construct(this->_array + i, x[i]);
                 }
                 return *this;
             }
@@ -105,7 +105,7 @@ namespace ft {
                             this->_alloc.destroy(&this->_array[i]);
                     if (this->_size < n)
                         for (size_type i = this->_size; i < n; i++)
-                            this->_array[i] = val;
+                            this->_alloc.construct(this->_array + i, val);
                 }
                 catch (std::length_error &e)
                 {
@@ -129,7 +129,7 @@ namespace ft {
                         newArray = this->_alloc.allocate(new_cap);
                         this->_capacity = new_cap;
                         for (size_type i = 0; i < this->_size; i++)
-                            newArray[i] = this->_array[i];
+                            this->_alloc.construct(newArray+ i, this->_array[i]);
                         for (size_type i = 0; i < this->_size; i++)
                             this->_alloc.destroy(&this->_array[i]);
                         this->_alloc.deallocate(this->_array, this->_capacity);
@@ -175,7 +175,7 @@ namespace ft {
                 }
                 for (size_type i = 0; first != last; first++)
                 {
-                    this->_array[i] = *first;
+                    this->_alloc.construct(this->_array + i, *first);
                     i++;
                 }
             }
@@ -189,7 +189,7 @@ namespace ft {
                     this->_array = this->_alloc.allocate(this->_capacity);
                 }
                 for (size_type i = 0; i < this->_size; i++)
-                    this->_array[i] = val;
+                    this->_alloc.construct(this->_array + i, val);
             }
             void push_back (const value_type& val)
             {
@@ -203,7 +203,7 @@ namespace ft {
                             this->reserve(this->_capacity * 2);
                     }
                     this->_size++;
-                    this->_array[this->_size - 1] = val;
+                    this->_alloc.construct(this->_array + (this->_size - 1), val);
                 }
                 catch(const std::bad_alloc& e)
                 {
@@ -213,12 +213,26 @@ namespace ft {
             void pop_back()
             {
                 if (this->_size)
+                {
                     this->_size--;
+                    this->destroy(this->_array + this->_size);
+                }
             }
-            // iterator insert (iterator position, const value_type& val)
-            // {
-                
-            // }
+            iterator insert (iterator position, const value_type& val)
+            {
+                difference_type d = std::distance(this->begin(), position);
+                if (this->_size + 1 > this->_capacity)
+                {
+                    if (!this->_capacity)
+                        this->reserve(1);
+                    else
+                        this->reserve(this->_capacity * 2);
+                }
+                for (size_type i = this->size; i >= d ;i--)
+                    this->_array[i - 1] = this->_array[i];
+                this->_alloc.construct(this->_array + d, val);
+                return (iterator(this->_array + d));
+            }
             // void insert (iterator position, size_type n, const value_type& val);	
             // template <class InputIterator>
             // void insert (iterator position, InputIterator first, InputIterator last);
@@ -279,7 +293,7 @@ namespace ft {
     {
         if (lhs.size() == rhs.size())
         {
-            return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+            return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
         }
         return false;
     }
@@ -316,8 +330,5 @@ namespace ft {
         return !ft::operator<(lhs, rhs);
     }
 }
-
-
-
 
 #endif
