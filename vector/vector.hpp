@@ -88,6 +88,10 @@ namespace ft {
             const_iterator begin() const { return const_iterator(this->_array); }
             iterator end() { return (iterator(this->_array + this->_size)); }
             const_iterator end() const { return const_iterator(this->_array + this->_size); }
+            // reverse_iterator rbegin();
+            // const_reverse_iterator rbegin() const;
+            // reverse_iterator rend();
+            // const_reverse_iterator rend() const;
 
             // Capacity :
             size_type size() const { return this->_size; }
