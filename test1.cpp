@@ -4,16 +4,16 @@
 #include <vector>         // std::vector
 
 int main (void) {
-  std::vector<int> a(20, 100);
-  std::vector<int> b(a.begin(), a.end());
-  std::cout << b.size() << std::endl;
-  std::cout << b.capacity() << std::endl;
+  // std::vector<int> a(20, 100);
+  // std::vector<int> b(a.begin(), a.end());
+  // std::cout << b.size() << std::endl;
+  // std::cout << b.capacity() << std::endl;
 
-  std::vector<int>::iterator it = a.end();
-  it--;
-  a.erase(a.begin(), a.end());
-  std::cout << a.size() << std::endl;
-  std::cout << a.capacity() << std::endl;
+  // std::vector<int>::iterator it = a.end();
+  // it--;
+  // a.erase(a.begin(), a.end());
+  // std::cout << a.size() << std::endl;
+  // std::cout << a.capacity() << std::endl;
 
   // std::vector<int> a(6, 10);
   // std::vector<int> b(4, 100);
@@ -93,7 +93,30 @@ int main (void) {
   //   std::cout << myvector[i] << std::endl;
 
 
+  // std::vector<int> a(10, 33);
+  // std::vector<int> b;
+  
 
+  // b.insert(b.end(), a.begin(), a.end());
+  // std::cout << b.size() << std::endl;
+  // std::cout << b.capacity() << std::endl;
+  // for (int i = 0; i < b.size(); i++)
+  //   std::cout << b[i] << std::endl;
+  // std::cout << std::distance(a.begin(), a.end()) << std::endl;
+
+  // std::vector<int> c;
+  // std::cout << c.begin().base() << std::endl;
+  // std::cout
+  std::vector<int> a;
+  std::vector<int> b(10, 55);
+  a.push_back(6);
+  std::vector<int>::iterator ir = a.begin();
+  ir++;
+  a.insert(a.begin(), b.begin(), b.end());
+  std::cout << "size: " << a.size() << std::endl;
+  std::cout << "capcity: " << a.capacity() << std::endl;
+  for (int i = 0; i < a.size(); i++)
+      std::cout << a[i] << std::endl;
   
   return 0;
 }

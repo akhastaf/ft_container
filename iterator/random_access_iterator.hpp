@@ -66,6 +66,14 @@ namespace ft
                 tmp += n;
                 return tmp;
             };
+            difference_type operator- (random_access_iterator<T> const rhs)
+            {
+                return this->_ptr - rhs._ptr;
+            }
+            difference_type operator+ (random_access_iterator<T> const rhs)
+            {
+                return this->_ptr + rhs._ptr;
+            }
             pointer base() const { return _ptr; };
 
 
