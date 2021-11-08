@@ -26,8 +26,8 @@ namespace ft {
             typedef size_t size_type;
             typedef ft::random_access_iterator<T> iterator;
             typedef ft::random_access_iterator<const T> const_iterator;
-            // typedef ft::random_access_iterator<T> reverse_iterator;
-            // typedef ft::random_access_iterator<T> const_reverse_iterator;
+            typedef ft::random_access_iterator<T> reverse_iterator;
+            typedef ft::random_access_iterator<T> const_reverse_iterator;
 
             explicit Vector (const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(0), _capacity(0), _array(NULL)  {}
             explicit Vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size(n), _capacity(n), _array(this->_alloc.allocate(n)) {
@@ -88,10 +88,10 @@ namespace ft {
             const_iterator begin() const { return const_iterator(this->_array); }
             iterator end() { return (iterator(this->_array + this->_size)); }
             const_iterator end() const { return const_iterator(this->_array + this->_size); }
-            // reverse_iterator rbegin();
-            // const_reverse_iterator rbegin() const;
-            // reverse_iterator rend();
-            // const_reverse_iterator rend() const;
+            reverse_iterator rbegin() { return reverse_iterator(this->end()--); }
+            //const_reverse_iterator rbegin() const { return reverse_iterator(this->end()--); }
+            reverse_iterator rend() { return reverse_iterator(this->begin()--); }
+            //const_reverse_iterator rend() const  { return reverse_iterator(this->begin()--); }
 
             // Capacity :
             size_type size() const { return this->_size; }
