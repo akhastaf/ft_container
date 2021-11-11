@@ -37,17 +37,20 @@ namespace ft
 
             bool operator== (random_access_iterator const & rhs) { return this->_ptr == rhs.base(); };
             bool operator!= (random_access_iterator const & rhs) { return this->_ptr != rhs.base(); };
-            reference operator* () { return *(this->_ptr); };
+            reference operator* () const { return *(this->_ptr); };
             pointer operator-> () { return &operator*(); };
             reference operator[] (difference_type n) { return this->_ptr[n]; };
-            random_access_iterator operator++ () { this->_ptr++; };
+            random_access_iterator operator++ () 
+            {
+                return random_access_iterator(this->_ptr++);
+            };
             random_access_iterator operator++ (int)
             {
                 random_access_iterator tmp = *this;
                 this->_ptr++;
                 return tmp; 
             };
-            random_access_iterator operator-- () { this->_ptr--; };
+            random_access_iterator operator-- () { return random_access_iterator(--(this->_ptr)); };
             random_access_iterator operator-- (int)
             {
                 random_access_iterator tmp = *this;

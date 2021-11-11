@@ -7,6 +7,7 @@
 # include <algorithm>
 #include <iterator>
 # include "../iterator/random_access_iterator.hpp"
+# include "../iterator/reverse_iterator.hpp"
 # include "../tools.hpp"
 
 namespace ft {
@@ -26,11 +27,13 @@ namespace ft {
             typedef size_t size_type;
             typedef ft::random_access_iterator<T> iterator;
             typedef ft::random_access_iterator<const T> const_iterator;
-            typedef ft::random_access_iterator<T> reverse_iterator;
-            typedef ft::random_access_iterator<T> const_reverse_iterator;
+            typedef typename ft::reverse_iterator<iterator> reverse_iterator;
+            typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
             explicit Vector (const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(0), _capacity(0), _array(NULL)  {}
-            explicit Vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size(n), _capacity(n), _array(this->_alloc.allocate(n)) {
+            explicit Vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size(n), _capacity(n) {
+                std::cout << this->_size << std::endl;
+                this->_array = this->_alloc.allocate(this->_size);
                 for (size_type i = 0; i < this->_size; i++)
                     this->_alloc.construct(this->_array + i, val);
             }
@@ -88,9 +91,9 @@ namespace ft {
             const_iterator begin() const { return const_iterator(this->_array); }
             iterator end() { return (iterator(this->_array + this->_size)); }
             const_iterator end() const { return const_iterator(this->_array + this->_size); }
-            reverse_iterator rbegin() { return reverse_iterator(this->end()--); }
+            reverse_iterator rbegin() { return reverse_iterator(--(this->end())); }
             //const_reverse_iterator rbegin() const { return reverse_iterator(this->end()--); }
-            reverse_iterator rend() { return reverse_iterator(this->begin()--); }
+            reverse_iterator rend() { return reverse_iterator(--(this->begin())); }
             //const_reverse_iterator rend() const  { return reverse_iterator(this->begin()--); }
 
             // Capacity :

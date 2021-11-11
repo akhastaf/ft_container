@@ -175,43 +175,59 @@ int main()
     // std::cout << a.capacity() << std::endl;
     // std::cout << b.size() << std::endl;
     // std::cout << b.capacity() << std::endl;
-    ft::Vector<int> a;
-    ft::Vector<int> b(10, 55);
-    a.push_back(6);
-    ft::Vector<int>::iterator ir = a.begin();
-    std::cout << "size : here " << a.size() << std::endl;
-    ir++;
-    a.insert(ir, 5, 45);
-    std::cout << "size: " << a.size() << std::endl;
-    std::cout << "capcity: " << a.capacity() << std::endl;
+    // ft::Vector<int> a;
+    // ft::Vector<int> b(10, 55);
+    // a.push_back(6);
+    // ft::Vector<int>::iterator ir = a.begin();
+    // std::cout << "size : here " << a.size() << std::endl;
+    // ir++;
+    // a.insert(ir, 5, 45);
+    // std::cout << "size: " << a.size() << std::endl;
+    // std::cout << "capcity: " << a.capacity() << std::endl;
     // for (int i = 0; i < a.size(); i++)
     //     std::cout << a[i] << std::endl;
 
-    a.push_back(8);
+    // a.push_back(8);
     // a.push_back(9);
     // a.push_back(10);
     // a.push_back(11);
-    for (int i = 0; i < a.size(); i++)
-        std::cout << a[i] << std::endl;
-    ir = a.begin();
-    ir++;
-    std::cout << "ir : " << *ir << std::endl;
-    a.erase(ir);
-    for (int i = 0; i < a.size(); i++)
-        std::cout << a[i] << std::endl;
-    ft::Vector<int>::iterator st = a.begin();
-    ft::Vector<int>::iterator en = a.end();
-    st++;
-    en--;
-    a.erase(st, a.end());
-    std::cout << "after" << std::endl;
-    for (int i = 0; i < a.size(); i++)
-        std::cout << a[i] << std::endl;
-
+    // for (int i = 0; i < a.size(); i++)
+    //     std::cout << a[i] << std::endl;
+    // ir = a.begin();
+    // ir++;
+    // std::cout << "ir : " << *ir << std::endl;
+    // a.erase(ir);
+    // for (int i = 0; i < a.size(); i++)
+    //     std::cout << a[i] << std::endl;
+    // ft::Vector<int>::iterator st = a.begin();
+    // ft::Vector<int>::iterator en = a.end();
+    // st++;
+    // en--;
+    // a.erase(st, a.end());
+    // std::cout << "after" << std::endl;
+    // for (int i = 0; i < a.size(); i++)
+    //     std::cout << a[i] << std::endl;
     // ir = a.end();
     // ir--;
     // ir--;
     // ft::Vector<int>::iterator it = a.erase(ir);
     // std::cout << *it << std::endl;
+    ft::Vector<int> myvector (5, 11);  // 5 default-constructed ints
+    myvector.push_back(55);
+    std::vector<int> myvector1 (5, 11);  // 5 default-constructed ints
+    myvector1.push_back(55);
+
+    int i=0;
+
+    ft::Vector<int>::reverse_iterator rit = myvector.rbegin();
+    std::cout << *rit << std::endl;
+    for (; rit!= myvector.rend(); ++rit)
+        *rit = ++i;
+
+    std::cout << "myvector contains:";
+    for (ft::Vector<int>::iterator it = myvector.begin(); it != myvector.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+
     return 0;
 }
