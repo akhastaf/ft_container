@@ -32,7 +32,6 @@ namespace ft {
 
             explicit Vector (const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(0), _capacity(0), _array(NULL)  {}
             explicit Vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size(n), _capacity(n) {
-                std::cout << this->_size << std::endl;
                 this->_array = this->_alloc.allocate(this->_size);
                 for (size_type i = 0; i < this->_size; i++)
                     this->_alloc.construct(this->_array + i, val);
@@ -91,10 +90,10 @@ namespace ft {
             const_iterator begin() const { return const_iterator(this->_array); }
             iterator end() { return (iterator(this->_array + this->_size)); }
             const_iterator end() const { return const_iterator(this->_array + this->_size); }
-            reverse_iterator rbegin() { return reverse_iterator(--(this->end())); }
-            //const_reverse_iterator rbegin() const { return reverse_iterator(this->end()--); }
-            reverse_iterator rend() { return reverse_iterator(--(this->begin())); }
-            //const_reverse_iterator rend() const  { return reverse_iterator(this->begin()--); }
+            reverse_iterator rbegin() { return reverse_iterator(this->end()); }
+            const_reverse_iterator rbegin() const { return reverse_iterator(this->end()--); }
+            reverse_iterator rend() { return reverse_iterator(this->begin()); }
+            const_reverse_iterator rend() const  { return reverse_iterator(this->begin()--); }
 
             // Capacity :
             size_type size() const { return this->_size; }
@@ -138,9 +137,10 @@ namespace ft {
                     {
                         newArray = this->_alloc.allocate(new_cap);
                         for (size_type i = 0; i < this->_size; i++)
+                        {
                             this->_alloc.construct(newArray + i, this->_array[i]);
-                        for (size_type i = 0; i < this->_size; i++)
                             this->_alloc.destroy(this->_array + i);
+                        }
                         this->_alloc.deallocate(this->_array, this->_capacity);
                         this->_capacity = new_cap;
                         this->_array  = newArray;
@@ -157,20 +157,20 @@ namespace ft {
             const_reference operator[] (size_type n) const { return this->_array[n]; }
             reference at (size_type n)
             {
-                if (n < 0 || n > this->_size)
+                if (n < 0 || n >= this->_size)
                     throw std::out_of_range("Vector");
                 return this->_array[n];
             }
             const_reference at (size_type n) const
             {
-                if (n < 0 || n > this->_size)
+                if (n < 0 || n >= this->_size)
                     throw std::out_of_range("Vector");
                 return this->_array[n];
             }
             reference front() { return this->_array[0]; }
             const_reference front() const { return this->_array[0]; }
-            reference back() { return this->_array[this->_size]; }
-            const_reference back() const { return this->_array[this->size]; }
+            reference back() { return this->_array[this->_size - 1]; }
+            const_reference back() const { return this->_array[this->size - 1]; }
 
             // Modifiers :
             template <class InputIterator>
@@ -225,7 +225,7 @@ namespace ft {
                 if (this->_size)
                 {
                     this->_size--;
-                    this->destroy(this->_array + this->_size);
+                    this->_alloc.destroy(this->_array + this->_size);
                 }
             }
             iterator insert (iterator position, const value_type& val)
@@ -247,9 +247,13 @@ namespace ft {
             void insert (iterator position, size_type n, const value_type& val)
             {
                 difference_type d = std::distance(this->begin(), position);
-                std::cout << this->_capacity << std::endl;
                 if (this->_size + n > this->_capacity)
-                    this->reserve(this->_size + n);
+                {
+                    if (this->size + n <= this->_capacity * 2)
+                        this->reserve(this->_capacity * 2);
+                    else
+                        this->reserve(this->_size + n);
+                }
                 for (int i = this->_size - 1; d <= i; i--)
                     this->_array[i + n] = this->_array[i];
                 for (size_type i = d; i < n + d; i++)
@@ -263,7 +267,12 @@ namespace ft {
                 difference_type d = std::distance(this->begin(), position);
                 difference_type n = std::distance(first, last);
                 if (this->_size + n > this->_capacity)
-                    this->reserve(this->_size + n);
+                {
+                    if (this->size + n <= this->_capacity * 2)
+                        this->reserve(this->_capacity * 2);
+                    else
+                        this->reserve(this->_size + n);
+                }
                 for (size_type i = d; i < this->_size + n; i++)
                     this->_array[i + n] = this->_array[i];
                 for (size_type i = d; first != last; first++)

@@ -212,22 +212,22 @@ int main()
     // ir--;
     // ft::Vector<int>::iterator it = a.erase(ir);
     // std::cout << *it << std::endl;
-    ft::Vector<int> myvector (5, 11);  // 5 default-constructed ints
-    myvector.push_back(55);
-    std::vector<int> myvector1 (5, 11);  // 5 default-constructed ints
-    myvector1.push_back(55);
+    // ft::Vector<int> myvector (5);  // 5 default-constructed ints
 
-    int i=0;
+    // int i=0;
 
-    ft::Vector<int>::reverse_iterator rit = myvector.rbegin();
-    std::cout << *rit << std::endl;
-    for (; rit!= myvector.rend(); ++rit)
-        *rit = ++i;
+    // ft::Vector<int>::reverse_iterator rit = myvector.rbegin();
+    // for (; rit != myvector.rend(); ++rit)
+    // {
+    //     std::cout << "i : " << i << std::endl;
+    //     *rit = ++i;
+    // }
 
-    std::cout << "myvector contains:";
-    for (ft::Vector<int>::iterator it = myvector.begin(); it != myvector.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-
+    // std::cout << "myvector contains:";
+    // for (ft::Vector<int>::iterator it = myvector.begin(); it != myvector.end(); ++it)
+    //     std::cout << ' ' << *it;
+    // std::cout << '\n';
+    ft::Vector<int>  a(4, 55);
+    std::cout << a.end() - a.begin() << std::endl;
     return 0;
 }
