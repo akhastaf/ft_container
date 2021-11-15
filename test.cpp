@@ -227,7 +227,11 @@ int main()
     // for (ft::Vector<int>::iterator it = myvector.begin(); it != myvector.end(); ++it)
     //     std::cout << ' ' << *it;
     // std::cout << '\n';
-    ft::Vector<int>  a(4, 55);
-    std::cout << a.end() - a.begin() << std::endl;
+    // ft::Vector<int>  a(4, 55);
+    // std::cout << a.end() - a.begin() << std::endl;
+    ft::vector<int> v(4,5);
+    ft::vector<int>::reverse_iterator 		my_rit2(v.end());
+    ft::vector<int>::const_reverse_iterator c_it, c_ob(v.end());
+    c_it = my_rit2;
     return 0;
 }

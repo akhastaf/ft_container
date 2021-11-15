@@ -34,7 +34,10 @@ namespace ft
                 this->_ptr -= n;
                 return *this;
             }
-
+            operator random_access_iterator<const T>()
+            {
+                return random_access_iterator<const T>(this->_ptr);
+            }
             bool operator== (random_access_iterator const & rhs) { return this->_ptr == rhs.base(); };
             bool operator!= (random_access_iterator const & rhs) { return this->_ptr != rhs.base(); };
             reference operator* () const { return *(this->_ptr); };
@@ -74,8 +77,6 @@ namespace ft
                 return this->_ptr - rhs._ptr;
             }
             pointer base() const { return _ptr; };
-
-
         private:
             pointer _ptr;
     };
@@ -115,5 +116,4 @@ namespace ft
         return random_access_iterator<T>(rhs + n);
     }
 }
-
 #endif

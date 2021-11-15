@@ -117,6 +117,8 @@ int main (void) {
   std::cout << "capcity: " << a.capacity() << std::endl;
   for (int i = 0; i < a.size(); i++)
       std::cout << a[i] << std::endl;
-  
+  std::vector<int>::const_reverse_iterator z = b.rbegin();
+  std::vector<int>::const_reverse_iterator x;
+  x = z;
   return 0;
 }
