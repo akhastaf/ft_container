@@ -3214,7 +3214,7 @@ int main(void)
 	sleep(1);
     reverse_iterator_tests();
 	sleep(1);
-	//reverse_iterator_with_ft_vector();
+	reverse_iterator_with_ft_vector();
 	sleep(1);
     vector_tests();
 

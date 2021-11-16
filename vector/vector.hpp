@@ -115,6 +115,7 @@ namespace ft {
                         for (size_type i = this->_size; i < n; i++)
                             this->_alloc.construct(this->_array + i, val);
                     }
+                    this->_size = n;
                }
                 catch (std::length_error &e)
                 {
@@ -240,8 +241,8 @@ namespace ft {
                 }
                 if (this->_size)
                 {
-                    for (difference_type i = this->_size; i >= d ;i--)
-                        this->_array[i - 1] = this->_array[i];
+                    for (size_type i = d + 1; i <= this->_size ;i++)
+                        std::swap(this->_array[d], this->_array[i]);
                 }
                 this->_size++;
                 this->_alloc.construct(this->_array + d, val);
