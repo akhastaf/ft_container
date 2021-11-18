@@ -1,8 +1,14 @@
 #include <iostream>
 # include <memory>
 #include <vector>
+# include <ctime>
+# include <iomanip>
+# include <unistd.h>
+# include <signal.h>
+# include <sys/time.h>
 # include "vector/Vector.hpp"
-
+# define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
+# define TIME_FAC 20 // the ft::vector methods can be slower up to std::vector methods * TIME_FAC (MAX 20)
 int main()
 {
     // std::vector<std::string> ar(4, "Hello");
@@ -229,9 +235,32 @@ int main()
     // std::cout << '\n';
     // ft::Vector<int>  a(4, 55);
     // std::cout << a.end() - a.begin() << std::endl;
-    ft::vector<int> v(4,5);
-    ft::vector<int>::reverse_iterator 		my_rit2(v.end());
-    ft::vector<int>::const_reverse_iterator c_it, c_ob(v.end());
-    c_it = my_rit2;
+    // std::vector<int> v(3);
+    // v.push_back(1);
+    // v.push_back(2);
+    // v.push_back(3);
+	// ft::reverse_iterator<std::vector<int>::iterator> my_rit(v.end()), my_rit1(v.end() - 1);
+    // std::cout << "\nvalue : " << *(v.end() - 1) << std::endl;
+    // std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " base function " << "] --------------------]\t\t\033[0m";
+    // EQUAL((&(*my_rit) == &(*my_rit1.base())));
+    // std::cout << &(*my_rit1.base()) << " " << &(*my_rit) << std::endl;
+    std::vector<int> v(3);
+    v.push_back(1);
+    v.push_back(2);
+    v.push_back(3);
+    std::reverse_iterator<std::vector<int>::iterator> rit(v.end()), rit_1(v.end() - 1);
+    ft::reverse_iterator<std::vector<int>::iterator> my_rit(v.end()), my_rit1(v.end() - 1);
+    ft::vector<int> my_v(3,4);
+    my_v.push_back(1);
+    my_v.push_back(2);
+    my_v.push_back(3);
+    std::cout << " my : " << *my_rit << " " << *(my_rit1 - 1) << std::endl;
+    std::cout << " v : " << *rit << " " << *(rit_1 - 1) << std::endl;
+    // std::cout << " my : " << &(*my_rit) << " " << &(*(my_rit1 - 1)) << std::endl;
+    // std::cout << " v : " << &(*rit) << " " << &(*(rit_1 - 1)) << std::endl;
+    // std::cout << (&(*rit) == &(*(rit_1 - 1))) << std::endl;
+    // std::cout << (&(*my_rit) == &(*(my_rit1 - 1))) << std::endl;
+    // std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " - operator " << "] --------------------]\t\t\033[0m";
+    // EQUAL((&(*my_rit) == &(*(my_rit1 - 1))) && (&(*rit) == &(*(rit_1 - 1))));
     return 0;
 }

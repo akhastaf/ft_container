@@ -2,6 +2,8 @@
 #include <iostream>       // std::cerr
 #include <stdexcept>      // std::out_of_range
 #include <vector>         // std::vector
+#include <utility>         // std::vector
+#include "tools.hpp"
 
 int main (void) {
   // std::vector<int> a(20, 100);
@@ -107,18 +109,30 @@ int main (void) {
   // std::vector<int> c;
   // std::cout << c.begin().base() << std::endl;
   // std::cout
-  std::vector<int> a;
-  std::vector<int> b(10, 55);
-  a.push_back(6);
-  std::vector<int>::iterator ir = a.begin();
-  ir++;
-  a.insert(a.begin(), b.begin(), b.end());
-  std::cout << "size: " << a.size() << std::endl;
-  std::cout << "capcity: " << a.capacity() << std::endl;
-  for (int i = 0; i < a.size(); i++)
-      std::cout << a[i] << std::endl;
-  std::vector<int>::const_reverse_iterator z = b.rbegin();
-  std::vector<int>::const_reverse_iterator x;
-  x = z;
+  // std::vector<int> a;
+  // std::vector<int> b(10, 55);
+  // a.push_back(6);
+  // std::vector<int>::iterator ir = a.begin();
+  // ir++;
+  // a.insert(a.begin(), b.begin(), b.end());
+  // std::cout << "size: " << a.size() << std::endl;
+  // std::cout << "capcity: " << a.capacity() << std::endl;
+  // for (int i = 0; i < a.size(); i++)
+  //     std::cout << a[i] << std::endl;
+  // std::vector<int>::const_reverse_iterator z = b.rbegin();
+  // std::vector<int>::const_reverse_iterator x;
+  // x = z;
+  std::pair<std::string, std::string> kv("jhon", "jhon@email.com");
+  ft::pair<std::string, std::string> ft_kv("jhon", "jhon@email.com");
+  ft::pair<std::string, std::string> ft_kv1 = ft_kv;
+  ft::pair<std::string, std::string> ft_kv2(ft_kv1);
+
+  std::cout << "key : " << kv.first << " value : " << kv.second << std::endl;
+  std::cout << "key : " << ft_kv.first << " value : " << ft_kv.second << std::endl;
+  std::cout << "key : " << ft_kv1.first << " value : " << ft_kv1.second << std::endl;
+  std::cout << "key : " << ft_kv2.first << " value : " << ft_kv.second << std::endl;
+  if (ft_kv1 == ft_kv2)
+    std::cout << "equal" << std::endl;
+
   return 0;
 }
