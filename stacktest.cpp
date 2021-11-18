@@ -2,12 +2,13 @@
 # include <memory>
 #include <vector>
 #include <list>
+#include <stack>
 # include "stack/Stack.hpp"
 
 
 int     main()
 {
-    ft::Stack<int>  s;
+    std::stack<int>  s;
 
     for (int i = 0; i < 10; i++)
         s.push(i * 2 + 3);
