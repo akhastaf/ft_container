@@ -24,13 +24,13 @@ namespace ft
             }
             reverse_iterator operator= (reverse_iterator const & it)
             {
-                this->_iter = it.base();
+                this->_iter = it._iter - 1;
                 return *this;
             }
             iterator_type base() const 
             {
                 iterator_type tmp = this->_iter;
-                return ++tmp; 
+                return (++tmp); 
             }
             reference operator*() const { return *(this->_iter); }
             reverse_iterator operator+ (difference_type n) const 

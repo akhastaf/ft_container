@@ -9,6 +9,7 @@ int     main()
     std::cout << m.size() << std::endl;
     std::map<std::string, std::string>::iterator it = m.begin();
     std::map<std::string, std::string>::iterator it1 = m.begin();
+    std::cout << (it == it1) << std::endl;
     std::cout << (*it).first << std::cout;
     return 0;
 }

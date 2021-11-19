@@ -45,7 +45,7 @@ namespace ft
             reference operator[] (difference_type n) { return this->_ptr[-n]; };
             random_access_iterator operator++ () 
             {
-                return random_access_iterator(this->_ptr++);
+                return random_access_iterator(++this->_ptr);
             };
             random_access_iterator operator++ (int)
             {
