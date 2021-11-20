@@ -24,7 +24,7 @@ namespace ft
             }
             reverse_iterator operator= (reverse_iterator const & it)
             {
-                this->_iter = it._iter - 1;
+                this->_iter = it._iter;
                 return *this;
             }
             iterator_type base() const 
