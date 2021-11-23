@@ -42,7 +42,7 @@ namespace ft
             bool operator!= (random_access_iterator const & rhs) { return this->_ptr != rhs.base(); };
             reference operator* () const { return *(this->_ptr); };
             pointer operator-> () { return &operator*(); };
-            reference operator[] (difference_type n) { return this->_ptr[-n]; };
+            reference operator[] (difference_type n) { return this->_ptr[n]; };
             random_access_iterator operator++ () 
             {
                 return random_access_iterator(++this->_ptr);
