@@ -113,12 +113,9 @@ namespace ft
         pair (const first_type& a, const second_type& b) : first(a), second(b) {}
         pair& operator= (const pair& pr)
         {
-            if (this != &pr)
-            {
-                this->first = pr.first;
-                this->second = pr.second;
-                return *this;
-            }
+            this->first = pr.first;
+            this->second = pr.second;
+            return *this;
         }
     };
     template <class T1, class T2>
@@ -144,12 +141,32 @@ namespace ft
     template <class T1, class T2>
     bool operator>= (const pair<T1,T2>& lhs, const pair<T1,T2>& rhs)
     { return !(lhs<rhs); }
+    
+    template <class T1, class T2>
+    std::ostream & operator<< (std::ostream & o, pair<T1,T2> const & p)
+    {
+        o << p.first << " " << p.second << std::endl;
+        return o; 
+    }
 
     template <class T1,class T2>
     pair<T1,T2> make_pair (T1 x, T2 y)
     {
         return ( pair<T1,T2>(x,y) );
     }
+    template<class T>
+    struct   Node
+    {
+        T   value;
+        Node<T> *left;
+        Node<T> *right;
+        Node<T> *parent;
+        bool black;
+        bool isleft;
+        Node() : value(T()), left(NULL), right(NULL), parent(NULL), black(false), isleft(true) {}
+        Node(T value) : value(value), left(NULL), right(NULL), parent(NULL), black(false), isleft(true) {}
+        ~Node() {}
+    };
 }
 
 #endif

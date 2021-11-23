@@ -6,9 +6,12 @@
 # include <unistd.h>
 # include <signal.h>
 # include <sys/time.h>
-# include "vector/Vector.hpp"
-# define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
-# define TIME_FAC 20 // the ft::vector methods can be slower up to std::vector methods * TIME_FAC (MAX 20)
+# include "vector/vector.hpp"
+# include "map/RedBlackTree.hpp"
+
+// # define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
+// # define TIME_FAC 20 // the ft::vector methods can be slower up to std::vector methods * TIME_FAC (MAX 20)
+
 int main()
 {
     // std::vector<std::string> ar(4, "Hello");
@@ -270,16 +273,52 @@ int main()
     // EQUAL((&(*my_rit) == &(*(my_rit1 - 1))) && (&(*rit) == &(*(rit_1 - 1))));
     // std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " base function " << "] --------------------]\t\t\033[0m";
     // EQUAL((&(*rit) == &(*rit_1.base())) && (&(*my_rit) == &(*my_rit1.base())));
-    std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " riterator to const_riterator " << "] --------------------]\t\t\033[0m";
-    {
-		ft::vector<int> v(4,5);
-		ft::vector<int>::reverse_iterator 		my_rit2(v.end());
-        ft::vector<int>::const_reverse_iterator c_it, c_ob(v.end());
-        c_it = my_rit2;
-        std::cout << (&(*my_rit2) == &(*c_it)) << " " << (&(*my_rit2) == &(*c_ob)) << std::endl;
-        std::cout << &(*my_rit2) << "  " << &(*c_it) << std::endl;
-        std::cout << (&(*my_rit2)  - &(*c_it)) << std::endl;;
-        EQUAL(&(*my_rit2) == &(*c_it) && (&(*my_rit2) == &(*c_ob)));
-    }
+    // std::cout << "\033[1;37m[-------------------- [" << std::setw(40) << std::left << " riterator to const_riterator " << "] --------------------]\t\t\033[0m";
+    // {
+	// 	ft::vector<int> v(4,5);
+	// 	ft::vector<int>::reverse_iterator 		my_rit2(v.end());
+    //     ft::vector<int>::const_reverse_iterator c_it, c_ob(v.end());
+    //     c_it = my_rit2;
+    //     std::cout << (&(*my_rit2) == &(*c_it)) << " " << (&(*my_rit2) == &(*c_ob)) << std::endl;
+    //     std::cout << &(*my_rit2) << "  " << &(*c_it) << std::endl;
+    //     std::cout << (&(*my_rit2)  - &(*c_it)) << std::endl;;
+    //     EQUAL(&(*my_rit2) == &(*c_it) && (&(*my_rit2) == &(*c_ob)));
+    // }
+    // ft::RedBlackTree<ft::pair<std::string, std::string> > tree1;
+    // ft::pair<std::string, std::string> p("test", "test");
+    // ft::pair<std::string, std::string> p1("test1", "test");
+    // ft::pair<std::string, std::string> p2("test2", "test");
+    // ft::pair<std::string, std::string> p3("test3", "test");
+    // ft::pair<std::string, std::string> p4("test4", "test");
+    // ft::pair<std::string, std::string> p5("test5", "test");
+    // tree1.insert(p2);
+    // tree1.insert(p1);
+    // tree1.insert(p);
+    // tree1.insert(p3);
+    // tree1.insert(p4);
+    // tree1.insert(p5);
+    // tree1.print2D();
+    // std::cout << tree1.size() << std::endl;
+    // std::cout << tree1.max_size() << std::endl;
+    // {
+    ft::RedBlackTree<ft::pair<int, int> > tree1;
+    ft::pair<int, int> p(2, 3);
+    ft::pair<int, int> p1(6, 7);
+    ft::pair<int, int> p2(8, 9);
+    ft::pair<int, int> p3(9, 9);
+    ft::pair<int, int> p4(4, 9);
+    ft::pair<int, int> p5(5, 9);
+    tree1.insert(p2);
+    tree1.insert(p1);
+    tree1.insert(p);
+    tree1.insert(p3);
+    tree1.insert(p4);
+    tree1.insert(p5);
+    tree1.print2D();
+    std::cout << tree1.size() << std::endl;
+    std::cout << tree1.max_size() << std::endl;
+
+    // }
+
     return 0;
 }
