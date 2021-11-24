@@ -31,7 +31,10 @@ namespace ft {
             typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
             explicit vector (const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(0), _capacity(0), _array(NULL)  {}
-            explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _alloc(alloc), _size(n), _capacity(n) {
+            explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) {
+                this->_alloc =alloc;
+                _size = n;
+                _capacity = n;
                 this->_array = this->_alloc.allocate(this->_size);
                 for (size_type i = 0; i < this->_size; i++)
                     this->_alloc.construct(this->_array + i, val);

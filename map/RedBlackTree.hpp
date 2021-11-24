@@ -2,7 +2,7 @@
 # define REDBLACKTREE_HPP
 # include <iostream>
 # include "../tools.hpp"
-#define COUNT 10
+#define COUNT 25
 
 namespace   ft
 {
@@ -46,9 +46,6 @@ namespace   ft
             }
             void    add(node_pointer parent, node_pointer node)
             {
-                // bool cmp = this->_comp(parent->value.first, node->value.first);
-                // std::cout << cmp << std::endl;
-                // exit(0);
                 if (this->_comp(parent->value.first, node->value.first)) //
                 {
                     if (!(parent->right))
@@ -57,7 +54,8 @@ namespace   ft
                         node->isleft = false;
                         parent->right = node;
                     }
-                    return add(parent->right, node);
+                    else
+                        return add(parent->right, node);
                 }
                 else
                 {
@@ -66,17 +64,17 @@ namespace   ft
                         node->parent = parent;
                         node->isleft = true;
                         parent->left = node;
-                        return ;
                     }
-                    return add(parent->left, node);
+                    else
+                        return add(parent->left, node);
                 }
-                //checkColor(node);
+                checkColor(node);
             }
             void    checkColor(node_pointer node)
             {
                 if (!node)
                     return;
-                if (!node->black && !node->parent->black)
+                if (!node->black && node->parent && !node->parent->black)
                     correctTree(node);
                 checkColor(node->parent);
             }
@@ -84,7 +82,7 @@ namespace   ft
             {
                 if (node->parent->isleft)
                 {
-                    if (!(node->parent->parent) || node->parent->parent->right->black)
+                    if (!(node->parent->parent->right) || (node->parent->parent->right && node->parent->parent->right->black))
                         return rotate(node);
                     if (node->parent->parent->right)
                         node->parent->parent->right->black = true;
@@ -92,7 +90,7 @@ namespace   ft
                     node->parent->black = true;
                     return ;
                 }
-                if (!(node->parent->parent) || node->parent->parent->left->black)
+                if (!(node->parent->parent->left) || (node->parent->parent->left && node->parent->parent->left->black))
                     return rotate(node);
                 if (node->parent->parent->left)
                     node->parent->parent->left->black = true;
@@ -113,31 +111,45 @@ namespace   ft
                             node->parent->right->black = false;
                         return ;
                     }
-                    rightleft_rotation(node->parent->parent);
-                    node->black = true;
+                    else
+                    {
+                        rightleft_rotation(node->parent->parent);
+                        node->black = true;
+                    }
                 }
                 else
                 {
                     if (!node->parent->isleft)
+                    {
                         left_rotation(node->parent->parent);
+                        node->black = false;
+                        node->parent->black = true;
+                        if (node->parent->left)
+                            node->parent->left->black = false;
+                        return ;
+                    }
                     else
+                    {
                         leftright_rotation(node->parent->parent);
-
+                        node->black = true;
+                    }
                 }
             }
             void left_rotation(node_pointer node)
             {
+                std::cout << "left rotation" << std::endl;
                 node_pointer tmp = node->right;
                 node->right = tmp->left;
-                if (!node->right)
+                if (node->right)
                 {
-                    tmp->right->parent = node;
+                    node->right->parent = node;
                     tmp->right->isleft = false;
                 }
                 if (!node->parent)
                 {
                     this->_head = tmp;
-                    tmp->parent = NULL; 
+                    this->_head->parent = NULL;
+                    this->_head->black = true; 
                 }
                 else
                 {
@@ -159,9 +171,10 @@ namespace   ft
             }
             void right_rotation(node_pointer node)
             {
+                std::cout << "right rotation" << std::endl;
                 node_pointer tmp = node->left;
                 node->left = tmp->right;
-                if (!node->left)
+                if (node->left)
                 {
                     tmp->left->parent = node;
                     tmp->left->isleft = true;
@@ -169,6 +182,7 @@ namespace   ft
                 if (!node->parent)
                 {
                     this->_head = tmp;
+                    this->_head->parent = NULL;
                     this->_head->black = true; 
                 }
                 else
@@ -191,11 +205,13 @@ namespace   ft
             }
             void leftright_rotation(node_pointer node)
             {
+                std::cout << "leftright rotation" << std::endl;
                 left_rotation(node->left);
                 right_rotation(node);
             }
             void rightleft_rotation(node_pointer node)
             {
+                std::cout << "rightleft rotation" << std::endl;
                 right_rotation(node->right);
                 left_rotation(node);
             }
@@ -221,10 +237,17 @@ namespace   ft
                 for (int i = COUNT; i < space; i++)
                     std::cout << " ";
                 if (root->black)
-                    std::cout << "\033[1;34m";
+                    std::cout << "\033[1;40m";
                 else
-                    std::cout << "\033[1;31m";
-                std::cout << root->value << "\033[0m";
+                    std::cout << "\033[1;41m";
+                std::cout << root->value;
+                if (root->isleft && root != this->_head)
+                    std::cout << " left ";
+                else if (root != this->_head)
+                    std::cout << " right ";
+                if (root->parent)
+                    std::cout << " parent(" << root->parent->value << ")";
+                std::cout << "\033[0m" << std::endl;
             
                 // Process left child
                 print2DUtil(root->left, space);

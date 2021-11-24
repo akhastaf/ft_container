@@ -308,9 +308,9 @@ int main()
     ft::pair<int, int> p3(9, 9);
     ft::pair<int, int> p4(4, 9);
     ft::pair<int, int> p5(5, 9);
-    tree1.insert(p2);
-    tree1.insert(p1);
     tree1.insert(p);
+    tree1.insert(p1);
+    tree1.insert(p2);
     tree1.insert(p3);
     tree1.insert(p4);
     tree1.insert(p5);

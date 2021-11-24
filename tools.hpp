@@ -145,7 +145,7 @@ namespace ft
     template <class T1, class T2>
     std::ostream & operator<< (std::ostream & o, pair<T1,T2> const & p)
     {
-        o << p.first << " " << p.second << std::endl;
+        o << p.first << " " << p.second;
         return o; 
     }
 
