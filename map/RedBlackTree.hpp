@@ -69,6 +69,7 @@ namespace   ft
                         return add(parent->left, node);
                 }
                 checkColor(node);
+                balckNode(node);
             }
             void    checkColor(node_pointer node)
             {
@@ -82,19 +83,21 @@ namespace   ft
             {
                 if (node->parent->isleft)
                 {
-                    if (!(node->parent->parent->right) || (node->parent->parent->right && node->parent->parent->right->black))
+                    if (!(node->parent->parent && node->parent->parent->right) || (node->parent->parent && node->parent->parent->right && node->parent->parent->right->black))
                         return rotate(node);
                     if (node->parent->parent->right)
                         node->parent->parent->right->black = true;
-                    node->parent->parent->black = false;
+                    if (this->_head != node->parent->parent)
+                        node->parent->parent->black = false;
                     node->parent->black = true;
                     return ;
                 }
-                if (!(node->parent->parent->left) || (node->parent->parent->left && node->parent->parent->left->black))
+                if (!(node->parent->parent && node->parent->parent->left) || (node->parent->parent && node->parent->parent->left && node->parent->parent->left->black))
                     return rotate(node);
                 if (node->parent->parent->left)
                     node->parent->parent->left->black = true;
-                node->parent->parent->black = false;
+                if (this->_head != node->parent->parent)
+                    node->parent->parent->black = false;
                 node->parent->black = true;
                 return ;
             }
@@ -137,7 +140,8 @@ namespace   ft
             }
             void left_rotation(node_pointer node)
             {
-                std::cout << "left rotation" << std::endl;
+                if (!node)
+                    return;
                 node_pointer tmp = node->right;
                 node->right = tmp->left;
                 if (node->right)
@@ -171,7 +175,8 @@ namespace   ft
             }
             void right_rotation(node_pointer node)
             {
-                std::cout << "right rotation" << std::endl;
+                if (!node)
+                    return;
                 node_pointer tmp = node->left;
                 node->left = tmp->right;
                 if (node->left)
@@ -205,15 +210,39 @@ namespace   ft
             }
             void leftright_rotation(node_pointer node)
             {
-                std::cout << "leftright rotation" << std::endl;
                 left_rotation(node->left);
                 right_rotation(node);
             }
             void rightleft_rotation(node_pointer node)
             {
-                std::cout << "rightleft rotation" << std::endl;
                 right_rotation(node->right);
                 left_rotation(node);
+            }
+            void    remove(node_pointer node)
+            {
+                if (!node->right && !node->left)
+                {
+                    if (node->isleft)
+                        node->parent->left = NULL;
+                    else
+                        node->parent->right = NULL;
+                    //this->_alloc.destroy(node->value, )
+                }
+            }
+            int    balckNode(node_pointer node)
+            {
+                if (node == NULL)
+                    return 1;
+                int rightBlackNode = this->balckNode(node->right);
+                int leftBlackNode = this->balckNode(node->left);
+                if (leftBlackNode != rightBlackNode)
+                {
+                    std::cout << "unbalnced" << std::endl;
+                    this->correctTree(node);
+                }
+                if (node->black)
+                    leftBlackNode++;
+                return leftBlackNode;
             }
             // void    clear_tree(node_pointer node);
             bool empty() const { return (this->_size == 0); }

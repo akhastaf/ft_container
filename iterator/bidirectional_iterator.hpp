@@ -35,18 +35,22 @@ namespace ft
             // {
                 
             // }
-            // bidirectional_iterator operator++(int)
-            // {
-
-            // }
+            bidirectional_iterator operator++(int)
+            {
+                bidirectional_iterator tmp = *this;
+                ++tmp;
+                return tmp;
+            }
             // bidirectional_iterator operator--()
             // {
                 
             // }
-            // bidirectional_iterator operator--(int)
-            // {
-
-            // }
+            bidirectional_iterator operator--(int)
+            {
+                bidirectional_iterator tmp = *this;
+                --tmp;
+                return tmp;
+            }
             template <class U>
             friend bool operator== (const bidirectional_iterator<U>& lhs, const bidirectional_iterator<U>& rhs);
             template <class U>
