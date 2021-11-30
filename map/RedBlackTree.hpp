@@ -69,7 +69,7 @@ namespace   ft
                         return add(parent->left, node);
                 }
                 checkColor(node);
-                balckNode(node);
+                
             }
             void    checkColor(node_pointer node)
             {
@@ -77,6 +77,7 @@ namespace   ft
                     return;
                 if (!node->black && node->parent && !node->parent->black)
                     correctTree(node);
+                balckNode(node);
                 checkColor(node->parent);
             }
             void    correctTree(node_pointer node)
@@ -118,6 +119,9 @@ namespace   ft
                     {
                         rightleft_rotation(node->parent->parent);
                         node->black = true;
+                        node->parent->black = false;
+                        if (node->right)
+                            node->right->black = false;
                     }
                 }
                 else
@@ -135,11 +139,15 @@ namespace   ft
                     {
                         leftright_rotation(node->parent->parent);
                         node->black = true;
+                        node->parent->black = false;
+                        if (node->right)
+                            node->right->black = false;
                     }
                 }
             }
             void left_rotation(node_pointer node)
             {
+                // std::cout << "left rotation" << std::endl;
                 if (!node)
                     return;
                 node_pointer tmp = node->right;
@@ -175,14 +183,15 @@ namespace   ft
             }
             void right_rotation(node_pointer node)
             {
+                // std::cout << "right rotation" << std::endl;
                 if (!node)
                     return;
                 node_pointer tmp = node->left;
                 node->left = tmp->right;
                 if (node->left)
                 {
-                    tmp->left->parent = node;
-                    tmp->left->isleft = true;
+                    node->left->parent = node;
+                    node->left->isleft = true;
                 }
                 if (!node->parent)
                 {
@@ -237,8 +246,13 @@ namespace   ft
                 int leftBlackNode = this->balckNode(node->left);
                 if (leftBlackNode != rightBlackNode)
                 {
-                    std::cout << "unbalnced" << std::endl;
-                    this->correctTree(node);
+                    std::cout << "unbalnced " << leftBlackNode << " " << rightBlackNode << std::endl;
+                    std::cout << node->value << std::endl;
+                    // if (node->right && node->right->black)
+                    //     node->right->black = false;
+                    // if (node->left && node->left->black)
+                    //     node->left->black = false;
+                    // this->correctTree(node);
                 }
                 if (node->black)
                     leftBlackNode++;
@@ -270,12 +284,12 @@ namespace   ft
                 else
                     std::cout << "\033[1;41m";
                 std::cout << root->value;
-                if (root->isleft && root != this->_head)
-                    std::cout << " left ";
-                else if (root != this->_head)
-                    std::cout << " right ";
+                // if (root->isleft && root != this->_head)
+                //     std::cout << " left ";
+                // else if (!root->isleft && root != this->_head)
+                //     std::cout << " right ";
                 if (root->parent)
-                    std::cout << " parent(" << root->parent->value << ")";
+                    std::cout << " p(" << root->parent->value << ")";
                 std::cout << "\033[0m" << std::endl;
             
                 // Process left child
@@ -287,6 +301,7 @@ namespace   ft
             {
                 // Pass initial space count as 0
                 print2DUtil(this->_head, 0);
+                std::cout << "======================================================================================" << std::endl;
             }
  
  
