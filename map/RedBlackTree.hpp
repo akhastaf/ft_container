@@ -34,6 +34,7 @@ namespace   ft
                 this->_alloc_node.construct(new_node);
                 //new_node->value = this->_alloc.allocate(1);
                 this->_alloc.construct(&(new_node->value), e);
+                std::cout << "add new : " << new_node->value << std::endl;
                 if (!this->_head)
                 {
                     this->_head = new_node;
@@ -70,6 +71,76 @@ namespace   ft
                 }
                 checkColor(node);
                 
+            }
+            void    remove(node_pointer node)
+            {
+                node_pointer tmp;
+                if (!node)
+                    return ;
+                if (!node->left && !node->right)
+                {
+                    std::cout << "delete leaf" << std::endl;
+                    // delete leaf
+                    if (node->isleft)
+                    {
+                        node->parent->left = NULL;
+                        //std::cout << "is left : " << node->parent->value << std::endl;
+                        // if (node->parent->left)
+                        //     std::cout << "left value : " << node->parent->left->value << std::endl;
+                    }
+                    else
+                    {
+                        //std::cout << "is right : " << std::endl;
+                        node->parent->right = NULL;
+                    }
+                    //std::cout << "node : " << node->value << std::endl;
+                    this->_alloc.destroy(&(node->value));
+                    this->_alloc_node.destroy(node);
+                    this->_alloc_node.deallocate(node, 1);
+                    this->_size--;
+                    return ;
+                    
+                }
+                else if (this->hasOneChild(node))
+                {
+                    std::cout << "delete node with one child" << std::endl;
+                    // delete node with one child
+                    if (node->left)
+                        tmp = node->left; //->parent = node->parent;
+                    else
+                        tmp = node->right;//->parent = node->parent;
+                    tmp->parent = node->parent;
+                    if (!tmp->parent)
+                    {
+                        this->_head = tmp;
+                        tmp->black = true;
+                    }
+                    else
+                    {
+                        if (node->isleft)
+                        {
+                            node->parent->left = tmp;
+                            tmp->isleft = true;
+                        }
+                        else
+                        {
+                            node->parent->right = tmp;
+                            tmp->isleft = false;
+                        }
+                    }
+                    this->_alloc.destroy(&(node->value));
+                    this->_alloc_node.destroy(node);
+                    this->_alloc_node.deallocate(node, 1);
+                    this->_size--;
+                }
+                else 
+                {
+                    std:: cout << "delete node with two children" << std::endl;
+                    // delete node with two children;
+                    node_pointer node_succer = getSuccessor(node);
+                    std::swap(node->value, node_succer->value);
+                    this->remove(node_succer);
+                }
             }
             void    checkColor(node_pointer node)
             {
@@ -147,7 +218,7 @@ namespace   ft
             }
             void left_rotation(node_pointer node)
             {
-                // std::cout << "left rotation" << std::endl;
+                std::cout << "left rotation" << std::endl;
                 if (!node)
                     return;
                 node_pointer tmp = node->right;
@@ -155,7 +226,7 @@ namespace   ft
                 if (node->right)
                 {
                     node->right->parent = node;
-                    tmp->right->isleft = false;
+                    node->right->isleft = false;
                 }
                 if (!node->parent)
                 {
@@ -183,7 +254,7 @@ namespace   ft
             }
             void right_rotation(node_pointer node)
             {
-                // std::cout << "right rotation" << std::endl;
+                std::cout << "right rotation" << std::endl;
                 if (!node)
                     return;
                 node_pointer tmp = node->left;
@@ -227,17 +298,6 @@ namespace   ft
                 right_rotation(node->right);
                 left_rotation(node);
             }
-            void    remove(node_pointer node)
-            {
-                if (!node->right && !node->left)
-                {
-                    if (node->isleft)
-                        node->parent->left = NULL;
-                    else
-                        node->parent->right = NULL;
-                    //this->_alloc.destroy(node->value, )
-                }
-            }
             int    balckNode(node_pointer node)
             {
                 if (node == NULL)
@@ -267,7 +327,6 @@ namespace   ft
                 // Base case
                 if (root == NULL)
                     return;
-            
                 // Increase distance between levels
                 space += COUNT;
             
@@ -284,6 +343,8 @@ namespace   ft
                 else
                     std::cout << "\033[1;41m";
                 std::cout << root->value;
+                // if (root->value.first == 120)
+                //     std::cout << " here : " << root->left << std::endl;
                 // if (root->isleft && root != this->_head)
                 //     std::cout << " left ";
                 // else if (!root->isleft && root != this->_head)
@@ -304,6 +365,22 @@ namespace   ft
                 std::cout << "======================================================================================" << std::endl;
             }
  
+            node_pointer getSuccessor()
+            {
+                return getSuccessor(this->_head);
+            }
+            node_pointer getPredecessor()
+            {
+                return getPredecessor(this->_head);
+            }
+            bool    contains(const_reference value)
+            {
+                return this->contains(this->_head, value);
+            }
+            node_pointer    find(const_reference value)
+            {
+                return (this->find(this->_head, value));
+            }
  
         private:
             node_pointer    _head;
@@ -311,6 +388,53 @@ namespace   ft
             compare_type    _comp;
             allocator_type  _alloc;
             allocator_node  _alloc_node;
+
+            bool    hasOneChild(node_pointer node)
+            {
+                if ((node->left && !node->right) || (!node->left && node->right))
+                    return true;
+                return false;
+            }
+            node_pointer getSuccessor(node_pointer node)
+            {
+                node_pointer    tmp;
+                if (!node)
+                    return NULL;
+                tmp = node->left;
+                while (tmp->right)
+                    tmp = tmp->right;
+                return tmp;
+            }
+            node_pointer getPredecessor(node_pointer node)
+            {
+                node_pointer    tmp;
+                if (!node)
+                    return NULL;
+                tmp = node->right;
+                while (tmp->left)
+                    tmp = tmp->left;
+                return tmp;
+            }
+            bool    contains(node_pointer parent, const_reference value)
+            {
+                if (!parent)
+                    return false;
+                if (value == parent->value)
+                    return true;
+                if (this->_comp(parent->value.first, value.first))
+                    return contains(parent->right, value);
+                return contains(parent->left, value);
+            }
+            node_pointer    find(node_pointer parent, const_reference value)
+            {
+                if (!parent)
+                    return NULL;
+                if (value == parent->value)
+                    return parent;
+                if (this->_comp(parent->value.first, value.first))
+                    return find(parent->right, value);
+                return find(parent->left, value);
+            }
     };
     
 }
