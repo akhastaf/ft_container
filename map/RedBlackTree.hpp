@@ -72,75 +72,123 @@ namespace   ft
                 checkColor(node);
                 
             }
+            void    fixRemove(node_pointer node)
+            {
+                node_pointer s;
+                while (node != this->_head && node->black)
+                {
+                    if (node == node->parent->left)
+                    {
+                        s = node->parent->right;
+                        if (!s->black)
+                        {
+                            s->black = true; // case 3.1
+                            node->parent->black = false; // case 3.1
+                            left_rotation(node->parent); // case 3.1
+                            s = node->parent->right; // case 3.1
+                        }
+                        if (s->left->black && s->right->black)
+                        {
+                            s->black = false; // case 3.2
+                            node = node->parent; //case 3.2
+                        }
+                        else if (s->right->black)
+                        {
+                                s->left->black = true; // case 3.3
+                                s->black = false; //case 3.3
+                                right_rotation(s); // case 3.3
+                                s = node->parent->right; // case 3.3
+                        }
+                        s->black = node->parent->right; // case 3.4
+                        node->parent->black = true; // case 3.4
+                        s->right->black = true; // case 3.4
+                        left_rotation(node->parent); // case 3.4
+                        node = this->_head;
+                    }
+                    //else (same as then close with “right” and “left” exchanged)
+                }
+                node->black = true;
+            }
             void    remove(node_pointer node)
+            {
+                if (!node->black)
+                    removeBST(node);
+                else if ((node->left && !node->left->black) || (node->right && !node->right->black))
+                {
+                    if (node->left && !node->left->black)
+                    {
+                        std::swap(node->value, node->left->value);
+                        node->black = true;
+                        removeBST(node->left);
+                    }
+                    else
+                    {
+                        std::swap(node->value, node->right->value);
+                        node->black = true;
+                        removeBST(node->right);
+                    }
+                }
+                else
+                    removeBST(node);
+                this->balckNode(this->_head);
+            }
+            void    removeBST(node_pointer node)
             {
                 node_pointer tmp;
                 if (!node)
                     return ;
                 if (!node->left && !node->right)
                 {
-                    std::cout << "delete leaf" << std::endl;
-                    // delete leaf
                     if (node->isleft)
-                    {
                         node->parent->left = NULL;
-                        //std::cout << "is left : " << node->parent->value << std::endl;
-                        // if (node->parent->left)
-                        //     std::cout << "left value : " << node->parent->left->value << std::endl;
-                    }
                     else
-                    {
-                        //std::cout << "is right : " << std::endl;
                         node->parent->right = NULL;
-                    }
-                    //std::cout << "node : " << node->value << std::endl;
                     this->_alloc.destroy(&(node->value));
                     this->_alloc_node.destroy(node);
                     this->_alloc_node.deallocate(node, 1);
                     this->_size--;
                     return ;
-                    
-                }
-                else if (this->hasOneChild(node))
-                {
-                    std::cout << "delete node with one child" << std::endl;
-                    // delete node with one child
-                    if (node->left)
-                        tmp = node->left; //->parent = node->parent;
-                    else
-                        tmp = node->right;//->parent = node->parent;
-                    tmp->parent = node->parent;
-                    if (!tmp->parent)
-                    {
-                        this->_head = tmp;
-                        tmp->black = true;
-                    }
-                    else
-                    {
-                        if (node->isleft)
-                        {
-                            node->parent->left = tmp;
-                            tmp->isleft = true;
-                        }
-                        else
-                        {
-                            node->parent->right = tmp;
-                            tmp->isleft = false;
-                        }
-                    }
-                    this->_alloc.destroy(&(node->value));
-                    this->_alloc_node.destroy(node);
-                    this->_alloc_node.deallocate(node, 1);
-                    this->_size--;
                 }
                 else 
                 {
-                    std:: cout << "delete node with two children" << std::endl;
-                    // delete node with two children;
-                    node_pointer node_succer = getSuccessor(node);
-                    std::swap(node->value, node_succer->value);
-                    this->remove(node_succer);
+                    node_pointer node_presuccessor = getPredecessor(node);
+                    if (!node_presuccessor)
+                        node_presuccessor = getSuccessor(node);
+                    std::swap(node->value, node_presuccessor->value);
+                    this->remove(node_presuccessor);
                 }
+                // else if (this->hasOneChild(node))
+                // {
+                //     std::cout << "delete node with one child" << std::endl;
+                //     // delete node with one child
+                //     if (node->left)
+                //         tmp = node->left; //->parent = node->parent;
+                //     else
+                //         tmp = node->right;//->parent = node->parent;
+                //     tmp->parent = node->parent;
+                //     if (!tmp->parent)
+                //     {
+                //         this->_head = tmp;
+                //         tmp->black = true;
+                //     }
+                //     else
+                //     {
+                //         if (node->isleft)
+                //         {
+                //             node->parent->left = tmp;
+                //             tmp->isleft = true;
+                //         }
+                //         else
+                //         {
+                //             node->parent->right = tmp;
+                //             tmp->isleft = false;
+                //         }
+                //     }
+                //     this->_alloc.destroy(&(node->value));
+                //     this->_alloc_node.destroy(node);
+                //     this->_alloc_node.deallocate(node, 1);
+                //     this->_size--;
+                // }
             }
             void    checkColor(node_pointer node)
             {
@@ -373,6 +421,14 @@ namespace   ft
             {
                 return getPredecessor(this->_head);
             }
+            node_pointer getMaximum()
+            {
+                return getMaximum(this->_head);
+            }
+            node_pointer getMinimum()
+            {
+                return getMinimum(this->_head);
+            }
             bool    contains(const_reference value)
             {
                 return this->contains(this->_head, value);
@@ -380,6 +436,54 @@ namespace   ft
             node_pointer    find(const_reference value)
             {
                 return (this->find(this->_head, value));
+            }
+            static node_pointer getPredecessor(node_pointer node)
+            {
+                node_pointer    tmp;
+                if (!node)
+                    return NULL;
+                tmp = node->left;
+                if (!tmp)
+                    return NULL;
+                while (tmp->right)
+                    tmp = tmp->right;
+                return tmp;
+            }
+            static node_pointer getSuccessor(node_pointer node)
+            {
+                node_pointer    tmp;
+                if (!node)
+                    return NULL;
+                tmp = node->right;
+                if (!tmp)
+                    return NULL;
+                while (tmp->left)
+                    tmp = tmp->left;
+                return tmp;
+            }
+            node_pointer getMinimum(node_pointer node)
+            {
+                node_pointer    tmp;
+                if (!node)
+                    return NULL;
+                tmp = node->left;
+                if (!tmp)
+                    return NULL;
+                while (tmp->left)
+                    tmp = tmp->left;
+                return tmp;
+            }
+            node_pointer getMaximum(node_pointer node)
+            {
+                node_pointer    tmp;
+                if (!node)
+                    return NULL;
+                tmp = node->right;
+                if (!tmp)
+                    return NULL;
+                while (tmp->right)
+                    tmp = tmp->right;
+                return tmp;
             }
  
         private:
@@ -394,26 +498,6 @@ namespace   ft
                 if ((node->left && !node->right) || (!node->left && node->right))
                     return true;
                 return false;
-            }
-            node_pointer getSuccessor(node_pointer node)
-            {
-                node_pointer    tmp;
-                if (!node)
-                    return NULL;
-                tmp = node->left;
-                while (tmp->right)
-                    tmp = tmp->right;
-                return tmp;
-            }
-            node_pointer getPredecessor(node_pointer node)
-            {
-                node_pointer    tmp;
-                if (!node)
-                    return NULL;
-                tmp = node->right;
-                while (tmp->left)
-                    tmp = tmp->left;
-                return tmp;
             }
             bool    contains(node_pointer parent, const_reference value)
             {

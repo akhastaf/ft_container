@@ -2,6 +2,8 @@
 # define BIDIRECTIONAL_ITERATOR_HPP
 # include <iostream>
 # include "iterator_trais.hpp"
+# include "../map/RedBlackTree.hpp"
+# include "../tools.hpp"
 
 namespace ft
 {
@@ -14,6 +16,8 @@ namespace ft
             typedef typename    ft::iterator<std::bidirectional_iterator_tag, T>::difference_type	difference_type;
             typedef             T*                                                                  pointer;
             typedef             T&			                                                        reference;
+            typedef             ft::RedBlackTree<T>			                                        tree;
+            typedef typename    tree::node_pointer			                                        node_pointer;
             bidirectional_iterator() : _ptr(nullptr) {}
             bidirectional_iterator(pointer ptr) : _ptr(ptr) {}
             bidirectional_iterator(bidirectional_iterator const & it) : _ptr(it._ptr) {}
@@ -25,7 +29,7 @@ namespace ft
             }
             reference operator* ()
             {
-                return *(this->_ptr);
+                return *(this->_ptr->value);
             }
             pointer operator-> ()
             {
@@ -33,7 +37,12 @@ namespace ft
             }
             // bidirectional_iterator operator++()
             // {
-                
+            //     node_pointer node_ptr = tree::getSuccessor(this->_ptr);
+            //     if (node_ptr)
+            //     {
+            //         while (this->_ptr->parent != NULL)
+            //             this->_ptr = this->_ptr->parent;
+            //     }        
             // }
             bidirectional_iterator operator++(int)
             {
@@ -57,7 +66,8 @@ namespace ft
             friend bool operator!= (const bidirectional_iterator<U>& lhs, const bidirectional_iterator<U>& rhs);
 
         private:
-            pointer _ptr;
+            //pointer _ptr;
+            node_pointer _ptr;
     };
     template <class U>
     bool operator== (const bidirectional_iterator<U>& lhs, const bidirectional_iterator<U>& rhs)
