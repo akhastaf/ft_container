@@ -366,10 +366,18 @@ int main()
     tree1.insert(p20);
     tree1.print2D();
     ft::RedBlackTree<ft::pair<int, int> >::node_pointer n1 = tree1.find(p2);
+    ft::RedBlackTree<ft::pair<int, int> >::node_pointer n2 = tree1.find(p1);
     std::cout << n1 << std::endl;
+    std::cout << n2 << std::endl;
     tree1.contains(p2);
+    tree1.contains(p1);
     std::cout << n1->value << std::endl;
+    std::cout << n2->value << std::endl;
     tree1.remove(n1);
+    tree1.print2D();
+    tree1.remove(n2);
+    tree1.print2D();
+    tree1.clear();
     tree1.print2D();
     std::cout << tree1.size() << std::endl;
     std::cout << tree1.max_size() << std::endl;

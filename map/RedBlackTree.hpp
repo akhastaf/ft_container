@@ -111,6 +111,7 @@ namespace   ft
             }
             void    remove(node_pointer node)
             {
+                std::cout << "node to be deleted  " << node->value << std::endl;
                 if (!node->black)
                     removeBST(node);
                 else if ((node->left && !node->left->black) || (node->right && !node->right->black))
@@ -128,8 +129,50 @@ namespace   ft
                         removeBST(node->right);
                     }
                 }
-                else
+                else if (getSebling(node) && !(getSebling(node)->black))
+                {
+                    if (getSebling(node)->left)
+                        right_rotation(node->parent);
+                    else
+                        left_rotation(node->parent);
+                    getSebling(node)->black = true;
+                    node->parent->black = false;
                     removeBST(node);
+                }
+                else
+                {
+                    if (node->isleft && node->parent->right && node->parent->right->black)
+                    {
+                        if (node->parent->right->right && !node->parent->right->right->black)
+                        {
+                            node->parent->right->right->black = true;
+                            left_rotation(node->parent);
+                            removeBST(node);
+                        }
+                        else if (node->parent->right->left && !node->parent->right->left->black)
+                        {
+                            node->parent->right->left->black = true;
+                            rightleft_rotation(node->parent);
+                            removeBST(node);
+                        }
+                    }
+                    else if (!node->isleft && node->parent->left && node->parent->left->black)
+                    {
+                        if (node->parent->left->left && !node->parent->left->left->black)
+                        {
+                            node->parent->left->left->black = true;
+                            std::cout << node->parent->value << std::endl;
+                            right_rotation(node->parent);
+                            removeBST(node);
+                        }
+                        else if (node->parent->left->right && !node->parent->left->right->black)
+                        {
+                            //node->parent->left->right->black = true;
+                            leftright_rotation(node->parent);
+                            removeBST(node);
+                        }
+                    }
+                }
                 this->balckNode(this->_head);
             }
             void    removeBST(node_pointer node)
@@ -139,10 +182,12 @@ namespace   ft
                     return ;
                 if (!node->left && !node->right)
                 {
-                    if (node->isleft)
+                    if (node->isleft && node != this->_head)
                         node->parent->left = NULL;
-                    else
+                    else if (!node->isleft && node != this->_head)
                         node->parent->right = NULL;
+                    if (node == this->_head)
+                        this->_head = NULL;
                     this->_alloc.destroy(&(node->value));
                     this->_alloc_node.destroy(node);
                     this->_alloc_node.deallocate(node, 1);
@@ -151,11 +196,11 @@ namespace   ft
                 }
                 else 
                 {
-                    node_pointer node_presuccessor = getPredecessor(node);
-                    if (!node_presuccessor)
-                        node_presuccessor = getSuccessor(node);
-                    std::swap(node->value, node_presuccessor->value);
-                    this->remove(node_presuccessor);
+                    node_pointer node_predecessor = getPredecessor(node);
+                    if (!node_predecessor)
+                        node_predecessor = getSuccessor(node);
+                    std::swap(node->value, node_predecessor->value);
+                    this->removeBST(node_predecessor);
                 }
                 // else if (this->hasOneChild(node))
                 // {
@@ -370,6 +415,12 @@ namespace   ft
             bool empty() const { return (this->_size == 0); }
             size_type   size() const { return this->_size; }
             size_type   max_size() const { return this->_alloc_node.max_size(); }
+            void clear()
+            {
+                while (this->_size > 0)
+                    removeBST(this->_head);
+                //this->_size = 0;
+            }
             void print2DUtil(node_pointer root, int space)
             {
                 // Base case
@@ -498,6 +549,15 @@ namespace   ft
                 if ((node->left && !node->right) || (!node->left && node->right))
                     return true;
                 return false;
+            }
+            node_pointer getSebling(node_pointer node)
+            {
+                if (node->isleft && node->parent->right)
+                    return node->right;
+                else if (!node->isleft && node->parent->left)
+                    return node->parent->left;
+                return NULL;
+                
             }
             bool    contains(node_pointer parent, const_reference value)
             {
