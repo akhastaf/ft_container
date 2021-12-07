@@ -2,6 +2,8 @@
 # define REDBLACKTREE_HPP
 # include <iostream>
 # include "../tools.hpp"
+//# include "../iteratot/bidirectional_iterator.hpp"
+
 #define COUNT 25
 
 namespace   ft
@@ -479,6 +481,27 @@ namespace   ft
             node_pointer getMinimum()
             {
                 return getMinimum(this->_head);
+            }
+            static node_pointer getParentSuccessor(node_pointer node)
+            {
+                node_pointer tmp;
+                std::cout << node->parent->value << " left : " << node->parent->isleft << std::endl;
+                if (node->parent && node->parent->isleft)
+                    return node->parent;
+                tmp = node->parent;
+                while (tmp && tmp->isleft && tmp->parent)
+                    tmp = tmp->parent;
+                return tmp->parent;
+            }
+            static node_pointer getParentPredecessor(node_pointer node)
+            {
+                node_pointer tmp;
+                if (node->parent && node->parent->isleft)
+                    return node->parent;
+                tmp = node->parent;
+                while (tmp && !(tmp->isleft) && tmp->parent)
+                    tmp = tmp->parent;
+                return tmp->parent;
             }
             bool    contains(const_reference value)
             {

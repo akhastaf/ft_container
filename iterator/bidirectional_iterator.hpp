@@ -35,15 +35,17 @@ namespace ft
             {
                 return &(this->operator*());
             }
-            // bidirectional_iterator operator++()
-            // {
-            //     node_pointer node_ptr = tree::getSuccessor(this->_ptr);
-            //     if (node_ptr)
-            //     {
-            //         while (this->_ptr->parent != NULL)
-            //             this->_ptr = this->_ptr->parent;
-            //     }        
-            // }
+            bidirectional_iterator operator++()
+            {
+                node_pointer tmp;
+                if (this->_ptr->isleft && !this->_ptr->left)
+                    this->_ptr = this->_ptr->parent;
+                else if (!this->_ptr->isleft && !this->_ptr->left)
+                    this->_ptr = tree::getParentPredecessor(this->_ptr);
+                else
+                    this->_ptr = tree::getPredecessor(this->_ptr);
+                return bidirectional_iterator(this->_ptr);
+            }
             bidirectional_iterator operator++(int)
             {
                 bidirectional_iterator tmp = *this;
@@ -52,14 +54,21 @@ namespace ft
             }
             // bidirectional_iterator operator--()
             // {
-                
+            //     node_pointer tmp;
+            //     if (!this->_ptr->isleft && !this->_ptr->l)
+            //         this->_ptr = this->_ptr->parent;
+            //     else if (!this->_ptr->isleft && !this->_ptr->left)
+            //         this->_ptr = tree::getParentPredecessor(this->_ptr);
+            //     else
+            //         this->_ptr = tree::getPredecessor(this->_ptr);
+            //     return bidirectional_iterator(this->_ptr);   
             // }
-            bidirectional_iterator operator--(int)
-            {
-                bidirectional_iterator tmp = *this;
-                --tmp;
-                return tmp;
-            }
+            // bidirectional_iterator operator--(int)
+            // {
+            //     bidirectional_iterator tmp = *this;
+            //     --tmp;
+            //     return tmp;
+            // }
             template <class U>
             friend bool operator== (const bidirectional_iterator<U>& lhs, const bidirectional_iterator<U>& rhs);
             template <class U>
