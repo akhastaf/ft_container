@@ -10,9 +10,14 @@ int     main()
     m.insert(kv);
     m.insert(kv1);
     std::map<std::string, std::string>::iterator it = m.begin();
-    std::cout << (*it).first << " : " << (*it).second << std::endl;
-    it--;
-    std::cout << (*it).first << " : " << (*it).second << std::endl;
+    std::map<std::string, std::string>::iterator ite = m.end();
+    //std::cout << (*it).first << " : " << (*it).second << std::endl;
+    it++;
+    it++;
+    std::cout << &(*it) << std::endl;
+    std::cout << &(*ite) << std::endl;
+    //std::cout << (*it).first << " : " << (*it).second << std::endl;
+    //std::cout << (*ite).first << " : " << (*ite).second << std::endl;
     std::cout << m.size() << std::endl;
     // std::map<std::string, std::string>::iterator it = m.begin();
     // std::map<std::string, std::string>::iterator it1 = m.begin();

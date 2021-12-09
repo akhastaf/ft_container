@@ -8,6 +8,7 @@
 # include <sys/time.h>
 # include "vector/vector.hpp"
 # include "map/RedBlackTree.hpp"
+# include "iterator/bidirectional_iterator.hpp"
 
 // # define EQUAL(x) ((x) ? (std::cout << "\033[1;32mAC\033[0m\n") : (std::cout << "\033[1;31mWA\033[0m\n"))
 // # define TIME_FAC 20 // the ft::vector methods can be slower up to std::vector methods * TIME_FAC (MAX 20)
@@ -368,20 +369,41 @@ int main()
     tree1.print2D();
     // tree1.insert(p21);
     // tree1.print2D();
-    // ft::RedBlackTree<ft::pair<int, int> >::node_pointer n1 = tree1.find(p2);
-    ft::RedBlackTree<ft::pair<int, int> >::node_pointer n2 = tree1.find(p6);
+    ft::RedBlackTree<ft::pair<int, int> >::node_pointer n1 = tree1.find(p3);
+    ft::RedBlackTree<ft::pair<int, int> >::node_pointer n2 = tree1.find(p18);
+    // ft::bidirectional_iterator<ft::pair<int, int> > itb(tree1.getMinimum());
+    // ft::bidirectional_iterator<ft::pair<int, int> > ite(tree1.getMaximum());
+    // std::cout << "value : " << *itb << std::endl;
+    // ++itb;
+    // std::cout << "value : " << *itb << std::endl;
+    // ++itb;
+    // std::cout << "value : " << *itb << std::endl;
+    // ++itb;
+    // std::cout << "value : " << *itb << std::endl;
+    // ++itb;
+    // std::cout << "value : " << *itb << std::endl;
+    // ++itb;
+    // std::cout << "value : " << *itb << std::endl;
+
+    // for ( ; itb != ite; ++itb)
+    //     std::cout << "value : " << *itb << std::endl;
+    // ft::bidirectional_iterator<ft::pair<int, int> > itb1(tree1.getMinimum());
+    // std::cout << "operator--" << std::endl;
+    // for ( ; ite != itb1; --ite)
+    //     std::cout << "value : " << *ite << std::endl; 
+
     // std::cout << n1 << std::endl;
     // std::cout << n2 << std::endl;
     // tree1.contains(p2);
     // tree1.contains(p11);
     // std::cout << n1->value << std::endl;
-    // std::cout << n2->value << std::endl;
-    ft::RedBlackTree<ft::pair<int, int> >::node_pointer np = tree1.getParentSuccessor(n2);
-    std::cout << "parent predecessor of : " << n2->value << " " << np->value << std::endl;
-    // tree1.remove(n1);
-    // tree1.print2D();
-    // tree1.remove(n2);
-    // tree1.print2D();
+    std::cout << n2->value << std::endl;
+    // ft::RedBlackTree<ft::pair<int, int> >::node_pointer np = tree1.getParentSuccessor(n2);
+    // std::cout << "parent predecessor of : " << n2->value << " " << np->value << std::endl;
+    tree1.remove(n1);
+    tree1.print2D();
+    tree1.remove(n2);
+    tree1.print2D();
     // tree1.clear();
     // tree1.print2D();
     std::cout << tree1.size() << std::endl;

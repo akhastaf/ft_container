@@ -16,10 +16,10 @@ namespace ft
             typedef typename    ft::iterator<std::bidirectional_iterator_tag, T>::difference_type	difference_type;
             typedef             T*                                                                  pointer;
             typedef             T&			                                                        reference;
-            typedef             ft::RedBlackTree<T>			                                        tree;
+            typedef typename    ft::RedBlackTree<T>			                                        tree;
             typedef typename    tree::node_pointer			                                        node_pointer;
             bidirectional_iterator() : _ptr(nullptr) {}
-            bidirectional_iterator(pointer ptr) : _ptr(ptr) {}
+            bidirectional_iterator(node_pointer ptr) : _ptr(ptr) {}
             bidirectional_iterator(bidirectional_iterator const & it) : _ptr(it._ptr) {}
             virtual ~bidirectional_iterator() {}
             bidirectional_iterator & operator= (bidirectional_iterator const & it) 
@@ -29,7 +29,7 @@ namespace ft
             }
             reference operator* ()
             {
-                return *(this->_ptr->value);
+                return (this->_ptr->value);
             }
             pointer operator-> ()
             {
@@ -38,12 +38,12 @@ namespace ft
             bidirectional_iterator operator++()
             {
                 node_pointer tmp;
-                if (this->_ptr->isleft && !this->_ptr->left)
+                if (this->_ptr->isleft && (!this->_ptr->left || !this->_ptr->right))
                     this->_ptr = this->_ptr->parent;
-                else if (!this->_ptr->isleft && !this->_ptr->left)
+                else if (!this->_ptr->isleft && !this->_ptr->right)
                     this->_ptr = tree::getParentPredecessor(this->_ptr);
                 else
-                    this->_ptr = tree::getPredecessor(this->_ptr);
+                    this->_ptr = tree::getSuccessor(this->_ptr);
                 return bidirectional_iterator(this->_ptr);
             }
             bidirectional_iterator operator++(int)
@@ -52,23 +52,23 @@ namespace ft
                 ++tmp;
                 return tmp;
             }
-            // bidirectional_iterator operator--()
-            // {
-            //     node_pointer tmp;
-            //     if (!this->_ptr->isleft && !this->_ptr->l)
-            //         this->_ptr = this->_ptr->parent;
-            //     else if (!this->_ptr->isleft && !this->_ptr->left)
-            //         this->_ptr = tree::getParentPredecessor(this->_ptr);
-            //     else
-            //         this->_ptr = tree::getPredecessor(this->_ptr);
-            //     return bidirectional_iterator(this->_ptr);   
-            // }
-            // bidirectional_iterator operator--(int)
-            // {
-            //     bidirectional_iterator tmp = *this;
-            //     --tmp;
-            //     return tmp;
-            // }
+            bidirectional_iterator operator--()
+            {
+                node_pointer tmp;
+                if (!this->_ptr->isleft && (!this->_ptr->right || !this->_ptr->left))
+                    this->_ptr = this->_ptr->parent;
+                else if (this->_ptr->isleft && !this->_ptr->left)
+                    this->_ptr = tree::getParentSuccessor(this->_ptr);
+                else
+                    this->_ptr = tree::getPredecessor(this->_ptr);
+                return bidirectional_iterator(this->_ptr);   
+            }
+            bidirectional_iterator operator--(int)
+            {
+                bidirectional_iterator tmp = *this;
+                --tmp;
+                return tmp;
+            }
             template <class U>
             friend bool operator== (const bidirectional_iterator<U>& lhs, const bidirectional_iterator<U>& rhs);
             template <class U>
