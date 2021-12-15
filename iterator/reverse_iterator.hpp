@@ -16,10 +16,13 @@ namespace ft
             typedef typename  iterator_traits<Iterator>::reference reference;
             reverse_iterator() : _iter(iterator_type()) { }
             explicit reverse_iterator (iterator_type it) : _iter(--it) { }
+            
             template <class Iter>
             reverse_iterator (const reverse_iterator<Iter>& rev_it) : _iter(rev_it.base()) { }
+
             operator reverse_iterator<const Iterator> ()
             {
+                std::cout << "tets" << std::endl;
                 return reverse_iterator<const Iterator>(this->_iter);
             }
             reverse_iterator operator= (reverse_iterator const & it)

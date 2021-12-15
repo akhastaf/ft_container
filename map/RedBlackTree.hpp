@@ -74,111 +74,141 @@ namespace   ft
                 checkColor(node);
                 
             }
-            void    fixRemove(node_pointer node)
+            void    fixDoubleBlack(node_pointer db)
             {
                 node_pointer s;
-                while (node != this->_head && node->black)
+                while (db)
                 {
-                    if (node == node->parent->left)
+                    
+                    s = getSebling(db);
+                    if (!db->parent)
+                        return ;
+                    if ((!s || (s && (!s->right || (s->right && s->right->black))
+                        && (!s->left || (s->left && s->left->black)))))
                     {
-                        s = node->parent->right;
-                        if (!s->black)
+                        if (s)
+                            s->black = false;
+                        if (!db->parent->black)
                         {
-                            s->black = true; // case 3.1
-                            node->parent->black = false; // case 3.1
-                            left_rotation(node->parent); // case 3.1
-                            s = node->parent->right; // case 3.1
+                            db->parent->black = true;
+                            return;
                         }
-                        if (s->left->black && s->right->black)
-                        {
-                            s->black = false; // case 3.2
-                            node = node->parent; //case 3.2
-                        }
-                        else if (s->right->black)
-                        {
-                                s->left->black = true; // case 3.3
-                                s->black = false; //case 3.3
-                                right_rotation(s); // case 3.3
-                                s = node->parent->right; // case 3.3
-                        }
-                        s->black = node->parent->right; // case 3.4
-                        node->parent->black = true; // case 3.4
-                        s->right->black = true; // case 3.4
-                        left_rotation(node->parent); // case 3.4
-                        node = this->_head;
+                        else  
+                            return this->fixDoubleBlack(db->parent);
                     }
-                    //else (same as then close with “right” and “left” exchanged)
+                    else if (s && !s->black)
+                    {
+                        std::swap(s->black, db->parent->black);
+                        if (db->isleft)
+                            left_rotation(db->parent);
+                        else
+                            right_rotation(db->parent);
+                        return this->fixDoubleBlack(db);
+                    }
+                    else if (!s || s->black)
+                    {
+                        if (db->isleft && (!s->left || (s->left && s->left->black)) && (s->right && !s->right->black))
+                        {
+                            std::swap(s->black, db->black);
+                            left_rotation(db->parent);
+                            return;
+                        }
+                        else if (!db->isleft && (s->left && !s->left->black) && (!s->right || (s->right && s->right->black)))
+                        {
+                            std::swap(s->black, db->black);
+                            right_rotation(db->parent);
+                            return;
+                        }
+                        if (db->isleft && (s->left && !s->left->black))
+                        {
+                            std::swap(s->black, s->left->black);
+                            right_rotation(s);
+                        }
+                        else if (!db->isleft && (s->right && !s->right->black))
+                        {
+                            std::swap(s->black, s->right->black);
+                            left_rotation(s);
+                        }
+                    }
                 }
-                node->black = true;
             }
             void    remove(node_pointer node)
             {
-                std::cout << "node to be deleted  " << node->value << std::endl;
-                if (!node->black)
-                    removeBST(node);
-                else if ((node->left && !node->left->black) || (node->right && !node->right->black))
-                {
-                    if (node->left && !node->left->black)
-                    {
-                        std::swap(node->value, node->left->value);
-                        node->black = true;
-                        removeBST(node->left);
-                    }
-                    else
-                    {
-                        std::swap(node->value, node->right->value);
-                        node->black = true;
-                        removeBST(node->right);
-                    }
-                }
-                else if (getSebling(node) && !(getSebling(node)->black))
-                {
-                    if (getSebling(node)->left)
-                        right_rotation(node->parent);
-                    else
-                        left_rotation(node->parent);
-                    getSebling(node)->black = true;
-                    node->parent->black = false;
-                    removeBST(node);
-                }
+                // std::cout << "node to be deleted  " << node->value << std::endl;
+                node_pointer tmp = findPosition(node);
+                // std::cout << "tmp : " << tmp->value << std::endl;
+                if (!tmp->black || (!tmp->parent && !tmp->left && !tmp->right))
+                    removeBST(tmp);
                 else
                 {
-                    if (node->isleft && node->parent->right && node->parent->right->black)
-                    {
-                        if (node->parent->right->right && !node->parent->right->right->black)
-                        {
-                            node->parent->right->right->black = true;
-                            left_rotation(node->parent);
-                            removeBST(node);
-                        }
-                        else if (node->parent->right->left && !node->parent->right->left->black)
-                        {
-                            node->parent->right->left->black = true;
-                            rightleft_rotation(node->parent);
-                            removeBST(node);
-                        }
-                    }
-                    else if (!node->isleft && node->parent->left && node->parent->left->black)
-                    {
-                        if (node->parent->left->left && !node->parent->left->left->black)
-                        {
-                            node->parent->left->left->black = true;
-                            std::cout << node->parent->value << std::endl;
-                            right_rotation(node->parent);
-                            removeBST(node);
-                        }
-                        else if (node->parent->left->right && !node->parent->left->right->black)
-                        {
-                            //node->parent->left->right->black = true;
-                            leftright_rotation(node->parent);
-                            removeBST(node);
-                        }
-                    }
+                    fixDoubleBlack(tmp);
+                    removeBST(tmp);
                 }
+
+                // else if ((tmp->left && !tmp->left->black) || (tmp->right && !tmp->right->black))
+                // {
+                //     if (tmp->left && !tmp->left->black)
+                //     {
+                //         std::swap(tmp->value, tmp->left->value);
+                //         tmp->black = true;
+                //         removeBST(tmp->left);
+                //     }
+                //     else
+                //     {
+                //         std::swap(tmp->value, tmp->right->value);
+                //         tmp->black = true;
+                //         removeBST(node->right);
+                //     }
+                // }
+                // else if (getSebling(tmp) && !(getSebling(tmp)->black))
+                // {
+                //     if (getSebling(tmp)->left)
+                //         right_rotation(tmp->parent);
+                //     else
+                //         left_rotation(tmp->parent);
+                //     getSebling(tmp)->black = true;
+                //     tmp->parent->black = false;
+                //     removeBST(tmp);
+                // }
+                // else
+                // {
+                //     if (tmp->isleft && tmp->parent->right && tmp->parent->right->black)
+                //     {
+                //         if (tmp->parent->right->right && !tmp->parent->right->right->black)
+                //         {
+                //             tmp->parent->right->right->black = true;
+                //             left_rotation(tmp->parent);
+                //             removeBST(tmp);
+                //         }
+                //         else if (tmp->parent->right->left && !tmp->parent->right->left->black)
+                //         {
+                //             tmp->parent->right->left->black = true;
+                //             rightleft_rotation(tmp->parent);
+                //             removeBST(tmp);
+                //         }
+                //     }
+                //     else if (!tmp->isleft && tmp->parent->left && tmp->parent->left->black)
+                //     {
+                //         if (tmp->parent->left->left && !tmp->parent->left->left->black)
+                //         {
+                //             tmp->parent->left->left->black = true;
+                //             std::cout << tmp->parent->value << std::endl;
+                //             right_rotation(tmp->parent);
+                //             removeBST(tmp);
+                //         }
+                //         else if (tmp->parent->left->right && !tmp->parent->left->right->black)
+                //         {
+                //             //node->parent->left->right->black = true;
+                //             leftright_rotation(tmp->parent);
+                //             removeBST(tmp);
+                //         }
+                //     }
+                // }
                 this->balckNode(this->_head);
             }
             void    removeBST(node_pointer node)
             {
+                std::cout << "delte node : " << node->value << std::endl;
                 node_pointer tmp;
                 if (!node)
                     return ;
@@ -196,14 +226,15 @@ namespace   ft
                     this->_size--;
                     return ;
                 }
-                else 
-                {
-                    node_pointer node_predecessor = getPredecessor(node);
-                    if (!node_predecessor)
-                        node_predecessor = getSuccessor(node);
-                    std::swap(node->value, node_predecessor->value);
-                    this->removeBST(node_predecessor);
-                }
+                // else 
+                // {
+                //     node_pointer node_predecessor = getPredecessor(node);
+                //     if (!node_predecessor)
+                //         node_predecessor = getSuccessor(node);
+                //     std::swap(node->value, node_predecessor->value);
+                //     //std::cout << node_predecessor->value << std::endl;
+                //     this->removeBST(node_predecessor);
+                // }
                 // else if (this->hasOneChild(node))
                 // {
                 //     std::cout << "delete node with one child" << std::endl;
@@ -243,7 +274,7 @@ namespace   ft
                     return;
                 if (!node->black && node->parent && !node->parent->black)
                     correctTree(node);
-                balckNode(node);
+                //balckNode(node);
                 checkColor(node->parent);
             }
             void    correctTree(node_pointer node)
@@ -577,7 +608,7 @@ namespace   ft
             node_pointer getSebling(node_pointer node)
             {
                 if (node->isleft && node->parent->right)
-                    return node->right;
+                    return node->parent->right;
                 else if (!node->isleft && node->parent->left)
                     return node->parent->left;
                 return NULL;
@@ -602,6 +633,20 @@ namespace   ft
                 if (this->_comp(parent->value.first, value.first))
                     return find(parent->right, value);
                 return find(parent->left, value);
+            }
+            node_pointer findPosition(node_pointer node)
+            {
+                if (!node->left && !node->right)
+                    return node;
+                node_pointer node_predecessor = getSuccessor(node);
+                if (!node_predecessor)
+                    node_predecessor = getPredecessor(node);
+                std::swap(node->value, node_predecessor->value);
+                if (!node_predecessor->left && !node_predecessor->right)
+                {
+                    return node_predecessor;
+                }
+                return findPosition(node_predecessor);
             }
     };
     
