@@ -1,23 +1,23 @@
 #include <map>
 #include <iostream>
 
-class A {
-    int a;
-    public:
-        A () : a(15) {}
-        class B {
-            friend class A;
-            int b;
-                B() : b(150) {}
-            public:
-                void show(A aa) {
-                    std::cout << "a = " << aa.a << std::endl;
-                }
-        };
-    void show(B bb) {
-        std::cout << "a = " << bb.b << std::endl;
-    }
-};
+// class A {
+//     int a;
+//     public:
+//         A () : a(15) {}
+//         class B {
+//             friend class A;
+//             int b;
+//                 B() : b(150) {}
+//             public:
+//                 void show(A aa) {
+//                     std::cout << "a = " << aa.a << std::endl;
+//                 }
+//         };
+//     void show(B bb) {
+//         std::cout << "a = " << bb.b << std::endl;
+//     }
+// };
 
 int     main()
 {
@@ -45,6 +45,20 @@ int     main()
     // // std::map<std::string, std::string>::iterator it1 = m.begin();
     // // std::cout << (it == it1) << std::endl;
     // // std::cout << (*it).first << std::cout;
-   ft::Vec
+   std::map<char,int> mymap;
+
+    mymap['x'] = 100;
+    mymap['y'] = 200;
+    mymap['z'] = 300;
+
+    // show content:
+    std::map<char,int>::const_iterator crit = mymap.begin();
+    std::map<char,int>::reverse_iterator rit = mymap.rbegin();
+    std::map<char,int>::reverse_iterator rend = mymap.rend();
+    std::cout << rit->first << " => " << rit->second << '\n';
+    // std::cout << rend->first << " => " << rend->second << '\n';
+
+    for (crit=mymap.begin(); crit!=mymap.end(); ++crit)
+        std::cout << crit->first << " => " << crit->second << '\n';
     return 0;
 }

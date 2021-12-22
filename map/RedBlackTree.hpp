@@ -2,33 +2,50 @@
 # define REDBLACKTREE_HPP
 # include <iostream>
 # include "../tools.hpp"
+# include "../iterator/reverse_iterator.hpp"
 // # include "../iterator/bidirectional_iterator.hpp"
 
 #define COUNT 25
 
 namespace   ft
 {
+    template <class T>
+    class bidirectional_iterator;
+    
     template<class T, class Compare = std::less<typename T::first_type>, class Alloc = std::allocator<T> >
     class RedBlackTree
     {
 
         public:
-            typedef T                               value_type;
-            typedef value_type&                     reference;
-            typedef const value_type&               const_reference;
-            typedef Node<value_type>                node_element;
-            typedef node_element*                   node_pointer;
-            typedef Alloc                           allocator_type;
-            typedef std::allocator<node_element>    allocator_node;
-            typedef Compare                         compare_type;
-            typedef size_t                          size_type;
+            typedef T                                                        value_type;
+            typedef value_type&                                              reference;
+            typedef const value_type&                                        const_reference;
+            typedef typename T::first_type                                   key;
+            typedef Node<value_type>                                         node_element;
+            typedef node_element*                                            node_pointer;
+            typedef Alloc                                                    allocator_type;
+            typedef std::allocator<node_element>                             allocator_node;
+            typedef Compare                                                  compare_type;
+            typedef size_t                                                   size_type;
+            typedef typename ft::bidirectional_iterator<value_type>          iterator;
+            typedef typename ft::bidirectional_iterator<const value_type>    const_iterator;
+            typedef typename ft::reverse_iterator<iterator>                  reverse_iterator;
+            typedef typename ft::reverse_iterator<const_iterator>            const_reverse_iterator;
         
-            RedBlackTree(const compare_type& compare = compare_type(), const allocator_type& alloc = allocator_type()) : _head(nullptr), _size(0), _comp(compare), _alloc(alloc) {} 
-            //RedBlackTree() : _head(nullptr), _size(0), p_alloc(alloc) {} 
+            RedBlackTree(const compare_type& compare = compare_type(), const allocator_type& alloc = allocator_type()) : _root(nullptr), _size(0), _comp(compare), _alloc(alloc) 
+            {
+                this->_endNode = this->_alloc_node.allocate(1);
+                this->_alloc_node.construct(this->_endNode);
+                this->_alloc.construct(&(this->_endNode->value), value_type());
+                //this->_endNode->parent = this->root;
+            } 
+            // RedBlackTree(RedBlackTree const & src) 
+            // {
+            //     while ()
+            // } 
             ~RedBlackTree()
             {
-                //clear_tree(this->_head);
-                this->_size = 0;
+                this->clear();
             }
             void    insert(const_reference e)
             {
@@ -36,15 +53,16 @@ namespace   ft
                 this->_alloc_node.construct(new_node);
                 //new_node->value = this->_alloc.allocate(1);
                 this->_alloc.construct(&(new_node->value), e);
-                std::cout << "add new : " << new_node->value << std::endl;
-                if (!this->_head)
+                if (!this->_root)
                 {
-                    this->_head = new_node;
-                    this->_head->black = true;
+                    this->_root = new_node;
+                    this->_root->black = true;
                     this->_size++;
                     return ;
                 }
-                add(this->_head, new_node);
+                add(this->_root, new_node);
+                this->_endNode->parent = this->_root;
+                this->_endNode->left = this->_root;
                 this->_size++;
             }
             void    add(node_pointer parent, node_pointer node)
@@ -134,9 +152,8 @@ namespace   ft
             }
             void    remove(node_pointer node)
             {
-                // std::cout << "node to be deleted  " << node->value << std::endl;
+                std::cout << "delete the node : " << node->value << std::endl;
                 node_pointer tmp = findPosition(node);
-                // std::cout << "tmp : " << tmp->value << std::endl;
                 if (!tmp->black || (!tmp->parent && !tmp->left && !tmp->right))
                     removeBST(tmp);
                 else
@@ -144,129 +161,28 @@ namespace   ft
                     fixDoubleBlack(tmp);
                     removeBST(tmp);
                 }
-
-                // else if ((tmp->left && !tmp->left->black) || (tmp->right && !tmp->right->black))
-                // {
-                //     if (tmp->left && !tmp->left->black)
-                //     {
-                //         std::swap(tmp->value, tmp->left->value);
-                //         tmp->black = true;
-                //         removeBST(tmp->left);
-                //     }
-                //     else
-                //     {
-                //         std::swap(tmp->value, tmp->right->value);
-                //         tmp->black = true;
-                //         removeBST(node->right);
-                //     }
-                // }
-                // else if (getSebling(tmp) && !(getSebling(tmp)->black))
-                // {
-                //     if (getSebling(tmp)->left)
-                //         right_rotation(tmp->parent);
-                //     else
-                //         left_rotation(tmp->parent);
-                //     getSebling(tmp)->black = true;
-                //     tmp->parent->black = false;
-                //     removeBST(tmp);
-                // }
-                // else
-                // {
-                //     if (tmp->isleft && tmp->parent->right && tmp->parent->right->black)
-                //     {
-                //         if (tmp->parent->right->right && !tmp->parent->right->right->black)
-                //         {
-                //             tmp->parent->right->right->black = true;
-                //             left_rotation(tmp->parent);
-                //             removeBST(tmp);
-                //         }
-                //         else if (tmp->parent->right->left && !tmp->parent->right->left->black)
-                //         {
-                //             tmp->parent->right->left->black = true;
-                //             rightleft_rotation(tmp->parent);
-                //             removeBST(tmp);
-                //         }
-                //     }
-                //     else if (!tmp->isleft && tmp->parent->left && tmp->parent->left->black)
-                //     {
-                //         if (tmp->parent->left->left && !tmp->parent->left->left->black)
-                //         {
-                //             tmp->parent->left->left->black = true;
-                //             std::cout << tmp->parent->value << std::endl;
-                //             right_rotation(tmp->parent);
-                //             removeBST(tmp);
-                //         }
-                //         else if (tmp->parent->left->right && !tmp->parent->left->right->black)
-                //         {
-                //             //node->parent->left->right->black = true;
-                //             leftright_rotation(tmp->parent);
-                //             removeBST(tmp);
-                //         }
-                //     }
-                // }
-                this->balckNode(this->_head);
+                this->balckNode(this->_root);
+                this->_endNode->parent = this->_root;
+                this->_endNode->left = this->_root;
             }
             void    removeBST(node_pointer node)
             {
-                std::cout << "delte node : " << node->value << std::endl;
-                node_pointer tmp;
                 if (!node)
                     return ;
                 if (!node->left && !node->right)
                 {
-                    if (node->isleft && node != this->_head)
+                    if (node->isleft && node != this->_root)
                         node->parent->left = NULL;
-                    else if (!node->isleft && node != this->_head)
+                    else if (!node->isleft && node != this->_root)
                         node->parent->right = NULL;
-                    if (node == this->_head)
-                        this->_head = NULL;
+                    if (node == this->_root)
+                        this->_root = NULL;
                     this->_alloc.destroy(&(node->value));
                     this->_alloc_node.destroy(node);
                     this->_alloc_node.deallocate(node, 1);
                     this->_size--;
                     return ;
                 }
-                // else 
-                // {
-                //     node_pointer node_predecessor = getPredecessor(node);
-                //     if (!node_predecessor)
-                //         node_predecessor = getSuccessor(node);
-                //     std::swap(node->value, node_predecessor->value);
-                //     //std::cout << node_predecessor->value << std::endl;
-                //     this->removeBST(node_predecessor);
-                // }
-                // else if (this->hasOneChild(node))
-                // {
-                //     std::cout << "delete node with one child" << std::endl;
-                //     // delete node with one child
-                //     if (node->left)
-                //         tmp = node->left; //->parent = node->parent;
-                //     else
-                //         tmp = node->right;//->parent = node->parent;
-                //     tmp->parent = node->parent;
-                //     if (!tmp->parent)
-                //     {
-                //         this->_head = tmp;
-                //         tmp->black = true;
-                //     }
-                //     else
-                //     {
-                //         if (node->isleft)
-                //         {
-                //             node->parent->left = tmp;
-                //             tmp->isleft = true;
-                //         }
-                //         else
-                //         {
-                //             node->parent->right = tmp;
-                //             tmp->isleft = false;
-                //         }
-                //     }
-                //     this->_alloc.destroy(&(node->value));
-                //     this->_alloc_node.destroy(node);
-                //     this->_alloc_node.deallocate(node, 1);
-                //     this->_size--;
-                // }
             }
             void    checkColor(node_pointer node)
             {
@@ -274,7 +190,6 @@ namespace   ft
                     return;
                 if (!node->black && node->parent && !node->parent->black)
                     correctTree(node);
-                //balckNode(node);
                 checkColor(node->parent);
             }
             void    correctTree(node_pointer node)
@@ -285,7 +200,7 @@ namespace   ft
                         return rotate(node);
                     if (node->parent->parent->right)
                         node->parent->parent->right->black = true;
-                    if (this->_head != node->parent->parent)
+                    if (this->_root != node->parent->parent)
                         node->parent->parent->black = false;
                     node->parent->black = true;
                     return ;
@@ -294,7 +209,7 @@ namespace   ft
                     return rotate(node);
                 if (node->parent->parent->left)
                     node->parent->parent->left->black = true;
-                if (this->_head != node->parent->parent)
+                if (this->_root != node->parent->parent)
                     node->parent->parent->black = false;
                 node->parent->black = true;
                 return ;
@@ -356,9 +271,9 @@ namespace   ft
                 }
                 if (!node->parent)
                 {
-                    this->_head = tmp;
-                    this->_head->parent = NULL;
-                    this->_head->black = true; 
+                    this->_root = tmp;
+                    this->_root->parent = NULL;
+                    this->_root->black = true; 
                 }
                 else
                 {
@@ -392,9 +307,9 @@ namespace   ft
                 }
                 if (!node->parent)
                 {
-                    this->_head = tmp;
-                    this->_head->parent = NULL;
-                    this->_head->black = true; 
+                    this->_root = tmp;
+                    this->_root->parent = NULL;
+                    this->_root->black = true; 
                 }
                 else
                 {
@@ -434,39 +349,40 @@ namespace   ft
                 {
                     std::cout << "unbalnced " << leftBlackNode << " " << rightBlackNode << std::endl;
                     std::cout << node->value << std::endl;
-                    // if (node->right && node->right->black)
-                    //     node->right->black = false;
-                    // if (node->left && node->left->black)
-                    //     node->left->black = false;
-                    // this->correctTree(node);
                 }
                 if (node->black)
                     leftBlackNode++;
                 return leftBlackNode;
             }
-            // void    clear_tree(node_pointer node);
+
+            iterator begin()  { return iterator(this->getMinimum(), this->_endNode); }
+            const_iterator begin() const { return const_iterator(this->getMinimum(), this->_endNode); }
+            iterator end()  { return iterator(this->_endNode, this->_endNode); }
+            const_iterator end() const { return const_iterator(this->_endNode, this->_endNode); }
+            reverse_iterator rbegin()  { return reverse_iterator(iterator(this->_endNode, this->_endNode)); }
+            // const_reverse_iterator rbegin() const { return const_reverse_iterator(this->_endNode, this->_endNode); }
+            reverse_iterator rend()  { return reverse_iterator(iterator(this->getMinimum(), this->_endNode)); }
+            // const_reverse_iterator rend() const { return const_reverse_iterator(this->getMinimum(), this->_endNode); }
+
             bool empty() const { return (this->_size == 0); }
             size_type   size() const { return this->_size; }
             size_type   max_size() const { return this->_alloc_node.max_size(); }
             void clear()
             {
-                while (this->_size > 0)
-                    removeBST(this->_head);
-                //this->_size = 0;
+                node_pointer tmp;
+                while (this->_root)
+                {
+                    tmp = findPosition(this->_root);
+                    removeBST(tmp);
+                }
+                this->_size = 0;
             }
             void print2DUtil(node_pointer root, int space)
             {
-                // Base case
                 if (root == NULL)
                     return;
-                // Increase distance between levels
                 space += COUNT;
-            
-                // Process right child first
                 print2DUtil(root->right, space);
-            
-                // Print current node after space
-                // count
                 std::cout<<std::endl;
                 for (int i = COUNT; i < space; i++)
                     std::cout << " ";
@@ -475,43 +391,69 @@ namespace   ft
                 else
                     std::cout << "\033[1;41m";
                 std::cout << root->value;
-                // if (root->value.first == 120)
-                //     std::cout << " here : " << root->left << std::endl;
-                // if (root->isleft && root != this->_head)
-                //     std::cout << " left ";
-                // else if (!root->isleft && root != this->_head)
-                //     std::cout << " right ";
                 if (root->parent)
                     std::cout << " p(" << root->parent->value << ")";
                 std::cout << "\033[0m" << std::endl;
-            
-                // Process left child
                 print2DUtil(root->left, space);
             }
-            
-            // Wrapper over print2DUtil()
             void print2D()
             {
-                // Pass initial space count as 0
-                print2DUtil(this->_head, 0);
+                print2DUtil(this->_root, 0);
                 std::cout << "======================================================================================" << std::endl;
             }
- 
+            node_pointer    uper_bound(key const k)
+            {
+                return uper_bound(this->_root, k);
+            }
+            node_pointer    uper_bound(node_pointer parent, key const k)
+            {
+                if (parent->value.first <= k && parent->right)
+                    return uper_bound(parent->right, k);
+                else if (parent->left && parent->left->value.first > k && parent->right)
+                    return uper_bound(parent->left, k);
+                if (!parent->right)
+                    return NULL;
+                return parent;
+            }
+            node_pointer    lower_bound(key const k)
+            {
+                return lower_bound(this->_root, k);
+            }
+            node_pointer    lower_bound(node_pointer parent, key const k)
+            {
+                if (parent->value.first == k)
+                    return parent;
+                if (parent->value.first < k && parent->right)
+                    return lower_bound(parent->right, k);
+                else if (parent->left && parent->left->value.first > k && parent->right)
+                    return uper_bound(parent->left, k);
+                if (!parent->right)
+                    return NULL;
+                return parent;
+            }
             node_pointer getSuccessor()
             {
-                return getSuccessor(this->_head);
+                return getSuccessor(this->_root);
             }
             node_pointer getPredecessor()
             {
-                return getPredecessor(this->_head);
+                return getPredecessor(this->_root);
             }
             node_pointer getMaximum()
             {
-                return getMaximum(this->_head);
+                return getMaximum(this->_root);
             }
             node_pointer getMinimum()
             {
-                return getMinimum(this->_head);
+                return getMinimum(this->_root);
+            }
+            node_pointer getMaximum() const
+            {
+                return getMaximum(this->_root);
+            }
+            node_pointer getMinimum() const
+            {
+                return getMinimum(this->_root);
             }
             static node_pointer getParentSuccessor(node_pointer node)
             {
@@ -537,11 +479,11 @@ namespace   ft
             }
             bool    contains(const_reference value)
             {
-                return this->contains(this->_head, value);
+                return this->contains(this->_root, value);
             }
             node_pointer    find(const_reference value)
             {
-                return (this->find(this->_head, value));
+                return (this->find(this->_root, value));
             }
             static node_pointer getPredecessor(node_pointer node)
             {
@@ -567,7 +509,7 @@ namespace   ft
                     tmp = tmp->left;
                 return tmp;
             }
-            node_pointer getMinimum(node_pointer node)
+            static node_pointer getMinimum(node_pointer node)
             {
                 node_pointer    tmp;
                 if (!node)
@@ -579,9 +521,11 @@ namespace   ft
                     tmp = tmp->left;
                 return tmp;
             }
-            node_pointer getMaximum(node_pointer node)
+            static node_pointer getMaximum(node_pointer node)
             {
                 node_pointer    tmp;
+                if (node->parent && node->parent == node->left)
+                    return getMaximum(node->parent);
                 if (!node)
                     return NULL;
                 tmp = node->right;
@@ -589,11 +533,13 @@ namespace   ft
                     return NULL;
                 while (tmp->right)
                     tmp = tmp->right;
+                std::cout << tmp->value << std::endl;
                 return tmp;
             }
  
         private:
-            node_pointer    _head;
+            node_pointer    _root;
+            node_pointer    _endNode;
             size_type       _size;
             compare_type    _comp;
             allocator_type  _alloc;

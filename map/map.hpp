@@ -27,6 +27,19 @@ namespace   ft
             typedef typename ft::bidirectional_iterator<const value_type> const_iterator;
             typedef typename ft::reverse_iterator<iterator> reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
+
+        //     explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :  {}
+        //     template <class InputIterator>
+        //     map (InputIterator first, InputIterator last,
+        //         const key_compare& comp = key_compare(),
+        //         const allocator_type& alloc = allocator_type());
+        //     map (const map& x);
+
+        //     bool empty() const { return this->_tree.empty(); }
+        //     size_type size() const { return this->_tree.size(); }
+        //     size_type max_size() const { return this->_tree.max_size();}
+        // private:
+        //     RedBlackTree<value_type> _tree;
     };
 }
 

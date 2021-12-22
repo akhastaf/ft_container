@@ -330,7 +330,8 @@ int main()
     ft::pair<int, int> p23(142, 9);
     ft::pair<int, int> p24(90, 9);
     tree1.insert(p3);
-    // tree1.print2D();
+
+    //tree1.print2D();
     tree1.insert(p5);
     // tree1.print2D();
     tree1.insert(p4);
@@ -415,30 +416,77 @@ int main()
     // ft::RedBlackTree<ft::pair<int, int> >::node_pointer np = tree1.getParentSuccessor(n2);
     // std::cout << "parent predecessor of : " << n2->value << " " << np->value << std::endl;
     // tree1.remove(n1);
-    tree1.print2D();
-    tree1.remove(n5);
+    // tree1.print2D();
+    // tree1.remove(n5);
     ft::RedBlackTree<ft::pair<int, int> >::node_pointer n4 = tree1.find(p7);
     tree1.print2D();
     tree1.remove(n4);
     ft::RedBlackTree<ft::pair<int, int> >::node_pointer n3 = tree1.find(p22);
     tree1.print2D();
     tree1.remove(n3);
-    tree1.print2D();
-    ft::RedBlackTree<ft::pair<int, int> >::node_pointer n1 = tree1.find(p);
-    std::cout << n1->value << std::endl;
-    tree1.remove(n1);
-    tree1.print2D();
+    // tree1.print2D();
+    // ft::RedBlackTree<ft::pair<int, int> >::node_pointer n1 = tree1.find(p);
+    // tree1.remove(n1);
+    // //std::cout << n1->value << std::endl;
+    // tree1.print2D();
     // ft::RedBlackTree<ft::pair<int, int> >::node_pointer n2 = tree1.find(p23);
     // tree1.remove(n2);
     // tree1.print2D();
     // tree1.clear();
     // tree1.print2D();
     // tree1.print2D();
-
+    
     // std::cout << tree1.size() << std::endl;
     // std::cout << tree1.max_size() << std::endl;
 
     // }
+
+    tree1.print2D();
+    ft::RedBlackTree<ft::pair<int, int> >::iterator begin = tree1.begin();
+    // ft::RedBlackTree<ft::pair<int, int> >::const_iterator end = tree1.end();
+    ft::RedBlackTree<ft::pair<int, int> >::reverse_iterator rbegin = tree1.rbegin();
+    ft::RedBlackTree<ft::pair<int, int> >::reverse_iterator rend = tree1.rend();
+    
+    ft::RedBlackTree<ft::pair<int, int> >::const_iterator cbegin = begin;
+    // std::cout << (*begin).first << " " << (*begin).second << std::endl;
+    // ++begin;
+    // std::cout << (*begin).first << " " << (*begin).second << std::endl;
+
+    
+    // ft::bidirectional_iterator<ft::pair<int, int> > it(tree1.getMinimum());
+    // std::cout << (*it).first << " " << (*it).second << std::endl; 
+    // ++it;
+    // std::cout << (*it).first << " " << (*it).second << std::endl; 
+    std::cout << "=======================================================================" << std::endl;
+    //std::cout << (*begin).first << " " << (*begin).second << std::endl;
+    // for (; begin != end; begin++)
+    //     std::cout << (*begin).first << " " << (*begin).second << std::endl;
+    // std::cout << rend->first << " " << rend->second << std::endl;
+    std::cout << "=======================================================================" << std::endl;
+    for (; rbegin != rend; ++rbegin)
+        std::cout << (*rbegin).first << " " << (*rbegin).second << std::endl;
+    // ++end;
+    // --end;
+    // std::cout << (*rend).first << " " << (*rend).second << std::endl;
+    // ft::RedBlackTree<ft::pair<int, int> >::iterator end2 = end--;
+    // std::cout << (*end).first  << "  " << (*end).second << std::endl;
+    // ft::RedBlackTree<ft::pair<int, int> >::node_pointer n6 = tree1.uper_bound(47);
+    // std::cout << n6->value << std::endl;
+    // ft::RedBlackTree<ft::pair<int, int> >::node_pointer n7 = tree1.lower_bound(47);
+    // std::cout << n7->value << std::endl;
+    // int arr[10] = {1,2,3,4,5,6,7,8,9,10};
+    
+    
+    
+    ft::vector<int> a(5, 55);
+    ft::vector<int>::const_iterator cit = a.begin();
+
+    // ft::vector<int> v((std::istream_iterator<int>(std::cin)), std::istream_iterator<int>());
+    // // std::vector<int>::iterator b = v.begin();
+    // std::cout << v.capacity() << " " << v.size() << "\n";
+    // std::vector<int> v1(v.begin(), v.end());
+    // // std::vector<int>::iterator b = v.begin();
+    // std::cout << v1.capacity() << " " << v1.size() << "\n";
 
     return 0;
 }

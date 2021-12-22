@@ -43,6 +43,14 @@ namespace ft {
             vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : _alloc(alloc), _size(abs(std::distance(first, last))),
                 _capacity(_size), _array(this->_alloc.allocate(this->_capacity))
             {
+                // difference_type d = abs(std::distance(first, last));
+                // if (InputIterator::iterator_category == std::input_iterator_tag)
+                // {
+                //     this->clear();
+                //     for (; first != last; first++)
+                //         this->push_back(*first);
+                //     return;
+                // }
                 for (size_type i = 0; first != last; first++)
                 {
                     this->_alloc.construct(this->_array + i, *first);
