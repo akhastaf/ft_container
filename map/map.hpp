@@ -5,6 +5,7 @@
 # include <stdexcept>
 # include <algorithm>
 # include "../iterator/reverse_iterator.hpp"
+# include "RedBlackTree.hpp"
 #include "../tools.hpp"
 
 namespace   ft
@@ -17,7 +18,21 @@ namespace   ft
             typedef T mapped_type;
             typedef pair<const key_type,mapped_type> value_type;
             typedef Compare key_compare;
-            // typedef Compare value_compare;
+            typedef class value_compare : std::binary_function<value_type,value_type,bool>
+            {   
+                friend class Map;
+                protected:
+                    Compare comp;
+                    value_compare (Compare c) : comp(c) {}
+                public:
+                    typedef bool result_type;
+                    typedef value_type first_argument_type;
+                    typedef value_type second_argument_type;
+                    bool operator() (const value_type& x, const value_type& y) const
+                    {
+                        return comp(x.first, y.first);
+                    }
+            }    value_compare;
             typedef Alloc allocator_type;
             typedef typename allocator_type::reference reference;
             typedef typename allocator_type::const_reference const_reference;
@@ -27,19 +42,67 @@ namespace   ft
             typedef typename ft::bidirectional_iterator<const value_type> const_iterator;
             typedef typename ft::reverse_iterator<iterator> reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
+            typedef ft::RedBlackTree<value_type, key_compare, allocator_type>   tree;
+            typedef ptrdiff_t                                                difference_type;
+            typedef size_t                                                   size_type;
 
-        //     explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :  {}
-        //     template <class InputIterator>
-        //     map (InputIterator first, InputIterator last,
-        //         const key_compare& comp = key_compare(),
-        //         const allocator_type& alloc = allocator_type());
-        //     map (const map& x);
+            explicit map (const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(tree()), _key_comp(comp), _alloc(alloc)
+            {
 
-        //     bool empty() const { return this->_tree.empty(); }
-        //     size_type size() const { return this->_tree.size(); }
-        //     size_type max_size() const { return this->_tree.max_size();}
-        // private:
-        //     RedBlackTree<value_type> _tree;
+            }
+            // template <class InputIterator>
+            // map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
+            // map (const map& x);
+            ~map() { }
+            // map& operator= (const map& x) {}
+
+            // Iterator
+            // iterator begin() { return this->_tree.begin(); }
+            // const_iterator begin() const { return this->_tree.begin(); }
+            // iterator end() { return this->_tree.end(); }
+            // const_iterator end() const { return this->_tree.end(); }
+            // reverse_iterator rbegin() { return this->_tree.rbegin(); }
+            // const_reverse_iterator rbegin() const { return this->_tree.rbegin(); }
+            // reverse_iterator rend() { return this->_tree.rend(); }
+            // const_reverse_iterator rend() const { return this->_tree.rend(); }
+
+            // Capacity
+            bool empty() const { return this->_tree.empty(); }
+            size_type size() const { return this->_tree.size(); }
+            size_type max_size() const { return this->_tree.max_size(); }
+            
+            // Element access
+            // mapped_type& operator[] (const key_type& k) {}
+
+            // Modifiers
+            pair<iterator,bool> insert (const value_type& val) { return this->_tree.insert(val); }
+            // iterator insert (iterator position, const value_type& val) {}
+            // template <class InputIterator>
+            // void insert (InputIterator first, InputIterator last) {}
+            // void erase (iterator position) { this->_tree.remove(position); }
+            // size_type erase (const key_type& k) {}
+            // void erase (iterator first, iterator last) {}
+            // void swap (map& x) {}
+            // void clear() { this->_tree.clear(); }
+
+            // Observers
+            // key_compare key_comp() const { return this->_key_comp; }
+            // value_compare value_comp() const { return value_compare(); }
+
+            // Operations
+            // iterator find (const key_type& k) {}
+            // const_iterator find (const key_type& k) const {}
+            // size_type count (const key_type& k) const {}
+            // iterator lower_bound (const key_type& k) { return this->_tree.lower_bound(k); }
+            // const_iterator lower_bound (const key_type& k) const { return this->_tree.lower_bound(k); }
+            // iterator upper_bound (const key_type& k) { return this->_tree.upper_bound(k); }
+            // const_iterator upper_bound (const key_type& k) const { return this->_tree.upper_bound(k); }
+       
+        private:
+            tree _tree;
+            key_compare _key_comp;
+            //value_compare _value_comp;
+            allocator_type _alloc;
     };
 }
 

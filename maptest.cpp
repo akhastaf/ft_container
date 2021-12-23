@@ -52,13 +52,18 @@ int     main()
     mymap['z'] = 300;
 
     // show content:
-    std::map<char,int>::const_iterator crit = mymap.begin();
-    std::map<char,int>::reverse_iterator rit = mymap.rbegin();
-    std::map<char,int>::reverse_iterator rend = mymap.rend();
-    std::cout << rit->first << " => " << rit->second << '\n';
+    std::map<char,int>::iterator rit = mymap.begin();
+    std::map<char,int>::iterator ritn = mymap.upper_bound('z');
+    //std::cout << ritn->first << " " << ritn->second << std::endl;
+    //std::map<char,int>::reverse_iterator rit = mymap.rbegin();
+    //std::map<char,int>::reverse_iterator rend = mymap.rend();
+    //--rit;
+    //std::cout << rit->first << " => " << rit->second << '\n';
+    //++rit;
+    //std::cout << rit->first << " => " << rit->second << '\n';
     // std::cout << rend->first << " => " << rend->second << '\n';
 
-    for (crit=mymap.begin(); crit!=mymap.end(); ++crit)
-        std::cout << crit->first << " => " << crit->second << '\n';
+    for (rit=mymap.begin(); rit!=mymap.end(); ++rit)
+        std::cout << rit->first << " => " << rit->second << '\n';
     return 0;
 }
