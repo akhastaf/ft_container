@@ -21,6 +21,10 @@
 
 int     main()
 {
+    int a = 5;
+
+    std::cout << ++a << std::endl;
+    std::cout << a++ << std::endl;
     // std::map<std::string, std::string> m;
     // std::map<std::string, std::string>::iterator itm;
 
@@ -45,25 +49,25 @@ int     main()
     // // std::map<std::string, std::string>::iterator it1 = m.begin();
     // // std::cout << (it == it1) << std::endl;
     // // std::cout << (*it).first << std::cout;
-   std::map<char,int> mymap;
+//    std::map<char,int> mymap;
 
-    mymap['x'] = 100;
-    mymap['y'] = 200;
-    mymap['z'] = 300;
+//     mymap['x'] = 100;
+//     mymap['y'] = 200;
+//     mymap['z'] = 300;
 
-    // show content:
-    std::map<char,int>::iterator rit = mymap.begin();
-    std::map<char,int>::iterator ritn = mymap.upper_bound('z');
-    //std::cout << ritn->first << " " << ritn->second << std::endl;
-    //std::map<char,int>::reverse_iterator rit = mymap.rbegin();
-    //std::map<char,int>::reverse_iterator rend = mymap.rend();
-    //--rit;
-    //std::cout << rit->first << " => " << rit->second << '\n';
-    //++rit;
-    //std::cout << rit->first << " => " << rit->second << '\n';
-    // std::cout << rend->first << " => " << rend->second << '\n';
+//     // show content:
+//     std::map<char,int>::iterator rit = mymap.begin();
+//     std::map<char,int>::iterator ritn = mymap.upper_bound('z');
+//     //std::cout << ritn->first << " " << ritn->second << std::endl;
+//     //std::map<char,int>::reverse_iterator rit = mymap.rbegin();
+//     //std::map<char,int>::reverse_iterator rend = mymap.rend();
+//     //--rit;
+//     //std::cout << rit->first << " => " << rit->second << '\n';
+//     //++rit;
+//     //std::cout << rit->first << " => " << rit->second << '\n';
+//     // std::cout << rend->first << " => " << rend->second << '\n';
 
-    for (rit=mymap.begin(); rit!=mymap.end(); ++rit)
-        std::cout << rit->first << " => " << rit->second << '\n';
+//     for (rit=mymap.begin(); rit!=mymap.end(); ++rit)
+//         std::cout << rit->first << " => " << rit->second << '\n';
     return 0;
 }

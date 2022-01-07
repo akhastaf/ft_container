@@ -57,9 +57,9 @@ namespace   ft
             // map& operator= (const map& x) {}
 
             // Iterator
-            // iterator begin() { return this->_tree.begin(); }
+            iterator begin() { return this->_tree.begin(); }
             // const_iterator begin() const { return this->_tree.begin(); }
-            // iterator end() { return this->_tree.end(); }
+            iterator end() { return this->_tree.end(); }
             // const_iterator end() const { return this->_tree.end(); }
             // reverse_iterator rbegin() { return this->_tree.rbegin(); }
             // const_reverse_iterator rbegin() const { return this->_tree.rbegin(); }
@@ -76,28 +76,41 @@ namespace   ft
 
             // Modifiers
             pair<iterator,bool> insert (const value_type& val) { return this->_tree.insert(val); }
-            // iterator insert (iterator position, const value_type& val) {}
-            // template <class InputIterator>
-            // void insert (InputIterator first, InputIterator last) {}
-            // void erase (iterator position) { this->_tree.remove(position); }
-            // size_type erase (const key_type& k) {}
-            // void erase (iterator first, iterator last) {}
+            iterator insert (iterator position, const value_type& val) 
+            {
+                (void)position;
+                return (this->insert(val)).first;
+            }
+            template <class InputIterator>
+            void insert (InputIterator first, InputIterator last)
+            {
+                for (; first != last; first++)
+                    this->insert(*first);
+            }
+            void erase (iterator position) { this->_tree.remove(position->first); }
+            size_type erase (const key_type& k) { return this->_tree.remove(k);  }
+            void erase (iterator first, iterator last) 
+            {
+                for (; first != last; first++)
+                    this->erase(first->first);
+            }
             // void swap (map& x) {}
-            // void clear() { this->_tree.clear(); }
+            void clear() { this->_tree.clear(); }
 
             // Observers
-            // key_compare key_comp() const { return this->_key_comp; }
-            // value_compare value_comp() const { return value_compare(); }
+            key_compare key_comp() const { return this->_key_comp; }
+            value_compare value_comp() const { return value_compare(); }
 
             // Operations
-            // iterator find (const key_type& k) {}
-            // const_iterator find (const key_type& k) const {}
-            // size_type count (const key_type& k) const {}
-            // iterator lower_bound (const key_type& k) { return this->_tree.lower_bound(k); }
-            // const_iterator lower_bound (const key_type& k) const { return this->_tree.lower_bound(k); }
-            // iterator upper_bound (const key_type& k) { return this->_tree.upper_bound(k); }
-            // const_iterator upper_bound (const key_type& k) const { return this->_tree.upper_bound(k); }
-       
+            iterator find (const key_type& k) { return this->_tree.ifind(k); }
+            const_iterator find (const key_type& k) const { return this->_tree.ifind(k); }
+            size_type count (const key_type& k) const { return this->_tree.contains(k); }
+            iterator lower_bound (const key_type& k) { return this->_tree.lower_bound(k); }
+            const_iterator lower_bound (const key_type& k) const { return this->_tree.lower_bound(k); }
+            iterator upper_bound (const key_type& k) { return this->_tree.upper_bound(k); }
+            const_iterator upper_bound (const key_type& k) const { return this->_tree.upper_bound(k); }
+            void    check_balance() { this->_tree.balckNode(); }
+            void    print2D() { this->_tree.print2D(); }
         private:
             tree _tree;
             key_compare _key_comp;

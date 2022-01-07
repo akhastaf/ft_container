@@ -44,7 +44,7 @@ namespace   ft
             // } 
             ~RedBlackTree()
             {
-                //this->clear();
+                this->clear();
             }
             ft::pair<iterator, bool>    insert(const_reference e)
             {
@@ -150,23 +150,29 @@ namespace   ft
                     }
                 }
             }
-            void    remove(iterator positon)
+            size_type    remove(const key key)
             {
-                remove(find(positon->first));
+                return remove(find(key));
             }
-            void    remove(node_pointer node)
+            size_type    remove(node_pointer node)
             {
+                size_type r = 0;
                 node_pointer tmp = findPosition(node);
                 if (!tmp->black || (!tmp->parent && !tmp->left && !tmp->right))
+                {
                     removeBST(tmp);
+                    r = 1;
+                }
                 else
                 {
                     fixDoubleBlack(tmp);
                     removeBST(tmp);
+                    r = 1;
                 }
                 this->balckNode(this->_root);
                 this->_endNode->parent = this->_root;
                 this->_endNode->left = this->_root;
+                return r;
             }
             void    removeBST(node_pointer node)
             {
@@ -340,6 +346,10 @@ namespace   ft
                 right_rotation(node->right);
                 left_rotation(node);
             }
+            int    balckNode()
+            {
+                return this->balckNode(this->_root);
+            }
             int    balckNode(node_pointer node)
             {
                 if (node == NULL)
@@ -416,7 +426,11 @@ namespace   ft
                 while (tmp)
                 {
                     if (tmp->value.first == k)
+                    {
+                        if (!this->getSuccessor(tmp))
+                            return this->getParentPredecessor(tmp);
                         return this->getSuccessor(tmp);
+                    }
                     if (this->_comp(tmp->value.first, k))
                     {
                         if (!tmp->right)
@@ -508,11 +522,27 @@ namespace   ft
                 //std::cout << " here : " << tmp->value << std::endl;
                 return tmp->parent; //->parent->parent
             }
-            bool    contains(const_reference value)
+            size_type    contains(const key value) const
             {
-                return this->contains(this->_root, value);
+                if (this->contains(this->_root, value))
+                    return 1;
+                return 0;
             }
-            node_pointer    find(const_reference value)
+            iterator    ifind(const key value)
+            {
+                node_pointer tmp = this->find(this->_root, value);
+                if (tmp)
+                    return (iterator(tmp, this->_endNode));
+                return this->end();
+            }
+            const_iterator    ifind(const key value) const
+            {
+                node_pointer tmp = this->find(this->_root, value);
+                if (tmp)
+                    return (const_iterator(tmp, this->_endNode));
+                return this->end();
+            }
+            node_pointer    find(const key value)
             {
                 return (this->find(this->_root, value));
             }
@@ -564,7 +594,6 @@ namespace   ft
                     return NULL;
                 while (tmp->right)
                     tmp = tmp->right;
-                std::cout << tmp->value << std::endl;
                 return tmp;
             }
  
@@ -591,25 +620,25 @@ namespace   ft
                 return NULL;
                 
             }
-            bool    contains(node_pointer parent, const_reference value)
+            bool    contains(node_pointer parent, const key value) const
             {
                 if (!parent)
                     return false;
-                if (value == parent->value)
+                if (value == parent->value.first)
                     return true;
-                if (this->_comp(parent->value.first, value.first))
+                if (this->_comp(parent->value.first, value))
                     return contains(parent->right, value);
                 return contains(parent->left, value);
             }
-            node_pointer    find(node_pointer parent, const_reference value)
+            node_pointer    find(node_pointer parent, const key key)
             {
                 if (!parent)
                     return NULL;
-                if (value == parent->value)
+                if (parent->value.first == key)
                     return parent;
-                if (this->_comp(parent->value.first, value.first))
-                    return find(parent->right, value);
-                return find(parent->left, value);
+                if (this->_comp(parent->value.first, key))
+                    return find(parent->right, key);
+                return find(parent->left, key);
             }
             node_pointer findPosition(node_pointer node)
             {
