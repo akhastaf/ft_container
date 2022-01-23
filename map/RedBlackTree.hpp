@@ -367,13 +367,13 @@ namespace   ft
             }
 
             iterator begin()  { return iterator(this->getMinimum(), this->_endNode); }
-            const_iterator begin() const { return const_iterator(this->getMinimum(), this->_endNode); }
+            const_iterator begin() const { return iterator(this->getMinimum(), this->_endNode); }
             iterator end()  { return iterator(this->_endNode, this->_endNode); }
-            const_iterator end() const { return const_iterator(this->_endNode, this->_endNode); }
+            const_iterator end() const { return iterator(this->_endNode, this->_endNode); }
             reverse_iterator rbegin()  { return reverse_iterator(iterator(this->_endNode, this->_endNode)); }
-            // const_reverse_iterator rbegin() const { return const_reverse_iterator(this->_endNode, this->_endNode); }
+            const_reverse_iterator rbegin() const { return reverse_iterator(this->_endNode, this->_endNode); }
             reverse_iterator rend()  { return reverse_iterator(iterator(this->getMinimum(), this->_endNode)); }
-            // const_reverse_iterator rend() const { return const_reverse_iterator(this->getMinimum(), this->_endNode); }
+            const_reverse_iterator rend() const { return reverse_iterator(this->getMinimum(), this->_endNode); }
 
             size_type empty() const { return (this->_size == 0); }
             size_type   size() const { return this->_size; }

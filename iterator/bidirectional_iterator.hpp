@@ -20,22 +20,24 @@ namespace ft
             typedef             T*                                                                  pointer;
             typedef             T&			                                                        reference;
             typedef             ft::RedBlackTree<T>			                                        tree;
-            typedef typename    tree::node_pointer			                                        node_pointer;
+            typedef Node<value_type>                                         node_element;
+            typedef node_element*                                            node_pointer;
+            // typedef typename    tree::node_pointer			                                        node_pointer;
             bidirectional_iterator() : _ptr(NULL), _endNode(NULL) {}
             bidirectional_iterator(node_pointer ptr, node_pointer endNode) : _ptr(ptr), _endNode(endNode) {}
             bidirectional_iterator(bidirectional_iterator const & it) : _ptr(it._ptr) {}
             virtual ~bidirectional_iterator() {}
             
-            operator bidirectional_iterator<const T>()
-            {
-                return bidirectional_iterator<const T>(this->_ptr, this->_endNode); 
-            }
             
             bidirectional_iterator & operator= (bidirectional_iterator const & it) 
             {
                 this->_ptr = it._ptr;
                 this->_endNode = it._endNode;
                 return *this;
+            }
+            operator bidirectional_iterator<const T>()
+            {
+                return bidirectional_iterator<const T>((Node<const T>*)this->_ptr, (Node<const T>*)this->_endNode); 
             }
             reference operator* () const
             {

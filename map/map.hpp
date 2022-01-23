@@ -50,21 +50,32 @@ namespace   ft
             {
 
             }
-            // template <class InputIterator>
-            // map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type());
-            // map (const map& x);
+            template <class InputIterator>
+            map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+            {
+                for (; first != last; first++)
+                    this->insert(*first);
+            }
+            map (const map& x) { *this = x; }
             ~map() { }
-            // map& operator= (const map& x) {}
+            map& operator= (const map& x) 
+            {
+                this->_alloc = x.get_allocator();
+                this->_key_comp = x.key_comp();
+                // this->_value_comp = x.value_comp();
+                this->insert(x.begin(), x.end());
+                return *this;
+            }
 
             // Iterator
             iterator begin() { return this->_tree.begin(); }
-            // const_iterator begin() const { return this->_tree.begin(); }
+            const_iterator begin() const { return this->_tree.begin(); }
             iterator end() { return this->_tree.end(); }
-            // const_iterator end() const { return this->_tree.end(); }
-            // reverse_iterator rbegin() { return this->_tree.rbegin(); }
-            // const_reverse_iterator rbegin() const { return this->_tree.rbegin(); }
-            // reverse_iterator rend() { return this->_tree.rend(); }
-            // const_reverse_iterator rend() const { return this->_tree.rend(); }
+            const_iterator end() const { return this->_tree.end(); }
+            reverse_iterator rbegin() { return this->_tree.rbegin(); }
+            const_reverse_iterator rbegin() const { return this->_tree.rbegin(); }
+            reverse_iterator rend() { return this->_tree.rend(); }
+            const_reverse_iterator rend() const { return this->_tree.rend(); }
 
             // Capacity
             bool empty() const { return this->_tree.empty(); }
@@ -72,7 +83,13 @@ namespace   ft
             size_type max_size() const { return this->_tree.max_size(); }
             
             // Element access
-            // mapped_type& operator[] (const key_type& k) {}
+            mapped_type& operator[] (const key_type& k)
+            {
+                iterator tmp = this->find(k);
+                if (tmp == this->end())
+                    tmp = this->insert(this->begin(), make_pair<Key, T>(k, T()));
+                return tmp->second;
+            }
 
             // Modifiers
             pair<iterator,bool> insert (const value_type& val) { return this->_tree.insert(val); }
@@ -111,10 +128,11 @@ namespace   ft
             const_iterator upper_bound (const key_type& k) const { return this->_tree.upper_bound(k); }
             void    check_balance() { this->_tree.balckNode(); }
             void    print2D() { this->_tree.print2D(); }
+            allocator_type get_allocator() const { return this->_alloc; }
         private:
             tree _tree;
             key_compare _key_comp;
-            //value_compare _value_comp;
+            // value_compare _value_comp;
             allocator_type _alloc;
     };
 }

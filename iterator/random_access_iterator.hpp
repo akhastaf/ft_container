@@ -15,7 +15,11 @@ namespace ft
 			typedef             T*                                                                  pointer;
     		typedef             T&			                                                               reference;
             random_access_iterator() : _ptr(nullptr) {};
-            random_access_iterator(pointer ptr) : _ptr(ptr) {};
+            random_access_iterator(pointer ptr) : _ptr(ptr) {
+                std::cout << "hello" << std::endl;
+                std::cout << this->_ptr << std::endl;
+                std::cout << *this->_ptr << std::endl;
+            };
             random_access_iterator(random_access_iterator const & src) { *this = src; };
             virtual ~random_access_iterator() {};
 
@@ -36,6 +40,7 @@ namespace ft
             }
             operator random_access_iterator<const T>()
             {
+                std::cout << "chello" << std::endl;
                 return random_access_iterator<const T>(this->_ptr);
             }
             bool operator== (random_access_iterator const & rhs) { return this->_ptr == rhs.base(); };

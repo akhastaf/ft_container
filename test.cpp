@@ -562,6 +562,24 @@ int main()
     // std::vector<int> v1(v.begin(), v.end());
     // // std::vector<int>::iterator b = v.begin();
     // std::cout << v1.capacity() << " " << v1.size() << "\n";
+    ft::map<int, int>::iterator itf = map2.find(70);
+    std::cout << itf->first << " " << itf->second << std::endl;
+    ft::map<int, int>::const_iterator citf = map2.begin();
+    std::cout << citf->first << " " << citf->second << std::endl;
+    map2[13] = 99;
+
+    // map2.print2D();
+    //std::cout << map2[70] << std::endl;
+    map2.print2D();
+    ft::map<int, int> map3(map2);
+    std::cout << "Map3" << std::endl;
+    map3.print2D();
+
+    // ft::vector<int> av(5, 55);
+    // ft::vector<int>::iterator itv =  av.begin();
+    // ft::vector<int>::const_iterator citv =  av.begin();
+    // std::cout << *citv << std::endl;
+    
 
     return 0;
 }
