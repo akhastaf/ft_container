@@ -304,7 +304,7 @@ int main()
     // std::cout << tree1.size() << std::endl;
     // std::cout << tree1.max_size() << std::endl;
     // {
-    ft::RedBlackTree<ft::pair<int, int> > tree1;
+    ft::RedBlackTree<ft::pair<int, int>, std::allocator<ft::pair<int, int> > > tree1;
     ft::map<int, int> map1;
     ft::pair<int, int> p(170, 3);
     ft::pair<int, int> p1(160, 7);

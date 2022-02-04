@@ -42,7 +42,7 @@ namespace   ft
             typedef typename ft::bidirectional_iterator<const value_type> const_iterator;
             typedef typename ft::reverse_iterator<iterator> reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
-            typedef ft::RedBlackTree<value_type, key_compare, allocator_type>   tree;
+            typedef ft::RedBlackTree<value_type, allocator_type, key_compare>   tree;
             typedef ptrdiff_t                                                difference_type;
             typedef size_t                                                   size_type;
 

@@ -12,7 +12,7 @@ namespace   ft
     template <class T>
     class bidirectional_iterator;
     
-    template<class T, class Compare = std::less<typename T::first_type>, class Alloc = std::allocator<T> >
+    template<class T, class Alloc = std::allocator<T>, class Compare = std::less<typename T::first_type> >
     class RedBlackTree
     {
 
@@ -23,8 +23,8 @@ namespace   ft
             typedef typename T::first_type                                   key;
             typedef Node<value_type>                                         node_element;
             typedef node_element*                                            node_pointer;
+            typedef typename Alloc::template rebind<node_element>::other     allocator_node;
             typedef Alloc                                                    allocator_type;
-            typedef std::allocator<node_element>                             allocator_node;
             typedef Compare                                                  compare_type;
             typedef size_t                                                   size_type;
             typedef typename ft::bidirectional_iterator<value_type>          iterator;
