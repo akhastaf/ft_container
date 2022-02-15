@@ -6,6 +6,7 @@
 # include <algorithm>
 # include "../iterator/reverse_iterator.hpp"
 # include "RedBlackTree.hpp"
+# include "../iterator/bidirectional_iterator.hpp"
 #include "../tools.hpp"
 
 namespace   ft
@@ -23,8 +24,8 @@ namespace   ft
                 friend class Map;
                 protected:
                     Compare comp;
-                    value_compare (Compare c) : comp(c) {}
                 public:
+                    value_compare (Compare c) : comp(c) {}
                     typedef bool result_type;
                     typedef value_type first_argument_type;
                     typedef value_type second_argument_type;
@@ -51,7 +52,7 @@ namespace   ft
 
             }
             template <class InputIterator>
-            map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+            map (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _tree(tree()), _key_comp(comp), _alloc(alloc)
             {
                 for (; first != last; first++)
                     this->insert(*first);
@@ -62,7 +63,6 @@ namespace   ft
             {
                 this->_alloc = x.get_allocator();
                 this->_key_comp = x.key_comp();
-                // this->_value_comp = x.value_comp();
                 this->insert(x.begin(), x.end());
                 return *this;
             }
@@ -87,7 +87,7 @@ namespace   ft
             {
                 iterator tmp = this->find(k);
                 if (tmp == this->end())
-                    tmp = this->insert(this->begin(), make_pair<Key, T>(k, T()));
+                    tmp = this->insert(this->begin(), pair<Key, T>(k, T()));
                 return tmp->second;
             }
 
@@ -111,12 +111,16 @@ namespace   ft
                 for (; first != last; first++)
                     this->erase(first->first);
             }
-            // void swap (map& x) {}
+            // void swap (map& x) 
+            // {
+            //     this->_tree = x._tree;
+            //     this->_tree = x;
+            // }
             void clear() { this->_tree.clear(); }
 
             // Observers
             key_compare key_comp() const { return this->_key_comp; }
-            value_compare value_comp() const { return value_compare(); }
+            value_compare value_comp() const { return value_compare(this->_key_comp); }
 
             // Operations
             iterator find (const key_type& k) { return this->_tree.ifind(k); }
@@ -126,6 +130,8 @@ namespace   ft
             const_iterator lower_bound (const key_type& k) const { return this->_tree.lower_bound(k); }
             iterator upper_bound (const key_type& k) { return this->_tree.upper_bound(k); }
             const_iterator upper_bound (const key_type& k) const { return this->_tree.upper_bound(k); }
+            // pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
+            // pair<iterator,iterator>             equal_range (const key_type& k);
             void    check_balance() { this->_tree.balckNode(); }
             void    print2D() { this->_tree.print2D(); }
             allocator_type get_allocator() const { return this->_alloc; }

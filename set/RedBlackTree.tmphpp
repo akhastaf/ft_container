@@ -57,13 +57,13 @@ namespace   ft
                     this->_root = new_node;
                     this->_root->black = true;
                     this->_size++;
-                    return pair<iterator, bool>(iterator(new_node, this->_endNode), true);
+                    return make_pair<iterator, bool>(iterator(new_node, this->_endNode), true);
                 }
                 add(this->_root, new_node);
                 this->_endNode->parent = this->_root;
                 this->_endNode->left = this->_root;
                 this->_size++;
-                return pair<iterator, bool>(iterator(new_node, this->_endNode), true);
+                return make_pair<iterator, bool>(iterator(new_node, this->_endNode), true);
             }
             void    add(node_pointer parent, node_pointer node)
             {
@@ -240,8 +240,7 @@ namespace   ft
                     {
                         rightleft_rotation(node->parent->parent);
                         node->black = true;
-                        if (node->parent)
-                            node->parent->black = false;
+                        node->parent->black = false;
                         if (node->right)
                             node->right->black = false;
                     }
@@ -261,8 +260,7 @@ namespace   ft
                     {
                         leftright_rotation(node->parent->parent);
                         node->black = true;
-                        if (node->parent)
-                            node->parent->black = false;
+                        node->parent->black = false;
                         if (node->right)
                             node->right->black = false;
                     }
@@ -373,9 +371,9 @@ namespace   ft
             iterator end()  { return iterator(this->_endNode, this->_endNode); }
             const_iterator end() const { return iterator(this->_endNode, this->_endNode); }
             reverse_iterator rbegin()  { return reverse_iterator(iterator(this->_endNode, this->_endNode)); }
-            const_reverse_iterator rbegin() const { return reverse_iterator(iterator(this->_endNode, this->_endNode)); }
+            const_reverse_iterator rbegin() const { return reverse_iterator(this->_endNode, this->_endNode); }
             reverse_iterator rend()  { return reverse_iterator(iterator(this->getMinimum(), this->_endNode)); }
-            const_reverse_iterator rend() const { return reverse_iterator(iterator(this->getMinimum(), this->_endNode)); }
+            const_reverse_iterator rend() const { return reverse_iterator(this->getMinimum(), this->_endNode); }
 
             size_type empty() const { return (this->_size == 0); }
             size_type   size() const { return this->_size; }
@@ -420,7 +418,7 @@ namespace   ft
             }
             const_iterator    upper_bound(key const k) const
             {
-                return const_iterator((node_pointer)upper_bound(this->_root, k), this->_endNode);
+                return const_iterator(upper_bound(this->_root, k), this->_endNode);
             }
             node_pointer    upper_bound(node_pointer parent, key const k)
             {
