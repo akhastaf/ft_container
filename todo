@@ -1,0 +1,5 @@
+rbegin and rend methods
+erase method
+equal_range
+const upper_bound
+const lower_bound

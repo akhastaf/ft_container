@@ -113,10 +113,8 @@ namespace ft
         pair (const first_type& a, const second_type& b) : first(a), second(b) {}
         pair& operator= (const pair& pr)
         {
-            // *this = this->pair(pr.first, pr.second);
-            // this->first = pr.first;
-            // this->second = pr.second;
-            memcpy(this, &pr, sizeof(pair));
+            this->first = pr.first;
+            this->second = pr.second;
             return *this;
         }
     };
@@ -166,7 +164,7 @@ namespace ft
         bool black;
         bool isleft;
         Node() : value(T()), left(NULL), right(NULL), parent(NULL), black(false), isleft(true) {}
-        Node(T value) : value(value), left(NULL), right(NULL), parent(NULL), black(false), isleft(true) {}
+        Node(T cvalue) : value(cvalue), left(NULL), right(NULL), parent(NULL), black(false), isleft(true) {}
         ~Node() {}
         // operator Node<const T>()
         // {

@@ -47,11 +47,15 @@ namespace ft
             {
                 return &(this->operator*());
             }
+            pointer operator-> () const
+            {
+                return &(this->operator*());
+            }
             bidirectional_iterator operator++()
             {
                 if (this->_ptr->parent && this->_ptr->parent == this->_ptr->left)
                     this->_ptr = this->_ptr->right;
-                else if (this->_ptr->isleft && (!this->_ptr->left || !this->_ptr->right))
+                else if (this->_ptr->parent && this->_ptr->isleft && (!this->_ptr->left || !this->_ptr->right))
                     this->_ptr = this->_ptr->parent;
                 else if (!this->_ptr->isleft && !this->_ptr->right)
                 {

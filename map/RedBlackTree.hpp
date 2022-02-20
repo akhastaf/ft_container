@@ -21,6 +21,7 @@ namespace   ft
             typedef value_type&                                              reference;
             typedef const value_type&                                        const_reference;
             typedef typename T::first_type                                   key;
+            typedef typename T::second_type                                  mapped_value;
             typedef Node<value_type>                                         node_element;
             typedef node_element*                                            node_pointer;
             typedef typename Alloc::template rebind<node_element>::other     allocator_node;
@@ -31,12 +32,21 @@ namespace   ft
             typedef typename ft::bidirectional_iterator<const value_type>    const_iterator;
             typedef typename ft::reverse_iterator<iterator>                  reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator>            const_reverse_iterator;
-        
+
+            node_pointer    _root;
+            node_pointer    _endNode;
+            size_type       _size;
+            compare_type    _comp;
+            allocator_type  _alloc;
+            allocator_node  _alloc_node;
+
+
             RedBlackTree(const compare_type& compare = compare_type(), const allocator_type& alloc = allocator_type()) : _root(nullptr), _size(0), _comp(compare), _alloc(alloc) 
             {
                 this->_endNode = this->_alloc_node.allocate(1);
                 this->_alloc_node.construct(this->_endNode);
                 this->_alloc.construct(&(this->_endNode->value), value_type());
+                this->_endNode->parent = NULL;
             }
             // RedBlackTree(RedBlackTree const & src) 
             // {
@@ -46,17 +56,28 @@ namespace   ft
             {
                 this->clear();
             }
+            RedBlackTree& operator= (const RedBlackTree& x)
+            {
+                this->_alloc = x._alloc;
+                this->_alloc_node = x._alloc_node;
+                this->_comp = x._comp;
+                for (iterator it = x.begin(); it != x.end(); ++it)
+                    this->insert(*it);
+            }
             ft::pair<iterator, bool>    insert(const_reference e)
             {
                 node_pointer new_node = this->_alloc_node.allocate(1);
                 this->_alloc_node.construct(new_node);
-                //new_node->value = this->_alloc.allocate(1);
+                // new_node->value = this->_alloc.allocate(1);
                 this->_alloc.construct(&(new_node->value), e);
+                //new_node->value = e;
                 if (!this->_root)
                 {
                     this->_root = new_node;
                     this->_root->black = true;
                     this->_size++;
+                    this->_endNode->parent = this->_root;
+                    this->_endNode->left = this->_root;
                     return pair<iterator, bool>(iterator(new_node, this->_endNode), true);
                 }
                 add(this->_root, new_node);
@@ -129,6 +150,7 @@ namespace   ft
                         {
                             std::swap(s->black, db->black);
                             left_rotation(db->parent);
+                            s->right->black = true;
                             return;
                         }
                         else if (!db->isleft && (s->left && !s->left->black) && (!s->right || (s->right && s->right->black)))
@@ -240,10 +262,12 @@ namespace   ft
                     {
                         rightleft_rotation(node->parent->parent);
                         node->black = true;
-                        if (node->parent)
+                        if (node->parent && node->parent != this->_root)
                             node->parent->black = false;
                         if (node->right)
                             node->right->black = false;
+                        if (node->left)
+                            node->left->black = false;
                     }
                 }
                 else
@@ -261,10 +285,12 @@ namespace   ft
                     {
                         leftright_rotation(node->parent->parent);
                         node->black = true;
-                        if (node->parent)
+                        if (node->parent && node->parent != this->_root)
                             node->parent->black = false;
                         if (node->right)
                             node->right->black = false;
+                        if (node->left)
+                            node->left->black = false;
                     }
                 }
             }
@@ -360,8 +386,8 @@ namespace   ft
                 int leftBlackNode = this->balckNode(node->left);
                 if (leftBlackNode != rightBlackNode)
                 {
-                    std::cout << "unbalnced " << leftBlackNode << " " << rightBlackNode << std::endl;
-                    std::cout << node->value << std::endl;
+                    // std::cout << "unbalnced " << leftBlackNode << " " << rightBlackNode << std::endl;
+                    // std::cout << node->value << std::endl;
                 }
                 if (node->black)
                     leftBlackNode++;
@@ -370,8 +396,18 @@ namespace   ft
 
             iterator begin()  { return iterator(this->getMinimum(), this->_endNode); }
             const_iterator begin() const { return iterator(this->getMinimum(), this->_endNode); }
-            iterator end()  { return iterator(this->_endNode, this->_endNode); }
-            const_iterator end() const { return iterator(this->_endNode, this->_endNode); }
+            iterator end()  
+            {
+                if (!this->_endNode->parent)
+                    return this->begin();
+                return iterator(this->_endNode, this->_endNode);
+            }
+            const_iterator end() const 
+            { 
+                if (!this->_endNode->parent)
+                    return this->begin();
+                return iterator(this->_endNode, this->_endNode);
+            }
             reverse_iterator rbegin()  { return reverse_iterator(iterator(this->_endNode, this->_endNode)); }
             const_reverse_iterator rbegin() const { return reverse_iterator(iterator(this->_endNode, this->_endNode)); }
             reverse_iterator rend()  { return reverse_iterator(iterator(this->getMinimum(), this->_endNode)); }
@@ -416,11 +452,12 @@ namespace   ft
             }
             iterator    upper_bound(key const k)
             {
-                return iterator(upper_bound(this->_root, k), this->_endNode);
+                return iterator(upper_bound(_root, k), this->_endNode);
             }
             const_iterator    upper_bound(key const k) const
             {
-                return const_iterator((node_pointer)upper_bound(this->_root, k), this->_endNode);
+                //iterator tmp = iterator(upper_bound(this->_root, k), this->_endNode);
+                return const_iterator(upper_bound(this->_root, k), this->_endNode);
             }
             node_pointer    upper_bound(node_pointer parent, key const k)
             {
@@ -446,15 +483,16 @@ namespace   ft
                         tmp = tmp->left;
                     }
                 }
-                return NULL;
+                return tmp;
             }
             iterator    lower_bound(key const k)
             {
-                return iterator(lower_bound(this->_root, k), this->_endNode);
+                return iterator(lower_bound(_root, k), _endNode);
             }
             const_iterator    lower_bound(key const k) const
             {
-                return const_iterator(lower_bound(this->_root, k), this->_endNode);
+                iterator tmp = iterator(lower_bound(this->_root, k), this->_endNode);
+                return const_iterator(tmp);
             }
             node_pointer    lower_bound(node_pointer parent, key const k)
             {
@@ -476,7 +514,7 @@ namespace   ft
                         tmp = tmp->left;
                     }
                 }
-                return NULL;
+                return tmp;
             }
             node_pointer getSuccessor()
             {
@@ -579,7 +617,7 @@ namespace   ft
                     return NULL;
                 tmp = node->left;
                 if (!tmp)
-                    return NULL;
+                    return node;
                 while (tmp->left)
                     tmp = tmp->left;
                 return tmp;
@@ -600,12 +638,6 @@ namespace   ft
             }
  
         private:
-            node_pointer    _root;
-            node_pointer    _endNode;
-            size_type       _size;
-            compare_type    _comp;
-            allocator_type  _alloc;
-            allocator_node  _alloc_node;
 
             bool    hasOneChild(node_pointer node)
             {
@@ -615,9 +647,9 @@ namespace   ft
             }
             node_pointer getSebling(node_pointer node)
             {
-                if (node->isleft && node->parent->right)
+                if (node->isleft && node->parent && node->parent->right)
                     return node->parent->right;
-                else if (!node->isleft && node->parent->left)
+                else if (!node->isleft && node->parent && node->parent->left)
                     return node->parent->left;
                 return NULL;
                 
@@ -649,7 +681,10 @@ namespace   ft
                 node_pointer node_predecessor = getSuccessor(node);
                 if (!node_predecessor)
                     node_predecessor = getPredecessor(node);
-                std::swap(node->value, node_predecessor->value);
+                ft::pair<key, mapped_value> tmp(node->value);
+                _alloc.construct(&node->value, node_predecessor->value);
+                _alloc.construct(&node_predecessor->value, tmp);
+                // std::swap(node->value, node_predecessor->value);
                 if (!node_predecessor->left && !node_predecessor->right)
                 {
                     return node_predecessor;

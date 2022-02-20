@@ -8,6 +8,8 @@
 # include "RedBlackTree.hpp"
 # include "../iterator/bidirectional_iterator.hpp"
 #include "../tools.hpp"
+#include "../vector/vector.hpp"
+
 
 namespace   ft
 {
@@ -61,8 +63,10 @@ namespace   ft
             ~map() { }
             map& operator= (const map& x) 
             {
+                this->_tree.clear();
                 this->_alloc = x.get_allocator();
                 this->_key_comp = x.key_comp();
+                this->_tree._endNode = x._tree._endNode;
                 this->insert(x.begin(), x.end());
                 return *this;
             }
@@ -108,14 +112,26 @@ namespace   ft
             size_type erase (const key_type& k) { return this->_tree.remove(k);  }
             void erase (iterator first, iterator last) 
             {
-                for (; first != last; first++)
-                    this->erase(first->first);
+                ft::vector <key_type> key_to_remove;
+				while (first != last)
+				{
+					key_to_remove.push_back(first->first);
+					first++;
+				}
+				for (size_t i = 0; i < key_to_remove.size(); i++)
+                    erase(key_to_remove[i]);
             }
-            // void swap (map& x) 
-            // {
-            //     this->_tree = x._tree;
-            //     this->_tree = x;
-            // }
+            void swap (map& x) 
+            {
+                std::swap(x._tree._endNode, this->_tree._endNode);
+				std::swap(x._tree._root, this->_tree._root);
+				std::swap(x._tree._alloc_node, this->_tree._alloc_node);
+				std::swap(x._tree._alloc, this->_tree._alloc);
+				std::swap(x._tree._size, this->_tree._size);
+				
+				std::swap(x._key_comp, this->_key_comp);
+				std::swap(x._alloc, this->_alloc);
+            }
             void clear() { this->_tree.clear(); }
 
             // Observers
@@ -127,20 +143,56 @@ namespace   ft
             const_iterator find (const key_type& k) const { return this->_tree.ifind(k); }
             size_type count (const key_type& k) const { return this->_tree.contains(k); }
             iterator lower_bound (const key_type& k) { return this->_tree.lower_bound(k); }
-            const_iterator lower_bound (const key_type& k) const { return this->_tree.lower_bound(k); }
+            //const_iterator lower_bound (const key_type& k) const { return this->_tree.lower_bound(k); }
             iterator upper_bound (const key_type& k) { return this->_tree.upper_bound(k); }
-            const_iterator upper_bound (const key_type& k) const { return this->_tree.upper_bound(k); }
+            //const_iterator upper_bound (const key_type& k) const { return this->_tree.upper_bound(k); }
             // pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
             // pair<iterator,iterator>             equal_range (const key_type& k);
             void    check_balance() { this->_tree.balckNode(); }
             void    print2D() { this->_tree.print2D(); }
             allocator_type get_allocator() const { return this->_alloc; }
+            template <class Key_, class T_, class Compare_, class Alloc_>
+			friend bool operator== ( const map<Key_,T_,Compare_,Alloc_>& lhs, const map<Key_,T_,Compare_,Alloc_>& rhs ){
+				if (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()))
+					return (true);
+				return (false);
+			}
+			
+			template <class Key_, class T_, class Compare_, class Alloc_>
+			friend bool operator!= ( const map<Key_,T_,Compare_,Alloc_>& lhs, const map<Key_,T_,Compare_,Alloc_>& rhs ){
+				return !(lhs == rhs);
+			}
+			
+			template <class Key_, class T_, class Compare_, class Alloc_>
+			friend bool operator<  ( const map<Key_,T_,Compare_,Alloc_>& lhs, const map<Key_,T_,Compare_,Alloc_>& rhs ){
+				return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+			}
+			
+			template <class Key_, class T_, class Compare_, class Alloc_>
+			friend bool operator<= ( const map<Key_,T_,Compare_,Alloc_>& lhs, const map<Key_,T_,Compare_,Alloc_>& rhs ){
+				return !(ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+
+			}
+			
+			template <class Key_, class T_, class Compare_, class Alloc_>
+			friend bool operator>  ( const map<Key_,T_,Compare_,Alloc_>& lhs, const map<Key_,T_,Compare_,Alloc_>& rhs ){
+				return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+			}
+			
+			template <class Key_, class T_, class Compare_, class Alloc_>
+			friend bool operator>= ( const map<Key_,T_,Compare_,Alloc_>& lhs, const map<Key_,T_,Compare_,Alloc_>& rhs ){
+				return !(ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+			}
         private:
             tree _tree;
             key_compare _key_comp;
             // value_compare _value_comp;
             allocator_type _alloc;
     };
+    template <class Key, class T, class Compare, class Alloc>
+	void swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y){
+		x.swap(y);
+	}
 }
 
 #endif
