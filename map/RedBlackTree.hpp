@@ -122,7 +122,7 @@ namespace   ft
                     s = getSebling(db);
                     if (!db->parent)
                         return ;
-                    if ((!s || (s && (!s->right || (s->right && s->right->black))
+                    if ((!s || (s && s->black && (!s->right || (s->right && s->right->black))
                         && (!s->left || (s->left && s->left->black)))))
                     {
                         if (s)
@@ -174,6 +174,8 @@ namespace   ft
             }
             size_type    remove(const key key)
             {
+                // this->print2D();
+                // std::cout << key << std::endl;
                 return remove(find(key));
             }
             size_type    remove(node_pointer node)
@@ -191,7 +193,7 @@ namespace   ft
                     removeBST(tmp);
                     r = 1;
                 }
-                this->balckNode(this->_root);
+                this->balckNode(_root);
                 this->_endNode->parent = this->_root;
                 this->_endNode->left = this->_root;
                 return r;
@@ -386,8 +388,10 @@ namespace   ft
                 int leftBlackNode = this->balckNode(node->left);
                 if (leftBlackNode != rightBlackNode)
                 {
-                    // std::cout << "unbalnced " << leftBlackNode << " " << rightBlackNode << std::endl;
-                    // std::cout << node->value << std::endl;
+                    std::cout << "unbalnced " << leftBlackNode << " " << rightBlackNode << std::endl;
+                    std::cout << node->value << std::endl;
+                    //this->print2D();
+                    //return 1;
                 }
                 if (node->black)
                     leftBlackNode++;
@@ -426,7 +430,7 @@ namespace   ft
                 }
                 this->_size = 0;
             }
-            void print2DUtil(node_pointer root, int space)
+            void print2DUtil(node_pointer root, int space) const
             {
                 if (root == NULL)
                     return;
@@ -445,7 +449,7 @@ namespace   ft
                 std::cout << "\033[0m" << std::endl;
                 print2DUtil(root->left, space);
             }
-            void print2D()
+            void print2D() const
             {
                 print2DUtil(this->_root, 0);
                 std::cout << "======================================================================================" << std::endl;
@@ -456,10 +460,10 @@ namespace   ft
             }
             const_iterator    upper_bound(key const k) const
             {
-                //iterator tmp = iterator(upper_bound(this->_root, k), this->_endNode);
-                return const_iterator(upper_bound(this->_root, k), this->_endNode);
+                iterator tmp = iterator(upper_bound(this->_root, k), this->_endNode);
+                return const_iterator(tmp);
             }
-            node_pointer    upper_bound(node_pointer parent, key const k)
+            node_pointer    upper_bound(node_pointer parent, key const k) const
             {
                 node_pointer tmp = parent;
                 while (tmp)
@@ -473,13 +477,13 @@ namespace   ft
                     if (this->_comp(tmp->value.first, k))
                     {
                         if (!tmp->right)
-                            return getBigger(tmp);
+                            return getBigger(tmp, k);
                         tmp = tmp->right;
                     }
                     else
                     {
                         if (!tmp->left)
-                            return getBigger(tmp);
+                            return getBigger(tmp, k);
                         tmp = tmp->left;
                     }
                 }
@@ -494,7 +498,7 @@ namespace   ft
                 iterator tmp = iterator(lower_bound(this->_root, k), this->_endNode);
                 return const_iterator(tmp);
             }
-            node_pointer    lower_bound(node_pointer parent, key const k)
+            node_pointer    lower_bound(node_pointer parent, key const k) const
             {
                 node_pointer tmp = parent;
                 while (tmp)
@@ -504,23 +508,23 @@ namespace   ft
                     if (this->_comp(tmp->value.first, k))
                     {
                         if (!tmp->right)
-                            return getBigger(tmp);
+                            return getBigger(tmp, k);
                         tmp = tmp->right;
                     }
                     else
                     {
                         if (!tmp->right)
-                            return getBigger(tmp);
+                            return getBigger(tmp, k);
                         tmp = tmp->left;
                     }
                 }
                 return tmp;
             }
-            node_pointer getSuccessor()
+            node_pointer getSuccessor() const
             {
                 return getSuccessor(this->_root);
             }
-            node_pointer getPredecessor()
+            node_pointer getPredecessor() const
             {
                 return getPredecessor(this->_root);
             }
@@ -691,9 +695,11 @@ namespace   ft
                 }
                 return findPosition(node_predecessor);
             }
-            node_pointer    getBigger(node_pointer node)
+            node_pointer    getBigger(node_pointer node, key k) const
             {
                 node_pointer tmp = node;
+                if (k < tmp->value.first)
+                    return tmp;
                 while (tmp)
                 {
                     if (tmp->isleft)

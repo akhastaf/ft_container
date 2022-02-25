@@ -2,14 +2,11 @@
 # define BIDIRECTIONAL_ITERATOR_HPP
 # include <iostream>
 # include "iterator_trais.hpp"
-# include "../map/RedBlackTree.hpp"
+# include "RedBlackTree.hpp"
 # include "../tools.hpp"
 
 namespace ft
 {
-    // template<class T, class Compare = std::less<typename T::first_type>, class Alloc = std::allocator<T> >
-    // class RedBlackTree;
-    
     template <class T>
     class bidirectional_iterator : public ft::iterator<std::bidirectional_iterator_tag, T>
     {
@@ -53,9 +50,9 @@ namespace ft
             }
             bidirectional_iterator operator++()
             {
-                if (this->_ptr->parent && this->_ptr->parent == this->_ptr->left)
+               if (this->_ptr->parent && this->_ptr->parent == this->_ptr->left)
                     this->_ptr = this->_ptr->right;
-                else if (this->_ptr->parent && this->_ptr->isleft && (!this->_ptr->left || !this->_ptr->right))
+                else if (this->_ptr->parent && this->_ptr->isleft && (!this->_ptr->left && !this->_ptr->right))
                     this->_ptr = this->_ptr->parent;
                 else if (!this->_ptr->isleft && !this->_ptr->right)
                 {

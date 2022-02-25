@@ -5,8 +5,8 @@
 # include <stdexcept>
 # include <algorithm>
 # include "../iterator/reverse_iterator.hpp"
-# include "RedBlackTree.hpp"
-# include "../iterator/bidirectional_iterator.hpp"
+// # include "RedBlackTree.hpp"
+# include "bidirectional_iterator.hpp"
 #include "../tools.hpp"
 #include "../vector/vector.hpp"
 
@@ -96,7 +96,7 @@ namespace   ft
             }
 
             // Modifiers
-            pair<iterator,bool> insert (const value_type& val) { return this->_tree.insert(val); }
+            ft::pair<iterator,bool> insert (const value_type& val) { return this->_tree.insert(val); }
             iterator insert (iterator position, const value_type& val) 
             {
                 (void)position;
@@ -120,6 +120,7 @@ namespace   ft
 				}
 				for (size_t i = 0; i < key_to_remove.size(); i++)
                     erase(key_to_remove[i]);
+                this->_tree.balckNode(_tree._root);
             }
             void swap (map& x) 
             {
@@ -143,13 +144,13 @@ namespace   ft
             const_iterator find (const key_type& k) const { return this->_tree.ifind(k); }
             size_type count (const key_type& k) const { return this->_tree.contains(k); }
             iterator lower_bound (const key_type& k) { return this->_tree.lower_bound(k); }
-            //const_iterator lower_bound (const key_type& k) const { return this->_tree.lower_bound(k); }
+            const_iterator lower_bound (const key_type& k) const { return this->_tree.lower_bound(k); }
             iterator upper_bound (const key_type& k) { return this->_tree.upper_bound(k); }
-            //const_iterator upper_bound (const key_type& k) const { return this->_tree.upper_bound(k); }
-            // pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
-            // pair<iterator,iterator>             equal_range (const key_type& k);
+            const_iterator upper_bound (const key_type& k) const { return this->_tree.upper_bound(k); }
+            // ft::pair<const_iterator,const_iterator> equal_range (const key_type& k) const;
+            // ft::pair<iterator,iterator>             equal_range (const key_type& k);
             void    check_balance() { this->_tree.balckNode(); }
-            void    print2D() { this->_tree.print2D(); }
+            void    print2D() const { this->_tree.print2D(); } 
             allocator_type get_allocator() const { return this->_alloc; }
             template <class Key_, class T_, class Compare_, class Alloc_>
 			friend bool operator== ( const map<Key_,T_,Compare_,Alloc_>& lhs, const map<Key_,T_,Compare_,Alloc_>& rhs ){
