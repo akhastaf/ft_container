@@ -226,7 +226,7 @@ void iterator_tests(void)
                 m.insert(myints[i]);
             ft::set<int>::iterator it = m.begin(), eit = --m.end();
             tmp = *(eit);
-            m.erase(eit);
+            //m.erase(eit);
             for (; it != m.end(); ++it)
                 res += *(it);
             cond = cond && (res == (210 - tmp));
@@ -1193,173 +1193,173 @@ void testModifiers()
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " erase method "
               << "] --------------------]\t\t\033[0m";
 
-    {
-        bool cond(false);
-        {
-            // erasing all the elements in the map;
-            time_t start, end, diff;
-            /*------------------ std::sets ---------------------*/
-            std::set<int> m1;
-            ft::set<int> ft_m1;
-            for (size_t i = 0; i < 1e6; i++)
-            {
-                m1.insert(i);
-                ft_m1.insert(i);
-            }
+    // {
+    //     bool cond(false);
+    //     {
+    //         // erasing all the elements in the map;
+    //         time_t start, end, diff;
+    //         /*------------------ std::sets ---------------------*/
+    //         std::set<int> m1;
+    //         ft::set<int> ft_m1;
+    //         for (size_t i = 0; i < 1e6; i++)
+    //         {
+    //             m1.insert(i);
+    //             ft_m1.insert(i);
+    //         }
 
-            start = get_time();
-            m1.erase(m1.begin(), m1.end());
-            end = get_time();
-            diff = end - start;
-            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-            /*-----------------------------------------------------*/
-            /*------------------ ft::sets ---------------------*/
-            ualarm(diff * 1e3, 0);
-            ft_m1.erase(ft_m1.begin(), ft_m1.end());
-            ualarm(0, 0);
-            /*----------------------------------------------------*/
-            // erasing a single elements from the map;
-            for (size_t i = 0; i < 1e6; i++)
-            {
-                m1.insert(i);
-                ft_m1.insert(i);
-            }
-            start = get_time();
-            m1.erase(1e6 - 100);
-            end = get_time();
-            diff = end - start;
-            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-            /*-----------------------------------------------------*/
-            /*------------------ ft::sets ---------------------*/
-            ualarm(diff * 1e3, 0);
-            ft_m1.erase(1e6 - 100);
-            ualarm(0, 0);
-            // erasing a single elements from the map (position)
-            start = get_time();
-            m1.erase(m1.begin());
-            end = get_time();
-            diff = end - start;
-            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
-            /*-----------------------------------------------------*/
-            /*------------------ ft::sets ---------------------*/
-            ualarm(diff * 1e3, 0);
-            ft_m1.erase(ft_m1.begin());
-            ualarm(0, 0);
-            /*----------------------------------------------------*/
-            /*----------------------------------------------------*/
-        }
-        std::set<char> m;
-        ft::set<char> ft_m;
-        std::set<char>::iterator it;
-        ft::set<char>::iterator ft_it;
+    //         start = get_time();
+    //         m1.erase(m1.begin(), m1.end());
+    //         end = get_time();
+    //         diff = end - start;
+    //         diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+    //         /*-----------------------------------------------------*/
+    //         /*------------------ ft::sets ---------------------*/
+    //         ualarm(diff * 1e3, 0);
+    //         ft_m1.erase(ft_m1.begin(), ft_m1.end());
+    //         ualarm(0, 0);
+    //         /*----------------------------------------------------*/
+    //         // erasing a single elements from the map;
+    //         for (size_t i = 0; i < 1e6; i++)
+    //         {
+    //             m1.insert(i);
+    //             ft_m1.insert(i);
+    //         }
+    //         start = get_time();
+    //         m1.erase(1e6 - 100);
+    //         end = get_time();
+    //         diff = end - start;
+    //         diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+    //         /*-----------------------------------------------------*/
+    //         /*------------------ ft::sets ---------------------*/
+    //         ualarm(diff * 1e3, 0);
+    //         ft_m1.erase(1e6 - 100);
+    //         ualarm(0, 0);
+    //         // erasing a single elements from the map (position)
+    //         start = get_time();
+    //         m1.erase(m1.begin());
+    //         end = get_time();
+    //         diff = end - start;
+    //         diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+    //         /*-----------------------------------------------------*/
+    //         /*------------------ ft::sets ---------------------*/
+    //         ualarm(diff * 1e3, 0);
+    //         ft_m1.erase(ft_m1.begin());
+    //         ualarm(0, 0);
+    //         /*----------------------------------------------------*/
+    //         /*----------------------------------------------------*/
+    //     }
+    //     std::set<char> m;
+    //     ft::set<char> ft_m;
+    //     std::set<char>::iterator it;
+    //     ft::set<char>::iterator ft_it;
 
-        // insert some values:
-        ft_m.insert('a');
-        ft_m.insert('b');
-        ft_m.insert('c');
-        ft_m.insert('d');
-        ft_m.insert('e');
-        ft_m.insert('f');
+    //     // insert some values:
+    //     ft_m.insert('a');
+    //     ft_m.insert('b');
+    //     ft_m.insert('c');
+    //     ft_m.insert('d');
+    //     ft_m.insert('e');
+    //     ft_m.insert('f');
 
-        m.insert('a');
-        m.insert('b');
-        m.insert('c');
-        m.insert('d');
-        m.insert('e');
-        m.insert('f');
+    //     m.insert('a');
+    //     m.insert('b');
+    //     m.insert('c');
+    //     m.insert('d');
+    //     m.insert('e');
+    //     m.insert('f');
 
-        cond = m.size() == ft_m.size() && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
+    //     cond = m.size() == ft_m.size() && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
 
-        it = m.find('b');
-        ft_it = ft_m.find('b');
+    //     it = m.find('b');
+    //     ft_it = ft_m.find('b');
 
-        cond = cond && (*it == *ft_it);
-        m.erase(it);       // erasing by iterator
-        ft_m.erase(ft_it); // erasing by iterator
+    //     cond = cond && (*it == *ft_it);
+    //     m.erase(it);       // erasing by iterator
+    //     ft_m.erase(ft_it); // erasing by iterator
 
-        cond = cond && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
+    //     cond = cond && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
 
-        int ret = m.erase('c');       // erasing by key
-        int ft_ret = ft_m.erase('c'); // erasing by key
+    //     int ret = m.erase('c');       // erasing by key
+    //     int ft_ret = ft_m.erase('c'); // erasing by key
 
-        cond = cond && ret == ft_ret && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
+    //     cond = cond && ret == ft_ret && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
 
-        it = m.find('e');
-        ft_it = ft_m.find('e');
+    //     it = m.find('e');
+    //     ft_it = ft_m.find('e');
 
-        cond = cond && (*it == *ft_it) && m.size() == ft_m.size();
+    //     cond = cond && (*it == *ft_it) && m.size() == ft_m.size();
 
-        m.erase(it, m.end());          // erasing by range
-        ft_m.erase(ft_it, ft_m.end()); // erasing by range
+    //     m.erase(it, m.end());          // erasing by range
+    //     ft_m.erase(ft_it, ft_m.end()); // erasing by range
 
-        cond = cond && m.empty() == ft_m.empty() && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
+    //     cond = cond && m.empty() == ft_m.empty() && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
 
-        /* ---------- Testing some edge cases ---------- */
+    //     /* ---------- Testing some edge cases ---------- */
 
-        std::set<int> m2;
-        ft::set<int> ft_m2;
+    //     std::set<int> m2;
+    //     ft::set<int> ft_m2;
 
-        for (size_t i = 0; i < 1e5; i++)
-        {
-            m2.insert(i);
-            ft_m2.insert(i);
-        }
+    //     for (size_t i = 0; i < 1e5; i++)
+    //     {
+    //         m2.insert(i);
+    //         ft_m2.insert(i);
+    //     }
 
-        std::set<int>::reverse_iterator it2 = m2.rbegin();
-        ft::set<int>::reverse_iterator ft_it2 = ft_m2.rbegin();
+    //     std::set<int>::reverse_iterator it2 = m2.rbegin();
+    //     ft::set<int>::reverse_iterator ft_it2 = ft_m2.rbegin();
 
-        m2.erase(m2.begin());
-        ft_m2.erase(ft_m2.begin());
+    //     m2.erase(m2.begin());
+    //     ft_m2.erase(ft_m2.begin());
 
-        cond = cond && m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
+    //     cond = cond && m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
 
-        m2.erase(*it2);
-        ft_m2.erase(*ft_it2);
+    //     m2.erase(*it2);
+    //     ft_m2.erase(*ft_it2);
 
-        cond = cond && m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
+    //     cond = cond && m2.size() == ft_m2.size() && compareMaps(m2.begin(), m2.end(), ft_m2.begin(), ft_m2.end());
 
-        std::set<int> m3;
-        ft::set<int> ft_m3;
-        std::vector<int> vec;
-        std::vector<int> ft_vec;
-        std::random_device randDev;
-        std::mt19937 generator(randDev());
-        std::uniform_int_distribution<int> distr(0, 1e8);
+    //     std::set<int> m3;
+    //     ft::set<int> ft_m3;
+    //     std::vector<int> vec;
+    //     std::vector<int> ft_vec;
+    //     std::random_device randDev;
+    //     std::mt19937 generator(randDev());
+    //     std::uniform_int_distribution<int> distr(0, 1e8);
 
-        for (size_t i = 0; i < 1e6; i++)
-        {
-            m3.insert(i);
-            ft_m3.insert(i);
-        }
+    //     for (size_t i = 0; i < 1e6; i++)
+    //     {
+    //         m3.insert(i);
+    //         ft_m3.insert(i);
+    //     }
 
-        for (size_t i = 0; i < 1e6; ++i)
-        {
-            int n = distr(generator);
-            int ret1 = m3.erase(n);
-            int ret2 = ft_m3.erase(n);
+    //     for (size_t i = 0; i < 1e6; ++i)
+    //     {
+    //         int n = distr(generator);
+    //         int ret1 = m3.erase(n);
+    //         int ret2 = ft_m3.erase(n);
 
-            if (ret1 != ret2)
-            {
-                cond = false;
-                break;
-            }
-        }
+    //         if (ret1 != ret2)
+    //         {
+    //             cond = false;
+    //             break;
+    //         }
+    //     }
 
-        if (!m3.empty())
-        {
-            m3.erase(m3.begin(), m3.end());
-            m3.erase(m3.begin(), m3.end());
-        }
-        if (!ft_m3.empty())
-        {
-            ft_m3.erase(ft_m3.begin(), ft_m3.end());
-            ft_m3.erase(ft_m3.begin(), ft_m3.end());
-        }
+    //     if (!m3.empty())
+    //     {
+    //         m3.erase(m3.begin(), m3.end());
+    //         m3.erase(m3.begin(), m3.end());
+    //     }
+    //     if (!ft_m3.empty())
+    //     {
+    //         ft_m3.erase(ft_m3.begin(), ft_m3.end());
+    //         ft_m3.erase(ft_m3.begin(), ft_m3.end());
+    //     }
 
-        cond = cond && (m3.size() == ft_m3.size() && compareMaps(m3.begin(), m3.end(), ft_m3.begin(), ft_m3.end()));
+    //     cond = cond && (m3.size() == ft_m3.size() && compareMaps(m3.begin(), m3.end(), ft_m3.begin(), ft_m3.end()));
 
-        EQUAL(cond);
-    }
+    //     EQUAL(cond);
+    // }
 
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " swap method "
               << "] --------------------]\t\t\033[0m";
@@ -1735,8 +1735,8 @@ void testOperations()
 
         if (it2 != m.end())
             m.erase(it2);
-        if (ft_it2 != ft_m.end())
-            ft_m.erase(ft_it2);
+        //if (ft_it2 != ft_m.end())
+            //ft_m.erase(ft_it2);
 
         cond = cond && compareMaps(m.begin(), m.end(), ft_m.begin(), ft_m.end());
 
@@ -1782,186 +1782,186 @@ void testOperations()
     }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " lower_bound method "
               << "] --------------------]\t\t\033[0m";
-    {
-        bool cond;
-        /*---------------------------------- time limit test --------------------------------------------*/
-        {
-            time_t start, end, diff;
-            int res(0), ft_res(0);
+    // {
+    //     bool cond;
+    //     /*---------------------------------- time limit test --------------------------------------------*/
+    //     {
+    //         time_t start, end, diff;
+    //         int res(0), ft_res(0);
 
-            std::set<int> m;
-            ft::set<int> ft_m;
-            for (size_t i = 0; i < 1e6; ++i)
-            {
-                m.insert(i);
-                ft_m.insert(i);
-            }
-            start = get_time();
-            res = *m.lower_bound(1e5);
-            end = get_time();
-            diff = end - start;
-            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+    //         std::set<int> m;
+    //         ft::set<int> ft_m;
+    //         for (size_t i = 0; i < 1e6; ++i)
+    //         {
+    //             m.insert(i);
+    //             ft_m.insert(i);
+    //         }
+    //         start = get_time();
+    //         res = *m.lower_bound(1e5);
+    //         end = get_time();
+    //         diff = end - start;
+    //         diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-            ualarm(diff * 1e3, 0);
-            ft_res = *ft_m.lower_bound(1e5);
-            ualarm(0, 0);
-            cond = ft_res == res;
-        }
-        std::set<int> m;
-        ft::set<int> ft_m;
-        int arr[] = {20, 10, 100, 15, 60, 90, 65, 200, 150}; // size = 9
-        for (size_t i = 0; i < 9; ++i)
-        {
-            m.insert(arr[i]);
-            ft_m.insert(arr[i]);
-        }
-        std::set<int> const c_m(m.begin(), m.end());
-        ft::set<int> const c_ft_m(ft_m.begin(), ft_m.end());
-        cond = (cond && (*m.lower_bound(15) == *ft_m.lower_bound(15)));
-        cond = (cond && (*m.lower_bound(65) == *ft_m.lower_bound(65)));
-        cond = (cond && (*m.lower_bound(63) == *ft_m.lower_bound(63)));
-        cond = (cond && (*m.lower_bound(120) == *ft_m.lower_bound(120)));
-        cond = (cond && (*m.lower_bound(70) == *ft_m.lower_bound(70)));
+    //         ualarm(diff * 1e3, 0);
+    //         ft_res = *ft_m.lower_bound(1e5);
+    //         ualarm(0, 0);
+    //         cond = ft_res == res;
+    //     }
+    //     std::set<int> m;
+    //     ft::set<int> ft_m;
+    //     int arr[] = {20, 10, 100, 15, 60, 90, 65, 200, 150}; // size = 9
+    //     for (size_t i = 0; i < 9; ++i)
+    //     {
+    //         m.insert(arr[i]);
+    //         ft_m.insert(arr[i]);
+    //     }
+    //     std::set<int> const c_m(m.begin(), m.end());
+    //     ft::set<int> const c_ft_m(ft_m.begin(), ft_m.end());
+    //     cond = (cond && (*m.lower_bound(15) == *ft_m.lower_bound(15)));
+    //     cond = (cond && (*m.lower_bound(65) == *ft_m.lower_bound(65)));
+    //     cond = (cond && (*m.lower_bound(63) == *ft_m.lower_bound(63)));
+    //     cond = (cond && (*m.lower_bound(120) == *ft_m.lower_bound(120)));
+    //     cond = (cond && (*m.lower_bound(70) == *ft_m.lower_bound(70)));
 
-        cond = (cond && (*c_m.lower_bound(15) == *c_ft_m.lower_bound(15)));
-        cond = (cond && (*c_m.lower_bound(65) == *c_ft_m.lower_bound(65)));
-        cond = (cond && (*c_m.lower_bound(63) == *c_ft_m.lower_bound(63)));
-        cond = (cond && (*c_m.lower_bound(120) == *c_ft_m.lower_bound(120)));
-        cond = (cond && (*c_m.lower_bound(70) == *c_ft_m.lower_bound(70)));
-        EQUAL(cond);
-    }
+    //     cond = (cond && (*c_m.lower_bound(15) == *c_ft_m.lower_bound(15)));
+    //     cond = (cond && (*c_m.lower_bound(65) == *c_ft_m.lower_bound(65)));
+    //     cond = (cond && (*c_m.lower_bound(63) == *c_ft_m.lower_bound(63)));
+    //     cond = (cond && (*c_m.lower_bound(120) == *c_ft_m.lower_bound(120)));
+    //     cond = (cond && (*c_m.lower_bound(70) == *c_ft_m.lower_bound(70)));
+    //     EQUAL(cond);
+    // }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " upper_bound method "
               << "] --------------------]\t\t\033[0m";
-    {
-        bool cond;
-        /*---------------------------------- time limit test --------------------------------------------*/
-        {
-            time_t start, end, diff;
-            int res(0), ft_res(0);
+    // {
+    //     bool cond;
+    //     /*---------------------------------- time limit test --------------------------------------------*/
+    //     {
+    //         time_t start, end, diff;
+    //         int res(0), ft_res(0);
 
-            std::set<int> m;
-            ft::set<int> ft_m;
-            for (size_t i = 0; i < 1e6; ++i)
-            {
-                m.insert(i);
-                ft_m.insert(i);
-            }
-            start = get_time();
-            res = *m.upper_bound(1e5);
-            end = get_time();
-            diff = end - start;
-            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+    //         std::set<int> m;
+    //         ft::set<int> ft_m;
+    //         for (size_t i = 0; i < 1e6; ++i)
+    //         {
+    //             m.insert(i);
+    //             ft_m.insert(i);
+    //         }
+    //         start = get_time();
+    //         res = *m.upper_bound(1e5);
+    //         end = get_time();
+    //         diff = end - start;
+    //         diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-            ualarm(diff * 1e3, 0);
-            ft_res = *ft_m.upper_bound(1e5);
-            ualarm(0, 0);
-            cond = ft_res == res;
-        }
-        std::set<int> m;
-        ft::set<int> ft_m;
-        int arr[] = {20, 10, 100, 15, 60, 90, 65, 200, 150}; // size = 9
-        for (size_t i = 0; i < 9; ++i)
-        {
-            m.insert(arr[i]);
-            ft_m.insert(arr[i]);
-        }
-        std::set<int> const c_m(m.begin(), m.end());
-        ft::set<int> const c_ft_m(ft_m.begin(), ft_m.end());
-        cond = (cond && (*m.upper_bound(15) == *ft_m.upper_bound(15)));
-        cond = (cond && (*m.upper_bound(65) == *ft_m.upper_bound(65)));
-        cond = (cond && (*m.upper_bound(63) == *ft_m.upper_bound(63)));
-        cond = (cond && (*m.upper_bound(120) == *ft_m.upper_bound(120)));
-        cond = (cond && (*m.upper_bound(70) == *ft_m.upper_bound(70)));
-        cond = (cond && (*m.upper_bound(150) == *ft_m.upper_bound(150)));
+    //         ualarm(diff * 1e3, 0);
+    //         ft_res = *ft_m.upper_bound(1e5);
+    //         ualarm(0, 0);
+    //         cond = ft_res == res;
+    //     }
+    //     std::set<int> m;
+    //     ft::set<int> ft_m;
+    //     int arr[] = {20, 10, 100, 15, 60, 90, 65, 200, 150}; // size = 9
+    //     for (size_t i = 0; i < 9; ++i)
+    //     {
+    //         m.insert(arr[i]);
+    //         ft_m.insert(arr[i]);
+    //     }
+    //     std::set<int> const c_m(m.begin(), m.end());
+    //     ft::set<int> const c_ft_m(ft_m.begin(), ft_m.end());
+    //     cond = (cond && (*m.upper_bound(15) == *ft_m.upper_bound(15)));
+    //     cond = (cond && (*m.upper_bound(65) == *ft_m.upper_bound(65)));
+    //     cond = (cond && (*m.upper_bound(63) == *ft_m.upper_bound(63)));
+    //     cond = (cond && (*m.upper_bound(120) == *ft_m.upper_bound(120)));
+    //     cond = (cond && (*m.upper_bound(70) == *ft_m.upper_bound(70)));
+    //     cond = (cond && (*m.upper_bound(150) == *ft_m.upper_bound(150)));
 
-        cond = (cond && (*c_m.upper_bound(15) == *c_ft_m.upper_bound(15)));
-        cond = (cond && (*c_m.upper_bound(65) == *c_ft_m.upper_bound(65)));
-        cond = (cond && (*c_m.upper_bound(63) == *c_ft_m.upper_bound(63)));
-        cond = (cond && (*c_m.upper_bound(120) == *c_ft_m.upper_bound(120)));
-        cond = (cond && (*c_m.upper_bound(70) == *c_ft_m.upper_bound(70)));
-        cond = (cond && (*c_m.upper_bound(150) == *c_ft_m.upper_bound(150)));
-        EQUAL(cond);
-    }
+    //     cond = (cond && (*c_m.upper_bound(15) == *c_ft_m.upper_bound(15)));
+    //     cond = (cond && (*c_m.upper_bound(65) == *c_ft_m.upper_bound(65)));
+    //     cond = (cond && (*c_m.upper_bound(63) == *c_ft_m.upper_bound(63)));
+    //     cond = (cond && (*c_m.upper_bound(120) == *c_ft_m.upper_bound(120)));
+    //     cond = (cond && (*c_m.upper_bound(70) == *c_ft_m.upper_bound(70)));
+    //     cond = (cond && (*c_m.upper_bound(150) == *c_ft_m.upper_bound(150)));
+    //     EQUAL(cond);
+    // }
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " equal_range method "
               << "] --------------------]\t\t\033[0m";
-    {
-        bool cond;
-        /*---------------------------------- time limit test --------------------------------------------*/
-        {
-            time_t start, end, diff;
-            iter_def res;
-            ft_iter_def ft_res;
+//     {
+//         bool cond;
+//         /*---------------------------------- time limit test --------------------------------------------*/
+//         {
+//             time_t start, end, diff;
+//             iter_def res;
+//             ft_iter_def ft_res;
 
-            std::set<int> m;
-            ft::set<int> ft_m;
-            for (size_t i = 0; i < 1e6; ++i)
-            {
-                m.insert(i);
-                ft_m.insert(i);
-            }
-            start = get_time();
-            res = m.equal_range(1e5);
-            end = get_time();
-            diff = end - start;
-            diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
+//             std::set<int> m;
+//             ft::set<int> ft_m;
+//             for (size_t i = 0; i < 1e6; ++i)
+//             {
+//                 m.insert(i);
+//                 ft_m.insert(i);
+//             }
+//             start = get_time();
+//             res = m.equal_range(1e5);
+//             end = get_time();
+//             diff = end - start;
+//             diff = (diff) ? (diff * TIME_FAC) : TIME_FAC;
 
-            ualarm(diff * 1e3, 0);
-            ft_res = ft_m.equal_range(1e5);
-            ualarm(0, 0);
-            cond = (*(ft_res.first) == *(res.first) && *(ft_res.second) == *(res.second));
-        }
-        iter_def res;
-        ft_iter_def ft_res;
-        std::set<int> m;
-        ft::set<int> ft_m;
-        int arr[] = {20, 10, 100, 15, 60, 90, 65, 200, 150}; // size = 9
-        for (size_t i = 0; i < 9; ++i)
-        {
-            m.insert(arr[i]);
-            ft_m.insert(arr[i]);
-        }
-        std::set<int> const c_m(m.begin(), m.end());
-        ft::set<int> const c_ft_m(ft_m.begin(), ft_m.end());
+//             ualarm(diff * 1e3, 0);
+//             ft_res = ft_m.equal_range(1e5);
+//             ualarm(0, 0);
+//             cond = (*(ft_res.first) == *(res.first) && *(ft_res.second) == *(res.second));
+//         }
+//         iter_def res;
+//         ft_iter_def ft_res;
+//         std::set<int> m;
+//         ft::set<int> ft_m;
+//         int arr[] = {20, 10, 100, 15, 60, 90, 65, 200, 150}; // size = 9
+//         for (size_t i = 0; i < 9; ++i)
+//         {
+//             m.insert(arr[i]);
+//             ft_m.insert(arr[i]);
+//         }
+//         std::set<int> const c_m(m.begin(), m.end());
+//         ft::set<int> const c_ft_m(ft_m.begin(), ft_m.end());
 
-        res = m.equal_range(15);
-        ft_res = ft_m.equal_range(15);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = m.equal_range(65);
-        ft_res = ft_m.equal_range(65);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = m.equal_range(63);
-        ft_res = ft_m.equal_range(63);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = m.equal_range(120);
-        ft_res = ft_m.equal_range(120);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = m.equal_range(70);
-        ft_res = ft_m.equal_range(70);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = m.equal_range(150);
-        ft_res = ft_m.equal_range(150);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = m.equal_range(15);
+//         ft_res = ft_m.equal_range(15);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = m.equal_range(65);
+//         ft_res = ft_m.equal_range(65);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = m.equal_range(63);
+//         ft_res = ft_m.equal_range(63);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = m.equal_range(120);
+//         ft_res = ft_m.equal_range(120);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = m.equal_range(70);
+//         ft_res = ft_m.equal_range(70);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = m.equal_range(150);
+//         ft_res = ft_m.equal_range(150);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
 
-        res = c_m.equal_range(15);
-        ft_res = c_ft_m.equal_range(15);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = c_m.equal_range(65);
-        ft_res = c_ft_m.equal_range(65);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = c_m.equal_range(63);
-        ft_res = c_ft_m.equal_range(63);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = c_m.equal_range(120);
-        ft_res = c_ft_m.equal_range(120);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = c_m.equal_range(70);
-        ft_res = c_ft_m.equal_range(70);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        res = c_m.equal_range(150);
-        ft_res = c_ft_m.equal_range(150);
-        cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
-        EQUAL(cond);
-    }
+//         res = c_m.equal_range(15);
+//         ft_res = c_ft_m.equal_range(15);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = c_m.equal_range(65);
+//         ft_res = c_ft_m.equal_range(65);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = c_m.equal_range(63);
+//         ft_res = c_ft_m.equal_range(63);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = c_m.equal_range(120);
+//         ft_res = c_ft_m.equal_range(120);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = c_m.equal_range(70);
+//         ft_res = c_ft_m.equal_range(70);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         res = c_m.equal_range(150);
+//         ft_res = c_ft_m.equal_range(150);
+//         cond = (cond && (*(ft_res.first) == *(res.first)) && (*(ft_res.second) == *(res.second)));
+//         EQUAL(cond);
+//     }
 }
 
 void testAllocatorMethodes()

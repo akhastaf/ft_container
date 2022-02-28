@@ -44,14 +44,19 @@ namespace ft
                 for (; first != last; first++)
                     this->insert(*first);
             }
-            set (const set& x) { *this = x; }
+            set (const set& x) : _alloc(x.get_allocator()), _tree(tree()), _key_compare(x.key_comp())
+            {
+                const_iterator it = x.begin();
+                for (; it != x.end(); it++)
+                    insert(*it);
+            }
             ~set() {}
             set& operator= (const set& x)
             {
-                this->_tree.clear();
-                this->_alloc = x.get_allocator();
-                this->_key_comp = x.key_comp();
-                this->_tree._endNode = x._tree._endNode;
+                _tree.clear();
+                _alloc = x.get_allocator();
+                _key_compare = x.key_comp();
+                _tree._endNode = x._tree._endNode;
                 this->insert(x.begin(), x.end());
                 return *this;
             }
@@ -95,7 +100,7 @@ namespace ft
 				std::swap(x._tree._alloc, this->_tree._alloc);
 				std::swap(x._tree._size, this->_tree._size);
 				
-				std::swap(x._key_comp, this->_key_comp);
+				std::swap(x._key_compare, this->_key_compare);
 				std::swap(x._alloc, this->_alloc);
             }
             void clear() { _tree.clear(); }
@@ -120,6 +125,38 @@ namespace ft
             key_compare    _key_compare;
 
     };
+    template <class T_, class Compare_, class Alloc_>
+    bool operator== ( const ft::set<T_,Compare_,Alloc_>& lhs, const ft::set<T_,Compare_,Alloc_>& rhs ){
+        if (lhs.size() == rhs.size() && ft::equal(lhs.begin(), lhs.end(), rhs.begin()))
+            return (true);
+        return (false);
+    }
+    
+    template <class T_, class Compare_, class Alloc_>
+    bool operator!= ( const ft::set<T_,Compare_,Alloc_>& lhs, const ft::set<T_,Compare_,Alloc_>& rhs ){
+        return !(lhs == rhs);
+    }
+    
+    template <class T_, class Compare_, class Alloc_>
+    bool operator<  ( const ft::set<T_,Compare_,Alloc_>& lhs, const ft::set<T_,Compare_,Alloc_>& rhs ){
+        return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+    }
+    
+    template <class T_, class Compare_, class Alloc_>
+    bool operator<= ( const ft::set<T_,Compare_,Alloc_>& lhs, const ft::set<T_,Compare_,Alloc_>& rhs ){
+        return !(ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+
+    }
+    
+    template <class T_, class Compare_, class Alloc_>
+    bool operator>  ( const ft::set<T_,Compare_,Alloc_>& lhs, const ft::set<T_,Compare_,Alloc_>& rhs ){
+        return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+    }
+    
+    template <class T_, class Compare_, class Alloc_>
+    bool operator>= ( const ft::set<T_,Compare_,Alloc_>& lhs, const ft::set<T_,Compare_,Alloc_>& rhs ){
+        return !(ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+    }
 
 }
 

@@ -1,7 +1,7 @@
 #ifndef BIDIRECTIONAL_ITERATOR_HPP
 # define BIDIRECTIONAL_ITERATOR_HPP
 # include <iostream>
-# include "iterator_trais.hpp"
+# include "../iterator/iterator_trais.hpp"
 # include "RedBlackTree.hpp"
 # include "../tools.hpp"
 
@@ -22,7 +22,7 @@ namespace ft
             // typedef typename    tree::node_pointer			                                        node_pointer;
             bidirectional_iterator() : _ptr(NULL), _endNode(NULL) {}
             bidirectional_iterator(node_pointer ptr, node_pointer endNode) : _ptr(ptr), _endNode(endNode) {}
-            bidirectional_iterator(bidirectional_iterator const & it) : _ptr(it._ptr) {}
+            bidirectional_iterator(bidirectional_iterator const & it) : _ptr(it._ptr), _endNode(it._endNode) {}
             virtual ~bidirectional_iterator() {}
             
             

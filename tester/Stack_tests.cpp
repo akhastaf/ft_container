@@ -1,5 +1,5 @@
-#include "../stack/Stack.hpp"       // your stack path.
-#include "../vector/Vector.hpp" // your Vector path.
+#include "../stack/stack.hpp"       // your stack path.
+#include "../vector/vector.hpp" // your Vector path.
 #include "../tools.hpp"  // path to ft::pair.
 
 #include <vector>

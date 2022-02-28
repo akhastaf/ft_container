@@ -23,7 +23,7 @@ namespace ft
             // typedef typename    tree::node_pointer			                                        node_pointer;
             bidirectional_iterator_set() : _ptr(NULL), _endNode(NULL) {}
             bidirectional_iterator_set(node_pointer ptr, node_pointer endNode) : _ptr(ptr), _endNode(endNode) {}
-            bidirectional_iterator_set(bidirectional_iterator_set const & it) : _ptr(it._ptr) {}
+            bidirectional_iterator_set(bidirectional_iterator_set const & it) : _ptr(it._ptr), _endNode(it._endNode) {}
             virtual ~bidirectional_iterator_set() {}
             
             
