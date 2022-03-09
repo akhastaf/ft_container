@@ -62,7 +62,12 @@ namespace ft
                         this->_ptr = this->_endNode;
                 }
                 else
-                    this->_ptr = tree::getSuccessor(this->_ptr);
+                {
+                    if (!tree::getSuccessor(this->_ptr))
+                        this->_ptr = this->_ptr->parent;
+                    else
+                        this->_ptr = tree::getSuccessor(this->_ptr);
+                }
                 return bidirectional_iterator_set(this->_ptr, this->_endNode);
             }
             bidirectional_iterator_set operator++(int)
@@ -78,6 +83,8 @@ namespace ft
                     this->_ptr = tree::getMaximum(this->_ptr->parent);
                     return bidirectional_iterator_set(this->_ptr, this->_endNode);
                 }
+                else if (!this->_ptr->isleft && (!this->_ptr->right  && this->_ptr->left))
+                    this->_ptr = tree::getPredecessor(this->_ptr);
                 else if (!this->_ptr->isleft && (!this->_ptr->right || !this->_ptr->left))
                     this->_ptr = this->_ptr->parent;
                 else if (this->_ptr->isleft && !this->_ptr->left)

@@ -121,16 +121,19 @@ namespace   ft
             size_type erase (const key_type& k) { return _tree.remove(k);  }
             void erase (iterator first, iterator last) 
             {
+                // print2D();
                 ft::vector <key_type> key_to_remove;
 				while (first != last)
 				{
+                    // std::cout << first->first << std::endl;
 					key_to_remove.push_back(first->first);
                     first++;
 				}
+
 				for (size_t i = 0; i < key_to_remove.size(); i++)
                 {
                     erase(key_to_remove[i]);
-                    //print2D();
+                    // print2D();
                 }
             }
             void swap (map& x) 

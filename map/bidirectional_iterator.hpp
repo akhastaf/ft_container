@@ -55,13 +55,16 @@ namespace ft
                 else if (this->_ptr->parent && this->_ptr->isleft && (!this->_ptr->left && !this->_ptr->right))
                     this->_ptr = this->_ptr->parent;
                 else if (!this->_ptr->isleft && !this->_ptr->right)
-                {
                     this->_ptr = tree::getParentPredecessor(this->_ptr);
-                    if (!this->_ptr)
-                        this->_ptr = this->_endNode;
-                }
                 else
-                    this->_ptr = tree::getSuccessor(this->_ptr);
+                {
+                    if (!tree::getSuccessor(this->_ptr))
+                        this->_ptr = this->_ptr->parent;
+                    else
+                        this->_ptr = tree::getSuccessor(this->_ptr);
+                }
+                if (!_ptr)
+                    this->_ptr = this->_endNode;
                 return bidirectional_iterator(this->_ptr, this->_endNode);
             }
             bidirectional_iterator operator++(int)
@@ -77,6 +80,8 @@ namespace ft
                     this->_ptr = tree::getMaximum(this->_ptr->parent);
                     return bidirectional_iterator(this->_ptr, this->_endNode);
                 }
+                else if (!this->_ptr->isleft && (!this->_ptr->right  && this->_ptr->left))
+                    this->_ptr = tree::getPredecessor(this->_ptr);
                 else if (!this->_ptr->isleft && (!this->_ptr->right || !this->_ptr->left))
                     this->_ptr = this->_ptr->parent;
                 else if (this->_ptr->isleft && !this->_ptr->left)
@@ -89,6 +94,25 @@ namespace ft
                     this->_ptr = tree::getPredecessor(this->_ptr);
                 return bidirectional_iterator(this->_ptr, this->_endNode);
             }
+            // bidirectional_iterator operator--()
+            // {
+            //     if (this->_ptr == this->_endNode)
+            //     {
+            //         this->_ptr = tree::getMaximum(this->_ptr->parent);
+            //         return bidirectional_iterator(this->_ptr, this->_endNode);
+            //     }
+            //     else if (!this->_ptr->isleft && (!this->_ptr->right || !this->_ptr->left))
+            //         this->_ptr = this->_ptr->parent;
+            //     else if (this->_ptr->isleft && !this->_ptr->left)
+            //     {
+            //         this->_ptr = tree::getParentSuccessor(this->_ptr);
+            //         if (!this->_ptr)
+            //             this->_ptr = this->_endNode;
+            //     }
+            //     else
+            //         this->_ptr = tree::getPredecessor(this->_ptr);
+            //     return bidirectional_iterator(this->_ptr, this->_endNode);
+            // }
             bidirectional_iterator operator--(int)
             {
                 bidirectional_iterator tmp = *this;

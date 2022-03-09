@@ -21,11 +21,6 @@ namespace ft
             template <class Iter>
             reverse_iterator (const reverse_iterator<Iter>& rev_it) : _iter(rev_it.base()) { }
 
-            // operator reverse_iterator<const Iterator> ()
-            // {
-            //     std::cout << "tets" << std::endl;
-            //     return reverse_iterator<const Iterator>(_iter);
-            // }
             reverse_iterator operator= (reverse_iterator const & it)
             {
                 _iter = it.base();
@@ -33,7 +28,7 @@ namespace ft
             }
             iterator_type base() const 
             {
-                return (_iter); 
+                return _iter; 
             }
             reference operator*() const 
             {

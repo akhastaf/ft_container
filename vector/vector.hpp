@@ -32,101 +32,101 @@ namespace ft {
 
             explicit vector (const allocator_type& alloc = allocator_type()): _alloc(alloc), _size(0), _capacity(0), _array(NULL)  {}
             explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) {
-                this->_alloc =alloc;
+                _alloc =alloc;
                 _size = n;
                 _capacity = n;
-                this->_array = this->_alloc.allocate(this->_size);
-                for (size_type i = 0; i < this->_size; i++)
-                    this->_alloc.construct(this->_array + i, val);
+                _array = _alloc.allocate(_size);
+                for (size_type i = 0; i < _size; i++)
+                    _alloc.construct(_array + i, val);
             }
             template <class InputIterator>
             vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : _alloc(alloc), _size(abs(std::distance(first, last))),
-                _capacity(_size), _array(this->_alloc.allocate(this->_capacity))
+                _capacity(_size), _array(_alloc.allocate(_capacity))
             {
                 // difference_type d = abs(std::distance(first, last));
                 // if (InputIterator::iterator_category == std::input_iterator_tag)
                 // {
-                //     this->clear();
+                //     clear();
                 //     for (; first != last; first++)
-                //         this->push_back(*first);
+                //         push_back(*first);
                 //     return;
                 // }
                 for (size_type i = 0; first != last; first++)
                 {
-                    this->_alloc.construct(this->_array + i, *first);
+                    _alloc.construct(_array + i, *first);
                     i++;
                 }
             }
             vector (const vector & x)
             {
-                this->_size = x.size();
-                this->_capacity = this->_size;
-                this->_alloc = x.get_allocator();
-                this->_array = this->_alloc.allocate(this->_capacity);
-                for (size_type i = 0; i < this->_size; i++)
-                    this->_alloc.construct(this->_array + i, x[i]);
+                _size = x.size();
+                _capacity = _size;
+                _alloc = x.get_allocator();
+                _array = _alloc.allocate(_capacity);
+                for (size_type i = 0; i < _size; i++)
+                    _alloc.construct(_array + i, x[i]);
             }
             
             ~vector() 
             {
-                if (this->_array)
+                if (_array)
                 {
-                    for (size_type i = 0; i < this->_size; i++)
-                        this->_alloc.destroy(&this->_array[i]);
-                    this->_alloc.deallocate(this->_array, this->_capacity);
+                    for (size_type i = 0; i < _size; i++)
+                        _alloc.destroy(&_array[i]);
+                    _alloc.deallocate(_array, _capacity);
                 }
             }
             vector& operator= (const vector& x)
             {
                 if (this != &x)
                 {
-                    if (this->_capacity >= x.size())
-                        this->_size = x.size();
+                    if (_capacity >= x.size())
+                        _size = x.size();
                     else
                     {
-                        this->_size = x.size();
-                        this->_alloc.deallocate(this->_array, this->_capacity);
-                        this->_capacity = this->_size;
-                        this->_array = this->_alloc.allocate(this->_capacity);
+                        _size = x.size();
+                        _alloc.deallocate(_array, _capacity);
+                        _capacity = _size;
+                        _array = _alloc.allocate(_capacity);
                     }
                     for (size_type i = 0; i < x.size(); i++)
-                        this->_alloc.construct(this->_array + i, x[i]);
+                        _alloc.construct(_array + i, x[i]);
                 }
                 return *this;
             }
             
 
             // Iterators:
-            iterator begin() { return (iterator(this->_array)); }
-            const_iterator begin() const { return const_iterator(this->_array); }
-            iterator end() { return (iterator(this->_array + this->_size)); }
-            const_iterator end() const { return const_iterator(this->_array + this->_size); }
-            reverse_iterator rbegin() { return reverse_iterator(this->end()); }
-            const_reverse_iterator rbegin() const { return const_reverse_iterator(this->end()); }
-            reverse_iterator rend() { return reverse_iterator(this->begin()); }
-            const_reverse_iterator rend() const { return const_reverse_iterator(this->begin()); }
+            iterator begin() { return (iterator(_array)); }
+            const_iterator begin() const { return const_iterator(_array); }
+            iterator end() { return (iterator(_array + _size)); }
+            const_iterator end() const { return const_iterator(_array + _size); }
+            reverse_iterator rbegin() { return reverse_iterator(end()); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+            reverse_iterator rend() { return reverse_iterator(begin()); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
             // Capacity :
-            size_type size() const { return this->_size; }
-            size_type max_size() const { return this->_alloc.max_size(); }
-            size_type capacity() const { return this->_capacity; }
-            bool empty() const { return this->_size == 0; }
+            size_type size() const { return _size; }
+            size_type max_size() const { return _alloc.max_size(); }
+            size_type capacity() const { return _capacity; }
+            bool empty() const { return _size == 0; }
             void resize (size_type n, value_type val = value_type())
             {
                 try
                 {
-                    this->reserve(n);
-                    if (this->_size > n)
+                    reserve(n);
+                    if (_size > n)
                     {
-                        for (size_type i = n; i < this->_size; i++)
-                            this->_alloc.destroy(&this->_array[i]);
+                        for (size_type i = n; i < _size; i++)
+                            _alloc.destroy(&_array[i]);
                     }
-                    if (this->_size < n)
+                    if (_size < n)
                     {
-                        for (size_type i = this->_size; i < n; i++)
-                            this->_alloc.construct(this->_array + i, val);
+                        for (size_type i = _size; i < n; i++)
+                            _alloc.construct(_array + i, val);
                     }
-                    this->_size = n;
+                    _size = n;
                }
                 catch (std::length_error &e)
                 {
@@ -141,21 +141,21 @@ namespace ft {
             void reserve( size_type new_cap )
             {
                 pointer newArray;
-                if (new_cap > this->max_size())
+                if (new_cap > max_size())
                     throw std::length_error("allocator<T>::allocate(size_t n) 'n' exceeds maximum supported size");
-                if (this->_capacity < new_cap)
+                if (_capacity < new_cap)
                 {
                     try
                     {
-                        newArray = this->_alloc.allocate(new_cap);
-                        for (size_type i = 0; i < this->_size; i++)
+                        newArray = _alloc.allocate(new_cap);
+                        for (size_type i = 0; i < _size; i++)
                         {
-                            this->_alloc.construct(newArray + i, this->_array[i]);
-                            this->_alloc.destroy(this->_array + i);
+                            _alloc.construct(newArray + i, _array[i]);
+                            _alloc.destroy(_array + i);
                         }
-                        this->_alloc.deallocate(this->_array, this->_capacity);
-                        this->_capacity = new_cap;
-                        this->_array  = newArray;
+                        _alloc.deallocate(_array, _capacity);
+                        _capacity = new_cap;
+                        _array  = newArray;
                     }
                     catch (std::bad_alloc &e)
                     {
@@ -165,67 +165,67 @@ namespace ft {
             }
 
             // Element access :
-            reference operator[] (size_type n) { return this->_array[n]; }
-            const_reference operator[] (size_type n) const { return this->_array[n]; }
+            reference operator[] (size_type n) { return _array[n]; }
+            const_reference operator[] (size_type n) const { return _array[n]; }
             reference at (size_type n)
             {
-                if (n < 0 || n >= this->_size)
+                if (n < 0 || n >= _size)
                     throw std::out_of_range("vector");
-                return this->_array[n];
+                return _array[n];
             }
             const_reference at (size_type n) const
             {
-                if (n < 0 || n >= this->_size)
+                if (n < 0 || n >= _size)
                     throw std::out_of_range("vector");
-                return this->_array[n];
+                return _array[n];
             }
-            reference front() { return this->_array[0]; }
-            const_reference front() const { return this->_array[0]; }
-            reference back() { return this->_array[this->_size - 1]; }
-            const_reference back() const { return this->_array[this->_size - 1]; }
+            reference front() { return _array[0]; }
+            const_reference front() const { return _array[0]; }
+            reference back() { return _array[_size - 1]; }
+            const_reference back() const { return _array[_size - 1]; }
 
             // Modifiers :
             template <class InputIterator>
             void assign (InputIterator first, InputIterator last)
             {
-                this->_size = std::distance(first, last);
-                if (this->_capacity < this->_size)
+                _size = std::distance(first, last);
+                if (_capacity < _size)
                 {
-                    this->_alloc.deallocate(this->_array, this->_capacity);
-                    this->_capacity = this->_size;
-                    this->_array = this->_alloc.allocate(this->_capacity);
+                    _alloc.deallocate(_array, _capacity);
+                    _capacity = _size;
+                    _array = _alloc.allocate(_capacity);
                 }
                 for (size_type i = 0; first != last; first++)
                 {
-                    this->_alloc.construct(this->_array + i, *first);
+                    _alloc.construct(_array + i, *first);
                     i++;
                 }
             }
             void assign (size_type n, const value_type& val)
             {
-                this->_size = n;
-                if (this->_capacity < n)
+                _size = n;
+                if (_capacity < n)
                 {
-                    this->_alloc.deallocate(this->_array, this->_capacity);
-                    this->_capacity = this->_size;
-                    this->_array = this->_alloc.allocate(this->_capacity);
+                    _alloc.deallocate(_array, _capacity);
+                    _capacity = _size;
+                    _array = _alloc.allocate(_capacity);
                 }
-                for (size_type i = 0; i < this->_size; i++)
-                    this->_alloc.construct(this->_array + i, val);
+                for (size_type i = 0; i < _size; i++)
+                    _alloc.construct(_array + i, val);
             }
             void push_back (const value_type& val)
             {
                 try
                 {
-                    if (this->_capacity < this->_size + 1)
+                    if (_capacity < _size + 1)
                     {
-                        if (!this->_capacity)
-                            this->reserve(1);
+                        if (!_capacity)
+                            reserve(1);
                         else
-                            this->reserve(this->_capacity * 2);
+                            reserve(_capacity * 2);
                     }
-                    this->_size++;
-                    this->_alloc.construct(this->_array + (this->_size - 1), val);
+                    _size++;
+                    _alloc.construct(_array + (_size - 1), val);
                 }
                 catch(const std::bad_alloc& e)
                 {
@@ -234,115 +234,115 @@ namespace ft {
             }
             void pop_back()
             {
-                if (this->_size)
+                if (_size)
                 {
-                    this->_size--;
-                    this->_alloc.destroy(this->_array + this->_size);
+                    _size--;
+                    _alloc.destroy(_array + _size);
                 }
             }
             iterator insert (iterator position, const value_type& val)
             {
-                difference_type d = abs(std::distance(this->begin(), position));
-                if (this->_size + 1 > this->_capacity)
+                difference_type d = abs(std::distance(begin(), position));
+                if (_size + 1 > _capacity)
                 {
-                    if (!this->_capacity)
-                        this->reserve(1);
+                    if (!_capacity)
+                        reserve(1);
                     else
-                        this->reserve(this->_capacity * 2);
+                        reserve(_capacity * 2);
                 }
-                if (this->_size)
+                if (_size)
                 {
-                    for (size_type i = d + 1; i <= this->_size ;i++)
-                        std::swap(this->_array[d], this->_array[i]);
+                    for (size_type i = d + 1; i <= _size ;i++)
+                        std::swap(_array[d], _array[i]);
                 }
-                this->_size++;
-                this->_alloc.construct(this->_array + d, val);
-                return (iterator(this->_array + d));
+                _size++;
+                _alloc.construct(_array + d, val);
+                return (iterator(_array + d));
             }
             void insert (iterator position, size_type n, const value_type& val)
             {
-                difference_type d = std::distance(this->begin(), position);
-                if (this->_size + n > this->_capacity)
+                difference_type d = std::distance(begin(), position);
+                if (_size + n > _capacity)
                 {
-                    if (this->_size + n <= this->_capacity * 2)
-                        this->reserve(this->_capacity * 2);
+                    if (_size + n <= _capacity * 2)
+                        reserve(_capacity * 2);
                     else
-                        this->reserve(this->_size + n);
+                        reserve(_size + n);
                 }
-                if (this->_size)
+                if (_size)
                 {
-                    for (int i = this->_size - 1; d <= i; i--)
-                        this->_array[i + n] = this->_array[i];
+                    for (int i = _size - 1; d <= i; i--)
+                        _array[i + n] = _array[i];
                 }
                 for (size_type i = d; i < n + d; i++)
-                    this->_alloc.construct(this->_array + i, val);
-                this->_size += n;
+                    _alloc.construct(_array + i, val);
+                _size += n;
             }
             template <class InputIterator>
             void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
             {
-                difference_type d = abs(std::distance(this->begin(), position));
+                difference_type d = abs(std::distance(begin(), position));
                 difference_type n = abs(std::distance(first, last));
-                if (this->_size + n > this->_capacity)
+                if (_size + n > _capacity)
                 {
-                    if (this->_size + n <= this->_capacity * 2)
-                        this->reserve(this->_capacity * 2);
+                    if (_size + n <= _capacity * 2)
+                        reserve(_capacity * 2);
                     else
-                        this->reserve(this->_size + n);
+                        reserve(_size + n);
                 }
-                if (this->_size)
+                if (_size)
                 {
                     for (difference_type i = d; i < d + n; i++)
-                        this->_array[i + n] = this->_array[i];
+                        _array[i + n] = _array[i];
                 }
                 for (size_type i = d; first != last; first++)
                 {
-                    this->_alloc.construct(this->_array + i, *first);
+                    _alloc.construct(_array + i, *first);
                     i++;
                 }
-                this->_size += n;
+                _size += n;
             }
             iterator erase (iterator position)
             {
-                difference_type d = std::distance(this->begin(), position);
-                for (size_type i = d; i < this->_size; i++)
-                    this->_array[i] = this->_array[i + 1];
-                this->_alloc.destroy((this->_array - 1) + d);
-                this->_size--;
-                return (iterator(this->_array + d));
+                difference_type d = std::distance(begin(), position);
+                for (size_type i = d; i < _size; i++)
+                    _array[i] = _array[i + 1];
+                _alloc.destroy((_array - 1) + d);
+                _size--;
+                return (iterator(_array + d));
             }
             iterator erase (iterator first, iterator last)
             {
-                difference_type d = abs(std::distance(this->begin(), first));
+                difference_type d = abs(std::distance(begin(), first));
                 difference_type n = abs(std::distance(first, last));
                 for (int i = d; i < d + n; i++)
-                    this->_alloc.destroy(this->_array + i);
-                if (this->_size != (size_type)n)
-                    for (difference_type i = d; i + n < (difference_type)this->_size ; i++)
-                        this->_array[i] = this->_array[i + n];
-                this->_size -= n;
-                return (iterator(this->_array + d));
+                    _alloc.destroy(_array + i);
+                if (_size != (size_type)n)
+                    for (difference_type i = d; i + n < (difference_type)_size ; i++)
+                        _array[i] = _array[i + n];
+                _size -= n;
+                return (iterator(_array + d));
             }
             void swap (vector& x)
             {
                 size_type tmp = x._size;
-                x._size = this->_size;
-                this->_size = tmp;
+                x._size = _size;
+                _size = tmp;
                 tmp = x._capacity;
-                x._capacity = this->_capacity;
-                this->_capacity = tmp;
+                x._capacity = _capacity;
+                _capacity = tmp;
                 pointer data = x._array;
-                x._array = this->_array;
-                this->_array = data;
+                x._array = _array;
+                _array = data;
             }
             void clear()
             {
-                for (size_type i = 0; i < this->_size; i++)
-                    this->_alloc.destroy(&this->_array[i]);
-                this->_size = 0;
+                for (size_type i = 0; i < _size; i++)
+                    _alloc.destroy(&_array[i]);
+                _size = 0;
             }
             // Allocator :
-            allocator_type get_allocator() const { return this->_alloc; }
+            allocator_type get_allocator() const { return _alloc; }
         private:
             allocator_type _alloc;
             size_type _size;

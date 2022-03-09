@@ -7,6 +7,7 @@
 # include "../iterator/reverse_iterator.hpp"
 # include "bidirectional_iterator_set.hpp"
 # include "../tools.hpp"
+# include "../vector/vector.hpp"
 
 
 namespace ft
@@ -41,8 +42,8 @@ namespace ft
             template <class InputIterator>
             set (InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _alloc(alloc), _tree(tree()), _key_compare(comp)
             {
-                for (; first != last; first++)
-                    this->insert(*first);
+                for (; first != last; ++first)
+                    insert(*first);
             }
             set (const set& x) : _alloc(x.get_allocator()), _tree(tree()), _key_compare(x.key_comp())
             {
@@ -89,9 +90,19 @@ namespace ft
                  for (; first != last; first++)
                     this->insert(*first);
             }
-            // void erase (iterator position);
-            // size_type erase (const value_type& val);
-            // void erase (iterator first, iterator last);
+            void erase (iterator position)  { _tree.remove(*position); }
+            size_type erase (const value_type& val) { return _tree.remove(val);  }
+            void erase (iterator first, iterator last)
+            {
+                ft::vector <key_type> key_to_remove;
+				while (first != last)
+				{
+					key_to_remove.push_back(*first);
+                    first++;
+				}
+				for (size_t i = 0; i < key_to_remove.size(); i++)
+                    erase(key_to_remove[i]);
+            }
             void swap (set& x)
             {
                 std::swap(x._tree._endNode, this->_tree._endNode);
@@ -112,12 +123,13 @@ namespace ft
             // Operations
             iterator find (const value_type& val) const { return _tree.ifind(val); }
             size_type count (const value_type& val) const { return _tree.contains(val); }
-            // iterator lower_bound (const value_type& val) const;
-            // iterator upper_bound (const value_type& val) const;
-            // ft::pair<iterator,iterator> equal_range (const value_type& val) const;
+            iterator lower_bound (const value_type& val) const { return _tree.lower_bound(val); }
+            iterator upper_bound (const value_type& val) const { return _tree.upper_bound(val); }
+            ft::pair<iterator,iterator> equal_range (const value_type& val) const { return ft::make_pair(lower_bound(val), upper_bound(val)); }
 
             // Alocator
             allocator_type get_allocator() const { return _alloc; }
+            void    print2D() { _tree.print2D(); } 
 
         private:
             allocator_type _alloc;

@@ -46,13 +46,12 @@ namespace   ft
                 _alloc.construct(&(_endNode->value), value_type());
                 _endNode->parent = NULL;
             }
-            // RedBlackTree(RedBlackTree const & src) 
-            // {
-            //     *this = src;
-            // } 
             ~RedBlackTree()
             {
                 clear();
+                //  _alloc.destroy(&_endNode->value);
+                // _alloc_node.destroy(_endNode);
+                // _alloc_node.deallocate(_endNode, 1);
             }
             RedBlackTree& operator= (const RedBlackTree& x)
             {
@@ -64,6 +63,7 @@ namespace   ft
             }
             ft::pair<iterator, bool>    insert(const_reference e)
             {
+                int r;
                 node_pointer new_node = _alloc_node.allocate(1);
                 _alloc_node.construct(new_node);
                 // new_node->value = _alloc.allocate(1);
@@ -78,14 +78,24 @@ namespace   ft
                     _endNode->left = _root;
                     return ft::pair<iterator, bool>(iterator(new_node, _endNode), true);
                 }
-                add(_root, new_node);
+                r = add(_root, new_node);
                 _endNode->parent = _root;
                 _endNode->left = _root;
+                if (!r)
+                    return pair<iterator, bool>(iterator(find(e), _endNode), false);
                 _size++;
                 return ft::pair<iterator, bool>(iterator(new_node, _endNode), true);
             }
-            void    add(node_pointer parent, node_pointer node)
+            int    add(node_pointer parent, node_pointer node)
             {
+                if (parent->value == node->value)
+                {
+                    // parent->value.second = node->value.second;
+                    _alloc.destroy(&node->value);
+                    _alloc_node.destroy(node);
+                    _alloc_node.deallocate(node, 1);
+                    return 0;
+                }
                 if (_comp(parent->value, node->value)) //
                 {
                     if (!(parent->right))
@@ -109,7 +119,7 @@ namespace   ft
                         return add(parent->left, node);
                 }
                 checkColor(node);
-                
+                return 1;
             }
             void    fixDoubleBlack(node_pointer db)
             {
@@ -144,7 +154,7 @@ namespace   ft
                     }
                     else if (!s || s->black)
                     {
-                        if (db->isleft && (!s->left || (s->left && s->left->black)) && (s->right && !s->right->black))
+                        if (db->isleft && (((!s->left || (s->left && s->left->black)) && (s->right && !s->right->black)) || (s->right && !s->right->black)))
                         {
                             std::swap(s->black, db->black);
                             left_rotation(db->parent);
@@ -180,6 +190,8 @@ namespace   ft
             {
                 size_type r = 0;
                 node_pointer tmp = findPosition(node);
+                if (!tmp)
+                    return 0;
                 if (!tmp->black || (!tmp->parent && !tmp->left && !tmp->right))
                 {
                     removeBST(tmp);
@@ -191,7 +203,7 @@ namespace   ft
                     removeBST(tmp);
                     r = 1;
                 }
-                balckNode(_root);
+                //balckNode(_root);
                 _endNode->parent = _root;
                 _endNode->left = _root;
                 return r;
@@ -395,7 +407,6 @@ namespace   ft
                     leftBlackNode++;
                 return leftBlackNode;
             }
-
             iterator begin()  { return iterator(getMinimum(), _endNode); }
             const_iterator begin() const { return iterator(getMinimum(), _endNode); }
             iterator end()  
@@ -410,10 +421,32 @@ namespace   ft
                     return begin();
                 return iterator(_endNode, _endNode);
             }
-            reverse_iterator rbegin()  { return reverse_iterator(iterator(getMaximum(), _endNode)); }
-            const_reverse_iterator rbegin() const { return reverse_iterator(iterator(getMaximum(), _endNode)); }
+            reverse_iterator rbegin()  { return reverse_iterator(iterator(_endNode, _endNode)); }
+            const_reverse_iterator rbegin() const { return reverse_iterator(iterator(_endNode, _endNode)); }
             reverse_iterator rend()  { return reverse_iterator(iterator(getMinimum(), _endNode)); }
             const_reverse_iterator rend() const { return reverse_iterator(iterator(getMinimum(), _endNode)); }
+            // iterator begin()  { return iterator(getMinimum(), _endNode); }
+            // const_iterator begin() const { return iterator(getMinimum(), _endNode); }
+            // iterator end()  
+            // {
+            //     if (!_endNode->parent)
+            //         return begin();
+            //     return iterator(_endNode, _endNode);
+            // }
+            // const_iterator end() const 
+            // { 
+            //     if (!_endNode->parent)
+            //         return begin();
+            //     return iterator(_endNode, _endNode);
+            // }
+            // // reverse_iterator rbegin()  { return reverse_iterator(iterator(_endNode, _endNode)); }
+            // // const_reverse_iterator rbegin() const { return reverse_iterator(iterator(_endNode, _endNode)); }
+            // // reverse_iterator rend()  { return reverse_iterator(iterator(getMinimum(), _endNode)); }
+            // // const_reverse_iterator rend() const { return reverse_iterator(iterator(getMinimum(), _endNode)); }
+            // reverse_iterator rbegin()  { return reverse_iterator(end()); }
+            // const_reverse_iterator rbegin() const { return reverse_iterator(iterator(getMaximum(), _endNode)); }
+            // reverse_iterator rend()  { return reverse_iterator(iterator(getMinimum(), _endNode)); }
+            // const_reverse_iterator rend() const { return reverse_iterator(iterator(getMinimum(), _endNode)); }
 
             size_type empty() const { return (_size == 0); }
             size_type   size() const { return _size; }
@@ -452,72 +485,62 @@ namespace   ft
                 print2DUtil(_root, 0);
                 std::cout << "======================================================================================" << std::endl;
             }
-            // iterator    upper_bound(key const k)
-            // {
-            //     return iterator(upper_bound(_root, k), _endNode);
-            // }
-            // const_iterator    upper_bound(key const k) const
-            // {
-            //     iterator tmp = iterator(upper_bound(_root, k), _endNode);
-            //     return const_iterator(tmp);
-            // }
-            // node_pointer    upper_bound(node_pointer parent, key const k) const
-            // {
-            //     node_pointer tmp = parent;
-            //     while (tmp)
-            //     {
-            //         if (tmp->value.first == k)
-            //         {
-            //             if (!getSuccessor(tmp))
-            //                 return getParentPredecessor(tmp);
-            //             return getSuccessor(tmp);
-            //         }
-            //         if (_comp(tmp->value.first, k))
-            //         {
-            //             if (!tmp->right)
-            //                 return getBigger(tmp, k);
-            //             tmp = tmp->right;
-            //         }
-            //         else
-            //         {
-            //             if (!tmp->left)
-            //                 return getBigger(tmp, k);
-            //             tmp = tmp->left;
-            //         }
-            //     }
-            //     return tmp;
-            // }
-            // iterator    lower_bound(key const k)
-            // {
-            //     return iterator(lower_bound(_root, k), _endNode);
-            // }
-            // const_iterator    lower_bound(key const k) const
-            // {
-            //     iterator tmp = iterator(lower_bound(_root, k), _endNode);
-            //     return const_iterator(tmp);
-            // }
-            // node_pointer    lower_bound(node_pointer parent, key const k) const
-            // {
-            //     node_pointer tmp = parent;
-            //     while (tmp)
-            //     {
-            //         if (tmp->value.first == k)
-            //             return tmp;
-            //         if (_comp(tmp->value.first, k))
-            //         {
-            //             if (!tmp->right)
-            //                 return getBigger(tmp, k);
-            //             tmp = tmp->right;
-            //         }
-            //         else
-            //         {
-            //             if (!tmp->right)
-            //                 return getBigger(tmp, k);
-            //             tmp = tmp->left;
-            //         }
-            //     }
-            //     return tmp;
-            // }
+            iterator    upper_bound(const_reference k) const
+            {
+                return iterator(upper_bound(_root, k), this->_endNode);
+            }
+            node_pointer    upper_bound(node_pointer parent, const_reference k) const
+            {
+                node_pointer tmp = parent;
+                while (tmp)
+                {
+                    if (tmp->value == k)
+                    {
+                        if (!this->getSuccessor(tmp))
+                            return this->getParentPredecessor(tmp);
+                        return this->getSuccessor(tmp);
+                    }
+                    if (this->_comp(tmp->value, k))
+                    {
+                        if (!tmp->right)
+                            return getBigger(tmp, k);
+                        tmp = tmp->right;
+                    }
+                    else
+                    {
+                        if (!tmp->left)
+                            return getBigger(tmp, k);
+                        tmp = tmp->left;
+                    }
+                }
+                return tmp;
+            }
+            iterator    lower_bound(const_reference k) const
+            {
+                return iterator(lower_bound(_root, k), _endNode);
+            }
+            node_pointer    lower_bound(node_pointer parent, const_reference k) const
+            {
+                node_pointer tmp = parent;
+                while (tmp)
+                {
+                    if (tmp->value == k)
+                        return tmp;
+                    if (this->_comp(tmp->value, k))
+                    {
+                        if (!tmp->right)
+                            return getBigger(tmp, k);
+                        tmp = tmp->right;
+                    }
+                    else
+                    {
+                        if (!tmp->right)
+                            return getBigger(tmp, k);
+                        tmp = tmp->left;
+                    }
+                }
+                return tmp;
+            }
             node_pointer getSuccessor() const
             {
                 return getSuccessor(_root);
@@ -635,7 +658,7 @@ namespace   ft
                     return NULL;
                 tmp = node->right;
                 if (!tmp)
-                    return NULL;
+                    return node;
                 while (tmp->right)
                     tmp = tmp->right;
                 return tmp;
@@ -680,6 +703,8 @@ namespace   ft
             }
             node_pointer findPosition(node_pointer node)
             {
+                if (!node)
+                    return NULL;
                 if (!node->left && !node->right)
                     return node;
                 node_pointer node_predecessor = getSuccessor(node);

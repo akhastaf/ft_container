@@ -45,7 +45,7 @@ void	testConstructors(void)
               << "] --------------------]\t\t\033[0m";
 	{
 		std::vector<int> myvector (2,200);
-		ft::Stack<int,std::vector<int> > s(myvector);
+		ft::stack<int,std::vector<int> > s(myvector);
 		EQUAL(s.size() == 2);
 	}
 }
@@ -55,7 +55,7 @@ void	testMemberMethods(void)
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " empty method "
               << "] --------------------]\t\t\033[0m";
 	{
-		ft::Stack<int> mystack;
+		ft::stack<int> mystack;
 		int sum (0);
 
 		for (int i=1;i<=10;i++) mystack.push(i);
@@ -71,7 +71,7 @@ void	testMemberMethods(void)
               << "] --------------------]\t\t\033[0m";
 	{
 		bool cond(false);
-		ft::Stack<int> myints;
+		ft::stack<int> myints;
 		cond = myints.size() == 0;
 
 		for (int i=0; i<5; i++) myints.push(i);
@@ -84,7 +84,7 @@ void	testMemberMethods(void)
     std::cout << "\t\033[1;37m[-------------------- [" << std::setw(40) << std::left << " top method "
               << "] --------------------]\t\t\033[0m";
 	{
-		ft::Stack<int> mystack;
+		ft::stack<int> mystack;
 
 		mystack.push(10);
 		mystack.push(20);
@@ -92,7 +92,7 @@ void	testMemberMethods(void)
 		mystack.top() -= 5;
 		std::vector<int> vec(10, 50);
 		vec.push_back(300);
-		ft::Stack<int, std::vector<int> > const c_mystack(vec);
+		ft::stack<int, std::vector<int> > const c_mystack(vec);
 
 		EQUAL(mystack.top() == 15 && c_mystack.top() == 300);
 	}
@@ -100,7 +100,7 @@ void	testMemberMethods(void)
               << "] --------------------]\t\t\033[0m";
 	{
 		int sum(0);
-		ft::Stack<int> mystack;
+		ft::stack<int> mystack;
 
 		for (int i=0; i<5; ++i) mystack.push(i);
 
@@ -122,16 +122,16 @@ void	testRelationalOperators(void)
 		std::vector<int>	vec(100, 2);
 		std::vector<int>	vec1(100, 2);
 		{
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = (mystack ==  mystack1) == (stack == stack1);
 		}
 		{
 			vec.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack ==  mystack1) == (stack == stack1);
@@ -139,8 +139,8 @@ void	testRelationalOperators(void)
 		{
 			vec.pop_back();
 			vec1.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack ==  mystack1) == (stack == stack1);
@@ -154,16 +154,16 @@ void	testRelationalOperators(void)
 		std::vector<int>	vec(100, 2);
 		std::vector<int>	vec1(100, 2);
 		{
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = (mystack !=  mystack1) == (stack != stack1);
 		}
 		{
 			vec.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack !=  mystack1) == (stack != stack1);
@@ -171,8 +171,8 @@ void	testRelationalOperators(void)
 		{
 			vec.pop_back();
 			vec1.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack !=  mystack1) == (stack != stack1);
@@ -186,16 +186,16 @@ void	testRelationalOperators(void)
 		std::vector<int>	vec(100, 2);
 		std::vector<int>	vec1(100, 2);
 		{
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = (mystack < mystack1) == (stack < stack1);
 		}
 		{
 			vec.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack < mystack1) == (stack < stack1);
@@ -203,8 +203,8 @@ void	testRelationalOperators(void)
 		{
 			vec.pop_back();
 			vec1.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack < mystack1) == (stack < stack1);
@@ -218,16 +218,16 @@ void	testRelationalOperators(void)
 		std::vector<int>	vec(100, 2);
 		std::vector<int>	vec1(100, 2);
 		{
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = (mystack <= mystack1) == (stack <= stack1);
 		}
 		{
 			vec.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack <= mystack1) == (stack <= stack1);
@@ -235,8 +235,8 @@ void	testRelationalOperators(void)
 		{
 			vec.pop_back();
 			vec1.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack <= mystack1) == (stack <= stack1);
@@ -250,16 +250,16 @@ void	testRelationalOperators(void)
 		std::vector<int>	vec(100, 2);
 		std::vector<int>	vec1(100, 2);
 		{
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = (mystack > mystack1) == (stack > stack1);
 		}
 		{
 			vec.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack > mystack1) == (stack > stack1);
@@ -267,8 +267,8 @@ void	testRelationalOperators(void)
 		{
 			vec.pop_back();
 			vec1.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack > mystack1) == (stack > stack1);
@@ -282,16 +282,16 @@ void	testRelationalOperators(void)
 		std::vector<int>	vec(100, 2);
 		std::vector<int>	vec1(100, 2);
 		{
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = (mystack >= mystack1) == (stack >= stack1);
 		}
 		{
 			vec.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack >= mystack1) == (stack >= stack1);
@@ -299,8 +299,8 @@ void	testRelationalOperators(void)
 		{
 			vec.pop_back();
 			vec1.push_back(300);
-			ft::Stack<int, std::vector<int> > mystack1(vec);
-			ft::Stack<int, std::vector<int> > mystack(vec1);
+			ft::stack<int, std::vector<int> > mystack1(vec);
+			ft::stack<int, std::vector<int> > mystack(vec1);
 			std::stack<int, std::vector<int> > stack1(vec);
 			std::stack<int, std::vector<int> > stack(vec1);
 			cond = cond && (mystack >= mystack1) == (stack >= stack1);

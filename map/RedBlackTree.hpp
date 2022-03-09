@@ -55,6 +55,9 @@ namespace   ft
             ~RedBlackTree()
             {
                 clear();
+                // _alloc.destroy(&_endNode->value);
+                // _alloc_node.destroy(_endNode);
+                // _alloc_node.deallocate(_endNode, 1);
             }
             RedBlackTree& operator= (const RedBlackTree& x)
             {
@@ -192,7 +195,11 @@ namespace   ft
             size_type    remove(node_pointer node)
             {
                 size_type r = 0;
+                // print2D();
                 node_pointer tmp = findPosition(node);
+                // print2D();
+                if (!tmp)
+                    return 0;
                 if (!tmp->black || (!tmp->parent && !tmp->left && !tmp->right))
                 {
                     removeBST(tmp);
@@ -531,48 +538,6 @@ namespace   ft
                 }
                 return tmp;
             }
-            // iterator    upper_bound(key const k)
-            // {
-            //     node_pointer node_to_find = upper_bound(getMinimum(), k);
-            //     if (!node_to_find)
-            //         return end();
-            //     return iterator(upper_bound(_root, k), _endNode);
-            // }
-            // const_iterator    upper_bound(key const k) const
-            // {
-            //     node_pointer node_to_find = upper_bound(getMinimum(), k);
-            //     if (!node_to_find)
-            //         return end();
-            //     iterator tmp = iterator(node_to_find, _endNode);
-            //     return const_iterator(tmp);
-            // }
-            // node_pointer    upper_bound(node_pointer first, key const k) const
-            // {
-            //     while (first){
-			// 		if (_comp(k,first->value.first))
-			// 			break ;
-			// 		first = next_node(first);
-			// 	}
-			// 	return first;
-            // }
-            // iterator    lower_bound(key const k)
-            // {
-            //     return iterator(lower_bound(_root, k), _endNode);
-            // }
-            // const_iterator    lower_bound(key const k) const
-            // {
-            //     iterator tmp = iterator(lower_bound(_root, k), _endNode);
-            //     return const_iterator(tmp);
-            // }
-            // node_pointer    lower_bound(node_pointer first, key const k) const
-            // {
-            //     while (first){
-			// 		if (_comp(first->value.first, k))
-			// 			break ;
-			// 		first = next_node(first);
-			// 	}
-			// 	return first;
-            // }
             node_pointer getSuccessor() const
             {
                 return getSuccessor(_root);
@@ -733,6 +698,9 @@ namespace   ft
             }
             node_pointer findPosition(node_pointer node)
             {
+                // node_pointer tmp;
+                if (!node)
+                    return NULL;
                 if (!node->left && !node->right)
                     return node;
                 node_pointer node_predecessor = getSuccessor(node);
@@ -741,7 +709,7 @@ namespace   ft
                 ft::pair<key, mapped_value> tmp(node->value);
                 _alloc.construct(&node->value, node_predecessor->value);
                 _alloc.construct(&node_predecessor->value, tmp);
-                // std::swap(node->value, node_predecessor->value);
+                // swap_node(node, node_predecessor);
                 if (!node_predecessor->left && !node_predecessor->right)
                 {
                     return node_predecessor;
@@ -762,6 +730,79 @@ namespace   ft
                     tmp = tmp->parent;
                 }
                 return NULL;
+            }
+
+            void    swap_node(node_pointer n1, node_pointer n2)
+            {
+                node_pointer tmp;
+                node_pointer tmp1;
+                // std::cout << n1->value << std::endl;
+                // std::cout << n2->value << std::endl;
+                std::swap(n1->isleft, n2->isleft);
+                std::swap(n1->black, n2->black);
+                tmp = n1->right;
+                n1->right = n2->right;
+                n2->right = tmp;
+                if (n2->right)
+                    n2->right->parent = n2;
+                if (n1->parent)
+                    n1->right->parent = n1;
+                tmp = n1->left;
+                n1->left = n2->left;
+                n2->left = tmp;
+                if (n2->left)
+                    n2->left->parent = n2;
+                if (n1->left)
+                    n1->left->parent = n1;
+                tmp = n1->parent;
+                n1->parent = n2->parent;
+                n2->parent = tmp;
+                if (n1->parent && n1->isleft)
+                    n1->parent->left = n1;
+                else if (n1->parent && !n1->isleft)
+                    n1->parent->right = n1;
+                if (n2->parent && n2->isleft)
+                    n2->parent->left = n2;
+                else if (n2->parent && !n2->isleft)
+                    n2->parent->right = n2;
+                
+                // tmp = n1->parent;
+                // if (n1 != n2->parent)
+                //     n1->parent = n2->parent;
+                // else
+                //     n1->parent = n2;
+                // if (n2 != n1->parent)
+                //     n2->parent = tmp;
+                // else
+                //     n2->parent = n1;
+                // std::swap(n1->isleft, n2->isleft);
+                // std::swap(n1->black, n2->black);
+                // if (n2->parent && n2->isleft)
+                //     n2->parent->left = n2;
+                // else if (n2->parent && !n2->isleft)
+                //     n2->parent->right = n2;
+                // tmp = n1->right;
+                // n1->right = n2->right;
+                // if (n1->parent == n2)
+                //     n2->right = n1;
+                // else
+                //     n2->right = tmp;
+                    
+                // if (n1->right)
+                //     n1->right->parent = n1;
+                // if (n2->right)
+                //     n2->right->parent = n2;
+                
+                // tmp = n1->left;
+                // if (n2->parent == n1)
+                //     n1->left = n2;
+                // else
+                //     n1->left = n2->left;
+                // n2->right = tmp;
+                // if (n1->left)
+                //     n1->left->parent = n1;
+                // if (n2->left)
+                //     n2->left->parent = n2;
             }
     };
     
