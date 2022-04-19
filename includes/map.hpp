@@ -4,11 +4,11 @@
 # include <memory>
 # include <stdexcept>
 # include <algorithm>
-# include "../iterator/reverse_iterator.hpp"
+# include "reverse_iterator.hpp"
 // # include "RedBlackTree.hpp"
 # include "bidirectional_iterator.hpp"
-#include "../tools.hpp"
-#include "../vector/vector.hpp"
+#include "tools.hpp"
+#include "vector.hpp"
 
 
 namespace   ft
@@ -45,7 +45,6 @@ namespace   ft
             typedef typename ft::bidirectional_iterator<const value_type> const_iterator;
             typedef typename ft::reverse_iterator<iterator> reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
-            typedef ft::RedBlackTree<value_type, allocator_type, key_compare>   tree;
             typedef ptrdiff_t                                                difference_type;
             typedef size_t                                                   size_type;
 
@@ -75,7 +74,7 @@ namespace   ft
                 _tree.clear();
                 _alloc = x.get_allocator();
                 _key_comp = x.key_comp();
-                _tree._endNode = x._tree._endNode;
+                _tree._endNode->parent = _tree._endNode->left = x._tree._root;
                 insert(x.begin(), x.end());
                 return *this;
             }
@@ -169,8 +168,6 @@ namespace   ft
             {
                 return ft::make_pair(lower_bound(k), upper_bound(k));    
             }
-            void    check_balance() { _tree.balckNode(); }
-            void    print2D() { _tree.print2D(); } 
             allocator_type get_allocator() const { return _alloc; }
             template <class Key_, class T_, class Compare_, class Alloc_>
 			friend bool operator== ( const map<Key_,T_,Compare_,Alloc_>& lhs, const map<Key_,T_,Compare_,Alloc_>& rhs ){
@@ -205,10 +202,10 @@ namespace   ft
 				return !(ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 			}
         private:
+            typedef ft::RedBlackTree<value_type, allocator_type, key_compare>   tree;
             allocator_type _alloc;
             tree _tree;
             key_compare _key_comp;
-            // value_compare _value_comp;
     };
     template <class Key, class T, class Compare, class Alloc>
 	void swap (map<Key,T,Compare,Alloc>& x, map<Key,T,Compare,Alloc>& y){

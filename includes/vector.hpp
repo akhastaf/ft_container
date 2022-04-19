@@ -5,10 +5,10 @@
 # include <stdexcept>
 # include <stdexcept>
 # include <algorithm>
-#include <iterator>
-# include "../iterator/random_access_iterator.hpp"
-# include "../iterator/reverse_iterator.hpp"
-# include "../tools.hpp"
+# include <iterator>
+# include "random_access_iterator.hpp"
+# include "reverse_iterator.hpp"
+# include "tools.hpp"
 
 namespace ft {
     template <class T, class Alloc = std::allocator<T> >
@@ -186,7 +186,7 @@ namespace ft {
 
             // Modifiers :
             template <class InputIterator>
-            void assign (InputIterator first, InputIterator last)
+            void assign (InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
             {
                 _size = std::distance(first, last);
                 if (_capacity < _size)
@@ -281,26 +281,41 @@ namespace ft {
             template <class InputIterator>
             void insert (iterator position, InputIterator first, InputIterator last, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
             {
-                difference_type d = abs(std::distance(begin(), position));
-                difference_type n = abs(std::distance(first, last));
+                difference_type d = std::distance(begin(), position);
+                difference_type n = std::distance(first, last);
                 if (_size + n > _capacity)
                 {
-                    if (_size + n <= _capacity * 2)
-                        reserve(_capacity * 2);
-                    else
+                    if (_size + n > _capacity * 2)
                         reserve(_size + n);
+                    else
+                        reserve(_capacity * 2);
                 }
                 if (_size)
-                {
-                    for (difference_type i = d; i < d + n; i++)
-                        _array[i + n] = _array[i];
-                }
-                for (size_type i = d; first != last; first++)
-                {
-                    _alloc.construct(_array + i, *first);
-                    i++;
-                }
+                    for (int i = _size - 1; i >= d; i--)
+                        std::swap(_array[i], _array[i + n]);
                 _size += n;
+                for (int i = d; i < d + n; i++, ++first)
+                    _alloc.construct(_array + i, *first);
+                // difference_type d = abs(std::distance(begin(), position));
+                // difference_type n = abs(std::distance(first, last));
+                // if (_size + n > _capacity)
+                // {
+                //     if (_size + n <= _capacity * 2)
+                //         reserve(_capacity * 2);
+                //     else
+                //         reserve(_size + n);
+                // }
+                // if (_size)
+                // {
+                //     for (difference_type i = d; i < d + n; i++)
+                //         _array[i + n] = _array[i];
+                // }
+                // for (size_type i = d; first != last; first++)
+                // {
+                //     _alloc.construct(_array + i, *first);
+                //     i++;
+                // }
+                // _size += n;
             }
             iterator erase (iterator position)
             {

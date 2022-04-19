@@ -1,9 +1,9 @@
-#ifndef bidirectional_iterator_SET_HPP
-# define bidirectional_iterator_SET_HPP
+#ifndef BIDIRECTIONAL_ITERATOR_SET_HPP
+# define BIDIRECTIONAL_ITERATOR_SET_HPP
 # include <iostream>
-# include "../iterator/iterator_trais.hpp"
-# include "RedBlackTree.hpp"
-# include "../tools.hpp"
+# include "iterator_trais.hpp"
+# include "RedBlackTreeSet.hpp"
+# include "tools.hpp"
 
 namespace ft
 {
@@ -17,10 +17,10 @@ namespace ft
             typedef typename    ft::iterator<std::bidirectional_iterator_tag, T>::difference_type	difference_type;
             typedef             T*                                                                  pointer;
             typedef             T&			                                                        reference;
-            typedef             ft::RedBlackTree<T>			                                        tree;
+            typedef             ft::RedBlackTreeSet<T>			                                        tree;
             typedef Node<value_type>                                         node_element;
             typedef node_element*                                            node_pointer;
-            // typedef typename    tree::node_pointer			                                        node_pointer;
+            
             bidirectional_iterator_set() : _ptr(NULL), _endNode(NULL) {}
             bidirectional_iterator_set(node_pointer ptr, node_pointer endNode) : _ptr(ptr), _endNode(endNode) {}
             bidirectional_iterator_set(bidirectional_iterator_set const & it) : _ptr(it._ptr), _endNode(it._endNode) {}

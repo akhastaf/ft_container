@@ -13,7 +13,7 @@ namespace ft
 			typedef typename    ft::iterator<std::random_access_iterator_tag, T>::value_type        value_type;
     		typedef typename    ft::iterator<std::random_access_iterator_tag, T>::difference_type	difference_type;
 			typedef             T*                                                                  pointer;
-    		typedef             T&			                                                               reference;
+    		typedef             T&			                                                        reference;
             random_access_iterator() : _ptr(nullptr) {};
             random_access_iterator(pointer ptr) : _ptr(ptr) {};
             random_access_iterator(random_access_iterator const & src) { *this = src; };

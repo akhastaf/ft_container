@@ -1,9 +1,9 @@
 #ifndef BIDIRECTIONAL_ITERATOR_HPP
 # define BIDIRECTIONAL_ITERATOR_HPP
 # include <iostream>
-# include "../iterator/iterator_trais.hpp"
+# include "iterator_trais.hpp"
 # include "RedBlackTree.hpp"
-# include "../tools.hpp"
+# include "tools.hpp"
 
 namespace ft
 {
@@ -19,7 +19,6 @@ namespace ft
             typedef             ft::RedBlackTree<T>			                                        tree;
             typedef Node<value_type>                                         node_element;
             typedef node_element*                                            node_pointer;
-            // typedef typename    tree::node_pointer			                                        node_pointer;
             bidirectional_iterator() : _ptr(NULL), _endNode(NULL) {}
             bidirectional_iterator(node_pointer ptr, node_pointer endNode) : _ptr(ptr), _endNode(endNode) {}
             bidirectional_iterator(bidirectional_iterator const & it) : _ptr(it._ptr), _endNode(it._endNode) {}
@@ -94,25 +93,6 @@ namespace ft
                     this->_ptr = tree::getPredecessor(this->_ptr);
                 return bidirectional_iterator(this->_ptr, this->_endNode);
             }
-            // bidirectional_iterator operator--()
-            // {
-            //     if (this->_ptr == this->_endNode)
-            //     {
-            //         this->_ptr = tree::getMaximum(this->_ptr->parent);
-            //         return bidirectional_iterator(this->_ptr, this->_endNode);
-            //     }
-            //     else if (!this->_ptr->isleft && (!this->_ptr->right || !this->_ptr->left))
-            //         this->_ptr = this->_ptr->parent;
-            //     else if (this->_ptr->isleft && !this->_ptr->left)
-            //     {
-            //         this->_ptr = tree::getParentSuccessor(this->_ptr);
-            //         if (!this->_ptr)
-            //             this->_ptr = this->_endNode;
-            //     }
-            //     else
-            //         this->_ptr = tree::getPredecessor(this->_ptr);
-            //     return bidirectional_iterator(this->_ptr, this->_endNode);
-            // }
             bidirectional_iterator operator--(int)
             {
                 bidirectional_iterator tmp = *this;

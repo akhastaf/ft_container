@@ -4,10 +4,10 @@
 # include <memory>
 # include <stdexcept>
 # include <algorithm>
-# include "../iterator/reverse_iterator.hpp"
+# include "reverse_iterator.hpp"
 # include "bidirectional_iterator_set.hpp"
-# include "../tools.hpp"
-# include "../vector/vector.hpp"
+# include "tools.hpp"
+# include "vector.hpp"
 
 
 namespace ft
@@ -34,7 +34,6 @@ namespace ft
             typedef ft::reverse_iterator<const_iterator>                        const_reverse_iterator;        
             typedef ptrdiff_t                                                   difference_type;        
             typedef size_t                                                      size_type;
-            typedef ft::RedBlackTree<value_type, allocator_type, key_compare>   tree;
 
 
 
@@ -57,7 +56,7 @@ namespace ft
                 _tree.clear();
                 _alloc = x.get_allocator();
                 _key_compare = x.key_comp();
-                _tree._endNode = x._tree._endNode;
+                _tree._endNode->parent = _tree._endNode->left = x._tree._root;
                 this->insert(x.begin(), x.end());
                 return *this;
             }
@@ -132,6 +131,7 @@ namespace ft
             void    print2D() { _tree.print2D(); } 
 
         private:
+            typedef ft::RedBlackTreeSet<value_type, allocator_type, key_compare>   tree;
             allocator_type _alloc;
             tree           _tree;
             key_compare    _key_compare;

@@ -166,10 +166,6 @@ namespace ft
         Node() : value(T()), left(NULL), right(NULL), parent(NULL), black(false), isleft(true) {}
         Node(T cvalue) : value(cvalue), left(NULL), right(NULL), parent(NULL), black(false), isleft(true) {}
         ~Node() {}
-        // operator Node<const T>()
-        // {
-        //     return Node<const T>(value);
-        // }
     };
 }
 
